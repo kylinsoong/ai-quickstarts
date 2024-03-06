@@ -1,0 +1,13 @@
+= Linear Regression
+
+== Exploratory Data Analysis (EDA)
+
+image:pairplot.png[]
+
+image:price_distribution.png[]
+
+== Predictions from your Model
+
+image:scatter.png[]
+
+image:predictions.png[]
