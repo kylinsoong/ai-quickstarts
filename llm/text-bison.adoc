@@ -1,0 +1,39 @@
+= PaLM 2 Text Bison
+:toc: manual
+
+text-bison is the name of the PaLM 2 Text Bison large language model that understands and generates language. It's a foundation model that performs well at a variety of natural language tasks such as sentiment analysis, entity extraction, and content creation. The type of content that text-bison can create includes document summaries, answers to questions, and labels that classify content.
+
+This model card also contains text-unicorn, the largest model in the PaLM family. Unicorn models excel at complex tasks, such as coding and chain-of-thought (CoT), due to the extensive knowledge embedded into the model and its reasoning capabilities.
+
+== Use cases
+
+* *Summarization*: Create a shorter version of a document that incorporates pertinent information from the original text. For example, you might want to summarize a chapter from a textbook. Or, you could create a succinct product description from a long paragraph that describes the product in detail.
+* *Question answering*: Provide answers to questions in text. For example, you might automate the creation of a Frequently Asked Questions (FAQ) document from knowledge base content.
+* *Classification*: Assign a label to provided text. For example, a label might be applied to text that describes how grammatically correct it is.
+* *Sentiment analysis*: This is a form of classification that identifies the sentiment of text. The sentiment is turned into a label that's applied to the text. For example, the sentiment of text might be polarities like positive or negative, or sentiments like anger or happiness.
+* *Entity extraction*: Extract a piece of information from text. For example, you can extract the name of a movie from the text of an article.
+
+== Example
+
+[source, bash]
+----
+curl -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application/json" \
+https://us-central1-aiplatform.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/publishers/google/models/text-bison:predict -d \
+$'{
+  "instances": [
+    { "prompt": "How to learn AI"}
+  ],
+  "parameters": {
+    "temperature": 0.2,
+    "maxOutputTokens": 256,
+    "topK": 40,
+    "topP": 0.95
+  }
+}'
+----
+
+* `temperature` - Temperature controls the degree of randomness in token selection. Lower temperatures are good for prompts that expect a true or correct response, while higher temperatures can lead to more diverse or unexpected results. With a temperature of 0 the highest probability token is always selected.
+* `maxOutputTokens` - Token limit determines the maximum amount of text output from one prompt. A token is approximately four characters.
+* `topK` - Top-k changes how the model selects tokens for output. A top-k of 1 means the selected token is the most probable among all tokens in the model’s vocabulary (also called greedy decoding), while a top-k of 3 means that the next token is selected from among the 3 most probable tokens (using temperature).
+* `topP` - Top-p changes how the model selects tokens for output. Tokens are selected from most probable to least until the sum of their probabilities equals the top-p value. For example, if tokens A, B, and C have a probability of .3, .2, and .1 and the top-p value is .5, then the model will select either A or B as the next token (using temperature).
+

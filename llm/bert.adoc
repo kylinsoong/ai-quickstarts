@@ -1,0 +1,9 @@
+= BERT
+
+Bidirectional Encoder Representations from Transformers (BERT) is a language representation model published in the paper "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding" by Devlin et al (2018). Unlike previous language representation models, BERT is designed to pre-train deep bidirectional representations from unlabeled text by jointly conditioning on both left and right context in all layers.The pre-trained BERT model can be fine-tuned with just one additional output layer to create state-of-the-art models for a wide range of tasks, such as question answering and language inference, without substantial task-specific architecture modifications.
+
+Parameter-efficient fine-tuning (PEFT) is a library for efficiently adapting pretrained language models to downstream applications without fine-tuning all the model's parameters. PEFT methods only fine-tune a small number of (extra) model parameters, significantly decreasing computational and storage costs. The common methods for PEFT include LoRA, prefix-tuning, and P-tuning.
+
+== Use cases
+
+* *Sequence classification*: predicts class labels based on a sequence of observations.
