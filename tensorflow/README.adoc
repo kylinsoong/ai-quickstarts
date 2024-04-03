@@ -3,3 +3,178 @@
 
 https://www.tensorflow.org/
 
+== N-dimensional
+
+[cols="2,2,5a,5a"]
+|===
+|Common Name |Rank(Dimension) |Example |Shape
+
+|Scalar
+|0
+|
+----
+tf.constant(3)
+----
+|
+----
+()
+----
+
+|Vector
+|1
+|
+----
+tf.constant([3, 5, 7])
+----
+|
+----
+(3,)
+----
+
+|Matix
+|2
+|
+----
+tf.constant([[3, 5, 7], [4, 6, 8]])
+----
+|
+----
+(2, 3)
+----
+
+|3D Tensor
+|3
+|
+----
+tf.constant([[[3, 5, 7], [4, 6, 8]],
+             [[1, 2, 3], [4, 5, 5]]])
+----
+|
+----
+(2, 2, 3)
+----
+
+|nD Tensor
+|n
+|
+----
+x1 = tf.constant([3, 5, 7])
+x2 = tf.stack([x1, x1])
+x3 = tf.stack([x2, x2, x2, x2])
+x4 = tf.stack([x3, x3])
+----
+|
+----
+(2, 4, 2, 3)
+----
+
+|===
+
+[source, python]
+.**
+----
+
+----
+
+[source, python]
+.**
+----
+
+----
+
+[source, python]
+.**
+----
+
+----
+
+[source, python]
+.**
+----
+
+----
+
+== Quickstart
+
+[source, python]
+.*1. Set up TensorFlow*
+----
+import tensorflow as tf
+print("TensorFlow version:", tf.__version__)
+----
+
+[source, python]
+.*2. Load a dataset*
+----
+mnist = tf.keras.datasets.mnist
+(x_train, y_train), (x_test, y_test) = mnist.load_data()
+x_train, x_test = x_train / 255.0, x_test / 255.0
+----
+
+[source, python]
+.*3. Build a machine learning model*
+----
+model = tf.keras.models.Sequential([
+  tf.keras.layers.Flatten(input_shape=(28, 28)),
+  tf.keras.layers.Dense(128, activation='relu'),
+  tf.keras.layers.Dropout(0.2),
+  tf.keras.layers.Dense(10)
+])
+
+predictions = model(x_train[:1]).numpy()
+print(predictions)
+----
+
+NOTE: Sequential is useful for stacking layers where each layer has one input tensor and one output tensor. Layers are functions with a known mathematical structure that can be reused and have trainable variables. Most TensorFlow models are composed of layers. 
+
+NOTE: *tf.keras.layers.Flatte* 用于将输入数据展平成一维向量。
+
+NOTE: *tf.keras.layers.Dense* 用于创建全连接（密集连接）的神经网络层。它的作用是将输入数据与权重矩阵相乘，并加上偏置，然后将结果传递给激活函数。
+
+NOTE: *tf.keras.layers.Dropout* 用于在训练过程中应用 dropout 正则化。Dropout 是一种常用的正则化技术，通过在训练期间随机丢弃网络中的一部分节点（按照指定的丢弃率），来减少过拟合的风险。
+
+[source, python]
+.*softmax function*
+----
+tf.nn.softmax(predictions).numpy()
+----
+
+[source, python]
+.*loss function*
+----
+loss_fn = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
+loss_fn(y_train[:1], predictions).numpy()
+----
+
+[source, python]
+.*compile the model*
+----
+model.compile(optimizer='adam',
+              loss=loss_fn,
+              metrics=['accuracy'])
+----
+
+[source, python]
+.*4. Train and evaluate your model*
+----
+model.fit(x_train, y_train, epochs=5)
+model.evaluate(x_test,  y_test, verbose=2)
+probability_model = tf.keras.Sequential([
+  model,
+  tf.keras.layers.Softmax()
+])
+
+probability_model(x_test[:5])
+----
+
+[source, python]
+.**
+----
+
+----
+
+[source, python]
+.**
+----
+
+----
