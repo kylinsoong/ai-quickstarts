@@ -71,27 +71,92 @@ x4 = tf.stack([x3, x3])
 |===
 
 [source, python]
-.**
+.*Tensor slice*
 ----
+import tensorflow as tf
 
-----
+m = tf.constant([[3, 5, 7], [4, 6, 8]])
+x = m[:, 2]
+y = m[1, :]
 
-[source, python]
-.**
-----
-
-----
-
-[source, python]
-.**
-----
-
+print(m)
+print(x)
+print(y)
 ----
 
 [source, python]
-.**
+----
+tf.Tensor(
+[[3 5 7]
+ [4 6 8]], shape=(2, 3), dtype=int32)
+tf.Tensor([7 8], shape=(2,), dtype=int32)
+tf.Tensor([4 6 8], shape=(3,), dtype=int32)
 ----
 
+[source, python]
+.*Tensor reshape*
+----
+import tensorflow as tf
+
+m = tf.constant([[3, 5, 7], [4, 6, 8]])
+x = tf.reshape(m, [3,2])
+y = tf.reshape(m, [1,6])
+z = tf.reshape(m, [6,1])
+
+print(m)
+print(x)
+print(y)
+print(z)
+----
+
+[source, python]
+----
+tf.Tensor(
+[[3 5 7]
+ [4 6 8]], shape=(2, 3), dtype=int32)
+tf.Tensor(
+[[3 5]
+ [7 4]
+ [6 8]], shape=(3, 2), dtype=int32)
+tf.Tensor([[3 5 7 4 6 8]], shape=(1, 6), dtype=int32)
+tf.Tensor(
+[[3]
+ [5]
+ [7]
+ [4]
+ [6]
+ [8]], shape=(6, 1), dtype=int32)
+----
+
+[source, python]
+.*Tensor variables(addition, subtraction, multiplication, division)*
+----
+import tensorflow as tf
+
+x = tf.Variable(2.0, dtype=tf.float32, name="x")
+y = tf.Variable(3.0, dtype=tf.float32, name="y")
+z = tf.Variable(2.0, dtype=tf.float32, name="z")
+print(x)
+x.assign(45.8)
+print(x)
+x.assign_add(4)
+print(x)
+x.assign_sub(3)
+print(x)
+x.assign(tf.multiply(x, y))
+print(x)
+x.assign(tf.divide(x, z))
+print(x)
+----
+
+[source, python]
+----
+<tf.Variable 'x:0' shape=() dtype=float32, numpy=2.0>
+<tf.Variable 'x:0' shape=() dtype=float32, numpy=45.8>
+<tf.Variable 'x:0' shape=() dtype=float32, numpy=49.8>
+<tf.Variable 'x:0' shape=() dtype=float32, numpy=46.8>
+<tf.Variable 'x:0' shape=() dtype=float32, numpy=140.4>
+<tf.Variable 'x:0' shape=() dtype=float32, numpy=70.2>
 ----
 
 == Quickstart

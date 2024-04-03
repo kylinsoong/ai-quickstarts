@@ -1,0 +1,7 @@
+= Machine Learning
+:toc: manual
+
+== ML Pipeline
+
+image:img/ml-pipeline.jpg[]
+
