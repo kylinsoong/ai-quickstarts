@@ -6,6 +6,12 @@ data = tf.data.Dataset.from_tensor_slices({
     'City': ['New York', 'Los Angeles', 'Chicago']
 })
 
+print(data)
+
+print(type(data))
+
+print()
+
 for record in data:
     print(record)
 

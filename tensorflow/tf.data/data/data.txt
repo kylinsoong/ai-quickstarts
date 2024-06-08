@@ -1,0 +1,3 @@
+Hello, world!
+TensorFlow is great.
+This is a text line dataset.
