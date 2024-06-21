@@ -1,7 +1,11 @@
 = Activation
 :toc: manual
 
-== sigmoid function
+== RelU
+
+
+
+== sigmoid
 
 S 型函数（sigmoid function）是一种常见的激活函数，在神经网络中被广泛使用。它的表达式为：
 
