@@ -1,78 +1,17 @@
-import os
-import requests
+import tensorflow.keras
 import pandas as pd
 import tensorflow as tf
+
 from tensorflow import feature_column as fc
 from tensorflow.keras import layers
-from matplotlib import pyplot as plt
 from sklearn.model_selection import train_test_split
+from matplotlib import pyplot as plt
 
-def download_file(url, local_filename):
-    with requests.get(url, stream=True) as response:
-        response.raise_for_status()  # Check for HTTP errors
-
-        with open(local_filename, 'wb') as file:
-            for chunk in response.iter_content(chunk_size=8192):
-                if chunk:  # Filter out keep-alive chunks
-                    file.write(chunk)
-                    
-    print(f"Downloaded file: {local_filename}")
+print("TensorFlow version: ",tf.version.VERSION)
 
 
-def df_to_dataset(dataframe, shuffle=True, batch_size=32):
-    dataframe = dataframe.copy()
-    labels = dataframe.pop('median_house_value')
-    ds = tf.data.Dataset.from_tensor_slices((dict(dataframe), labels))
-    if shuffle:
-        ds = ds.shuffle(buffer_size=len(dataframe))
-    ds = ds.batch(batch_size)
-    return ds
 
-
-def get_scal(feature):
-    def minmax(x):
-        mini = train[feature].min()
-        maxi = train[feature].max()
-        return (x - mini)/(maxi-mini)
-    return(minmax)
-
-
-def plot_curves(history, metrics):
-    nrows = 1
-    ncols = 2
-    fig = plt.figure(figsize=(10, 5))
-
-    for idx, key in enumerate(metrics):  
-        ax = fig.add_subplot(nrows, ncols, idx+1)
-        plt.plot(history.history[key])
-        plt.plot(history.history['val_{}'.format(key)])
-        plt.title('model {}'.format(key))
-        plt.ylabel(key)
-        plt.xlabel('epoch')
-        plt.legend(['train', 'validation'], loc='upper left');  
-    plt.show()
-
-
-def test_input_fn(features, batch_size=256):
-    return tf.data.Dataset.from_tensor_slices(dict(features)).batch(batch_size)
-
-
-base_dir = os.path.join(os.path.expanduser("~"), ".ml/housing")
-file_path = os.path.join(base_dir, "housing_pre-proc_toy.csv")
-file_path_train = os.path.join(base_dir, "housing-train.csv")
-file_path_val = os.path.join(base_dir, "housing-val.csv")
-file_path_test = os.path.join(base_dir, "housing-test.csv")
-
-
-if not os.path.exists(base_dir):
-    os.makedirs(base_dir)
-    print("create directory", base_dir)
-
-if not os.path.isfile(file_path):
-    url = 'https://storage.googleapis.com/cloud-training/mlongcp/v3.0_MLonGC/toy_data/housing_pre-proc_toy.csv'
-    download_file(url, file_path)
-
-housing_df = pd.read_csv(file_path, on_bad_lines='skip')
+housing_df = pd.read_csv('../data/housing/housing_pre-proc_toy.csv', on_bad_lines='skip')
 print(housing_df.head())
 print(housing_df.describe())
 
@@ -83,9 +22,18 @@ print(len(train), 'train examples')
 print(len(val), 'validation examples')
 print(len(test), 'test examples')
 
-train.to_csv(file_path_train, encoding='utf-8', index=False)
-val.to_csv(file_path_val, encoding='utf-8', index=False)
-test.to_csv(file_path_test, encoding='utf-8', index=False)
+train.to_csv('../data/housing/housing-train.csv', encoding='utf-8', index=False)
+val.to_csv('../data/housing/housing-val.csv', encoding='utf-8', index=False)
+test.to_csv('../data/housing/housing-test.csv', encoding='utf-8', index=False)
+
+def df_to_dataset(dataframe, shuffle=True, batch_size=32):
+    dataframe = dataframe.copy()
+    labels = dataframe.pop('median_house_value')
+    ds = tf.data.Dataset.from_tensor_slices((dict(dataframe), labels))
+    if shuffle:
+        ds = ds.shuffle(buffer_size=len(dataframe))
+    ds = ds.batch(batch_size)
+    return ds
 
 batch_size = 32
 train_ds = df_to_dataset(train)
@@ -98,6 +46,13 @@ for feature_batch, label_batch in train_ds.take(1):
     print('A batch of targets:', label_batch)
 
 numeric_cols = ['longitude', 'latitude', 'housing_median_age', 'total_rooms', 'total_bedrooms', 'population', 'households', 'median_income']
+
+def get_scal(feature):
+    def minmax(x):
+        mini = train[feature].min()
+        maxi = train[feature].max()
+        return (x - mini)/(maxi-mini)
+        return(minmax)
 
 feature_columns = []
 for header in numeric_cols:
@@ -117,20 +72,48 @@ model = tf.keras.Sequential([
 ])
 
 # Model compile
-model.compile(optimizer='adam', loss='mse', metrics=['mse'])
+model.compile(optimizer='adam',
+              loss='mse',
+              metrics=['mse'])
 
 # Model Fit
-history = model.fit(train_ds, validation_data=val_ds, epochs=32)
+history = model.fit(train_ds,
+                    validation_data=val_ds,
+                    epochs=32)
+
+loss, mse = model.evaluate(train_ds)
+print("Mean Squared Error", mse)
+
+def plot_curves(history, metrics):
+    nrows = 1
+    ncols = 2
+    fig = plt.figure(figsize=(10, 5))
+
+    for idx, key in enumerate(metrics):  
+        ax = fig.add_subplot(nrows, ncols, idx+1)
+        plt.plot(history.history[key])
+        plt.plot(history.history['val_{}'.format(key)])
+        plt.title('model {}'.format(key))
+        plt.ylabel(key)
+        plt.xlabel('epoch')
+        plt.legend(['train', 'validation'], loc='upper left');  
+
 plot_curves(history, ['loss', 'mse'])
 
-test_data = pd.read_csv(file_path_test)
+test_data = pd.read_csv('../data/housing/housing-test.csv')
 print(test_data.describe())
 
-test_predict = test_input_fn(dict(test_data))
-predicted_median_house_value = model.predict(test_predict)
-print(predicted_median_house_value)
 
-results = model.predict({
+def test_input_fn(features, batch_size=256):
+    """An input function for prediction."""
+    # Convert the inputs to a Dataset without labels.
+    return tf.data.Dataset.from_tensor_slices(dict(features)).batch(batch_size)
+
+test_predict = test_input_fn(dict(test_data))
+
+predicted_median_house_value = model.predict(test_predict)
+
+model.predict({
     'longitude': tf.convert_to_tensor([-121.86]),
     'latitude': tf.convert_to_tensor([39.78]),
     'housing_median_age': tf.convert_to_tensor([12.0]),
@@ -142,9 +125,7 @@ results = model.predict({
     'ocean_proximity': tf.convert_to_tensor(['INLAND'])
 }, steps=1)
 
-print(results)
-
-results = model.predict({
+model.predict({
     'longitude': tf.convert_to_tensor([-122.43]),
     'latitude': tf.convert_to_tensor([37.63]),
     'housing_median_age': tf.convert_to_tensor([34.0]),
@@ -156,18 +137,26 @@ results = model.predict({
     'ocean_proximity': tf.convert_to_tensor(['NEAR OCEAN'])
 }, steps=1)
 
-print(results)
-
-numeric_cols = ['longitude', 'latitude', 'housing_median_age', 'total_rooms', 'total_bedrooms', 'population', 'households', 'median_income']
+numeric_cols = ['longitude', 'latitude', 'housing_median_age', 'total_rooms',
+                'total_bedrooms', 'population', 'households', 'median_income']
 
 bucketized_cols = ['housing_median_age']
 
+# indicator columns,Categorical features
 categorical_cols = ['ocean_proximity']
+
+def get_scal(feature):
+    def minmax(x):
+        mini = train[feature].min()
+        maxi = train[feature].max()
+        return (x - mini)/(maxi-mini)
+        return(minmax)
 
 feature_columns = []
 for header in numeric_cols:
     scal_input_fn = get_scal(header)
-    feature_columns.append(fc.numeric_column(header, normalizer_fn=scal_input_fn))
+    feature_columns.append(fc.numeric_column(header,
+                                             normalizer_fn=scal_input_fn))
 
 for feature_name in categorical_cols:
     vocabulary = housing_df[feature_name].unique()
@@ -192,7 +181,6 @@ feature_columns.append(crossed_feature)
 
 print('Total number of feature columns: ', len(feature_columns))
 
-# Model create
 feature_layer = tf.keras.layers.DenseFeatures(feature_columns,
                                               dtype='float64')
 
@@ -218,7 +206,7 @@ print("Mean Squared Error", mse)
 
 plot_curves(history, ['loss', 'mse'])
 
-results = model.predict({
+model.predict({
     'longitude': tf.convert_to_tensor([-122.43]),
     'latitude': tf.convert_to_tensor([37.63]),
     'housing_median_age': tf.convert_to_tensor([34.0]),
@@ -229,5 +217,3 @@ results = model.predict({
     'median_income': tf.convert_to_tensor([4.9732]),
     'ocean_proximity': tf.convert_to_tensor(['NEAR OCEAN'])
 }, steps=1)
-
-print(results)

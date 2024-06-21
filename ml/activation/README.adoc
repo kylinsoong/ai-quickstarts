@@ -1,4 +1,4 @@
-= Math
+= Activation
 :toc: manual
 
 == sigmoid function
