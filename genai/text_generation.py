@@ -1,16 +1,14 @@
 import os
 import warnings
-warnings.filterwarnings("ignore")
-os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 import time
 import numpy as np
 import tensorflow as tf
+from fileutils import readAsString
 
-path_to_file = tf.keras.utils.get_file(
-    "shakespeare.txt",
-    "https://storage.googleapis.com/download.tensorflow.org/data/shakespeare.txt",
-)
-text = open(path_to_file, "rb").read().decode(encoding="utf-8")
+warnings.filterwarnings("ignore")
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
+
+text = readAsString("https://storage.googleapis.com/download.tensorflow.org/data/shakespeare.txt")
 print(f"Length of texts: {len(text)} characters")
 print("First 50 letter:", text[:50])
 
@@ -27,3 +25,6 @@ chars_from_ids = tf.keras.layers.StringLookup(
 
 def text_from_ids(ids):
     return tf.strings.reduce_join(chars_from_ids(ids), axis=-1)
+
+all_ids = ids_from_chars(tf.strings.unicode_split(text, "UTF-8"))
+print("text to ids:", all_ids)
