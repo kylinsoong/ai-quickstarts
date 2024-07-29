@@ -32,5 +32,9 @@ def readAsString(url):
     content = open(file_path, "rb").read().decode(encoding="utf-8")
     return content
 
+def checkpointDir(dir):
+    return os.path.join(os.path.expanduser("~"), ".ai", dir)
 
+def modelDir(dir):
+    return os.path.join(os.path.expanduser("~"), ".ai", "model", dir)
 
