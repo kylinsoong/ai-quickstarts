@@ -116,7 +116,7 @@ checkpoint_dir = checkpointDir("training_checkpoints")
 checkpoint_prefix = os.path.join(checkpoint_dir, "ckpt_{epoch}")
 checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_prefix, save_weights_only=True)
 
-EPOCHS = 15
+EPOCHS = 10
 history = model.fit(dataset, epochs=EPOCHS, callbacks=[checkpoint_callback])
 
 class OneStep(tf.keras.Model):
