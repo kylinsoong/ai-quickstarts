@@ -1,0 +1,17 @@
+= Llama 3
+
+image:genai_app_arch.png[]
+
+image:rag_arch.png[]
+
+image:llama2_family.png[]
+
+image:llama3_family.png[]
+
+image:bot_arch.png[]
+
+image:fine_tuned_arch.png[]
+
+image:load_data_faiss_arch.png[]
+
+image:mem_context.png[]
