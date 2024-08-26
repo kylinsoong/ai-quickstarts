@@ -1,0 +1,39 @@
+= Azure AI Face
+
+== Run the code
+
+[source, bash]
+----
+$ python face-analysis.py 
+
+-----Facial Attributes-----
+
+
+Person Number: 0
+
+Glasses: GlassesType.reading_glasses
+
+Blur: BlurLevel.low
+
+Occlusion: {'additional_properties': {}, 'forehead_occluded': False, 'eye_occluded': False, 'mouth_occluded': False}
+
+Noise Level: NoiseLevel.low
+
+----------
+
+
+
+Person Number: 1
+
+Accessories: {'additional_properties': {}, 'type': <AccessoryType.glasses: 'glasses'>, 'confidence': 1.0}
+
+Glasses: GlassesType.sunglasses
+
+Blur: BlurLevel.low
+
+Occlusion: {'additional_properties': {}, 'forehead_occluded': False, 'eye_occluded': False, 'mouth_occluded': False}
+
+Noise Level: NoiseLevel.medium
+
+----------
+----

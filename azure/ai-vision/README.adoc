@@ -4,7 +4,7 @@
 
 [source, bash]
 ----
-$ python 1-image-analysis.py 
+$ python image-analysis.py 
 
 -----Image Description-----
 Confidence: 0.48432523012161255
