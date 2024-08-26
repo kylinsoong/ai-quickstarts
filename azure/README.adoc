@@ -1,0 +1,24 @@
+= Azure AI 
+
+[cols="5a,5a"]
+|===
+|Item | Note
+
+|link:ai-vision/README.adoc[Azure AI Vision]
+|
+* The Azure AI Vision service gives you access to advanced algorithms that process images and return information based on the visual features you're interested in. 
+
+|link:ai-face/README.adoc[Azure AI Face]
+|
+* The Azure AI Face service provides AI algorithms that detect, recognize, and analyze human faces in images.
+* Facial recognition software is important in many scenarios, such as identification, touchless access control, and automatic face blurring for privacy.
+
+|link:ai-custom-vision/README.adoc[AI Custom Vision Classification]
+|
+* Easily customize your own state-of-the-art computer vision models for your unique use case.
+* https://azure.microsoft.com/en-us/products/ai-services/ai-custom-vision
+
+|link:ai-custom-vision/README.adoc[AI Custom Vision Object Detection]
+|
+* To identify and locate specific objects within an image, providing both the object class and its location.
+|===
