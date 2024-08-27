@@ -1,4 +1,7 @@
 = Azure AI 
+:toc: manual
+
+== Labs
 
 [cols="5a,5a"]
 |===
@@ -32,4 +35,60 @@
 |link:ai-custom-vision/README.adoc[AI Custom Vision Object Detection]
 |
 * To identify and locate specific objects within an image, providing both the object class and its location.
+
+|link:ml-workspaces/README.adoc[ML Workspace]
+|
+* A workspace is the top-level resource that provides a centralized place to work with all the artifacts created when using Azure Machine Learning, including models, environments, components, and data assets. 
+
+|link:automated-ml/README.adoc[Automated ML]
+|
+* Automated machine learning (AutoML) is the process of automating the time-consuming, iterative tasks of machine learning model development. It allows data scientists, analysts, and developers to build ML models with high scale, efficiency, and productivity all while sustaining model quality. AutoML in Azure Machine Learning is based on a breakthrough from the Microsoft Research division.
 |===
+
+== Glosary
+
+[cols="2,5a"]
+|===
+|Name |Note
+
+|Azure AI Bot Service
+|Azure AI Bot Service provide a platform for conversational artificial intelligence (AI), which designates the ability of software agents to participate in a conversation. 
+
+|
+|
+
+|===
+
+== Responsible AI Principles
+
+[cols="2,5a"]
+|===
+|Name |Note
+
+|Fairness
+|AI systems should treat all people fairly. 
+
+|Reliability and safety
+|AI systems should perform reliably and safely. 
+
+|Privacy and security
+|AI systems should be secure and respect privacy. 
+
+|Inclusiveness
+|
+* AI systems should empower everyone and engage people.
+* AI should bring benefits to all parts of society, regardless of physical ability, gender, sexual orientation, ethnicity, or other factors.
+
+|Transparency
+|
+* AI systems should be understandable. 
+* Users should be made fully aware of the purpose of the system, how it works, and what limitations may be expected.
+
+|Accountability
+|
+* People should be accountable for AI systems.
+* Designers and developers of AI-based solutions should work within a framework of governance and organizational principles that ensure the solution meets ethical and legal standards that are clearly defined.
+
+|===
+
+

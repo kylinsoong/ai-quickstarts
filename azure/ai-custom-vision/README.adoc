@@ -1,2 +1,4 @@
 = Azure AI Custom Vision
 
+* Object detection provides the ability to generate bounding boxes identifying the locations of different types of vehicles in an image. 
+

@@ -1,0 +1,11 @@
+= Azure Machine Learning Workspace 
+
+== What's Azure Workspace
+
+A workspace in Azure is a deployment of a cloud service account that provides a unified environment for working with specific assets. Here are some examples of workspaces in different Azure services:
+
+* *Azure Databricks*: A workspace organizes objects such as notebooks, libraries, dashboards, and experiments into folders and provides access to data objects and computational resources.
+* *Azure API Management*: Workspaces are used to manage APIs, products, subscriptions, named values, and related resources for a specific team.
+* *Azure Machine Learning*: A workspace is the top-level resource that provides a centralized place to work with all the artifacts created when using Azure Machine Learning, including models, environments, components, and data assets.
+
+

@@ -1,5 +1,8 @@
 = Azure AI Face
 
+* Face identification in the Azure AI Face service can address one-to-many matching of one face in an image to a set of faces in a secure repository. 
+* Face verification has the capability for one-to-one matching of a face in an image to a single face from a secure repository or a photo to verify whether they are the same individual.
+
 == Run the code
 
 [source, bash]
