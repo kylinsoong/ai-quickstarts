@@ -43,6 +43,9 @@
 |link:automated-ml/README.adoc[Automated ML]
 |
 * Automated machine learning (AutoML) is the process of automating the time-consuming, iterative tasks of machine learning model development. It allows data scientists, analysts, and developers to build ML models with high scale, efficiency, and productivity all while sustaining model quality. AutoML in Azure Machine Learning is based on a breakthrough from the Microsoft Research division.
+
+|link:regression/README.adoc[Regission Model]
+|A source code for demonstrate the regression.
 |===
 
 == Glosary
@@ -50,6 +53,11 @@
 [cols="2,5a"]
 |===
 |Name |Note
+
+|Resource Group
+|
+* Resource Group in Azure is to act as a container that holds related resources for an Azure solution. 
+* Resource groups can include all the resources for the solution or only those resources that you want to manage as a group. You decide how you want to allocate resources to resource groups based on what makes the most sense for your organization.
 
 |Azure AI Bot Service
 |Azure AI Bot Service provide a platform for conversational artificial intelligence (AI), which designates the ability of software agents to participate in a conversation. 
