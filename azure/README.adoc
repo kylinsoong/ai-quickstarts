@@ -46,6 +46,12 @@
 
 |link:regression/README.adoc[Regission Model]
 |A source code for demonstrate the regression.
+
+|link:classification/README.adoc[Classificaton Model]
+|
+
+|link:clustering/README.adoc[Clustering Model]
+|
 |===
 
 == Glosary
