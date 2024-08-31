@@ -1,0 +1,543 @@
+= Azure AI Language 
+:toc: manual
+
+== Analyze Sentiment
+
+[source, bash]
+----
+$ python3 sentiment.py 
+Let's visualize the sentiment of each of these documents
+Document text: I had the best day of my life. I decided to go sky-diving and it made me appreciate my whole life so much more.
+    I developed a deep-connection with my instructor as well, and I feel as if I've made a life-long friend in her.
+Overall sentiment: positive
+
+Document text: This was a waste of my time. All of the views on this drop are extremely boring, all I saw was grass. 0/10 would
+    not recommend to any divers, even first timers.
+Overall sentiment: negative
+
+Document text: This was pretty good! The sights were ok, and I had fun with my instructors! Can't complain too much about my experience
+Overall sentiment: positive
+
+Document text: I only have one word for my experience: WOW!!! I can't believe I have had such a wonderful skydiving company right
+    in my backyard this whole time! I will definitely be a repeat customer, and I want to take my grandmother skydiving too,
+    I know she'll love it!
+Overall sentiment: positive
+----
+
+== Recognize Entities
+
+[source, bash]
+----
+$ python3 recognize-entities.py 
+Entity 'Foo Company' has category 'Organization'
+Entity 'Contoso' has category 'Person'
+Entity 'annual' has category 'DateTime'
+Entity 'founding ceremony' has category 'Event'
+Entity 'food' has category 'Product'
+Entity 'Foo Company' has category 'Organization'
+Entity 'Contoso' has category 'Person'
+Entity 'food' has category 'Product'
+Entity 'Bar Company' has category 'Organization'
+Entity 'service' has category 'Skill'
+Entity 'Contoso' has category 'Person'
+Entity 'sliders' has category 'Product'
+
+
+Organization 'Foo Company' has left us the following review(s): I work for Foo Company, and we hired Contoso for our annual founding ceremony. The food
+    was amazing and we all can't say enough good words about the quality and the level of service.
+
+We at the Foo Company re-hired Contoso after all of our past successes with the company.
+    Though the food was still great, I feel there has been a quality drop since their last time
+    catering for us. Is anyone else running into the same problem?
+
+
+Organization 'Bar Company' has left us the following review(s): Bar Company is over the moon about the service we received from Contoso, the best sliders ever!!!!
+----
+
+== Recognize Linked Entities
+
+[source, bash]
+----
+$ python3 recognize_linked_entities.py 
+Let's map each entity to it's Wikipedia article. I also want to see how many times each entity is mentioned in a document
+
+
+Entity 'Microsoft' has been mentioned '3' time(s)
+Entity 'Bill Gates' has been mentioned '2' time(s)
+Entity 'Harvard University' has been mentioned '1' time(s)
+Entity 'Steve Ballmer' has been mentioned '2' time(s)
+Entity 'Chief executive officer' has been mentioned '2' time(s)
+Entity 'Satya Nadella' has been mentioned '1' time(s)
+Entity 'Bellevue, Washington' has been mentioned '1' time(s)
+Entity 'Briann January' has been mentioned '1' time(s)
+Entity 'Redmond, Washington' has been mentioned '1' time(s)
+----
+
+== Recognize PII Entities
+
+[source, bash]
+----
+$ python3 recognize_pii_entities.py 
+Let's compare the original document with the documents after redaction. I also want to comb through all of the entities that got redacted
+Document text: Parker Doe has repaid all of their loans as of 2020-04-25.
+    Their SSN is 859-98-0987. To contact them, use their phone number
+    555-555-5555. They are originally from Brazil and have Brazilian CPF number 998.214.865-68
+Redacted document text: ********** has repaid all of their loans as of **********.
+    Their SSN is ***********. To contact them, use their phone number
+    ************. They are originally from Brazil and have Brazilian CPF number 998.214.865-68
+...Entity 'Parker Doe' with category 'Organization' got redacted
+...Entity '2020-04-25' with category 'DateTime' got redacted
+...Entity '859-98-0987' with category 'USSocialSecurityNumber' got redacted
+...Entity '555-555-5555' with category 'PhoneNumber' got redacted
+----
+
+== Extract Key Phrases
+
+[source, bash]
+----
+$ python3 extract_key_phrases.py 
+Key phrases in article #1: D.C. Autumn, beautiful season, clearer view, blue sky, yellow leaves, Washington, DC, trees, city, forests, ground
+Key phrases in article #2: United States workers, start date, Redmond, WA, past, days, Microsoft, pandemic, end, sight
+Key phrases in article #3: new coffee shop, Redmond, WA, Employees, Microsoft, campus, workers
+----
+
+== Detect Language
+
+[source, bash]
+----
+$ python3 detect_language.py 
+Let's see what language each review is in!
+Review #0 is in 'English', which has ISO639-1 name 'en'
+
+Review #1 is in 'Chinese_Simplified', which has ISO639-1 name 'zh_chs'
+----
+
+== Healthcare Entities Analysis
+
+[source, bash]
+----
+$ python3 analyze_healthcare_entities.py 
+Let's first visualize the outputted healthcare result:
+Entity: 100 mg
+...Normalized Text: None
+...Category: Dosage
+...Subcategory: None
+...Offset: 27
+...Confidence score: 0.99
+Entity: ibuprofen
+...Normalized Text: ibuprofen
+...Category: MedicationName
+...Subcategory: None
+...Offset: 37
+...Confidence score: 1.0
+...Data Sources:
+......Entity ID: C0020740
+......Name: UMLS
+......Entity ID: 0000019879
+......Name: AOD
+......Entity ID: M01AE01
+......Name: ATC
+......Entity ID: 0046165
+......Name: CCPSS
+......Entity ID: 0000006519
+......Name: CHV
+......Entity ID: 2270-2077
+......Name: CSP
+......Entity ID: DB01050
+......Name: DRUGBANK
+......Entity ID: 1611
+......Name: GS
+......Entity ID: sh97005926
+......Name: LCH_NW
+......Entity ID: LP16165-0
+......Name: LNC
+......Entity ID: 40458
+......Name: MEDCIN
+......Entity ID: d00015
+......Name: MMSL
+......Entity ID: D007052
+......Name: MSH
+......Entity ID: WK2XYI10QM
+......Name: MTHSPL
+......Entity ID: C561
+......Name: NCI
+......Entity ID: 002377
+......Name: NDDF
+......Entity ID: CDR0000040475
+......Name: PDQ
+......Entity ID: x02MO
+......Name: RCD
+......Entity ID: 5640
+......Name: RXNORM
+......Entity ID: E-7772
+......Name: SNM
+......Entity ID: C-603C0
+......Name: SNMI
+......Entity ID: 387207008
+......Name: SNOMEDCT_US
+......Entity ID: m39860
+......Name: USP
+......Entity ID: MTHU000060
+......Name: USPMG
+......Entity ID: 4017840
+......Name: VANDF
+Entity: 3 mg
+...Normalized Text: None
+...Category: Dosage
+...Subcategory: None
+...Offset: 52
+...Confidence score: 0.98
+Entity: potassium
+...Normalized Text: potassium
+...Category: MedicationName
+...Subcategory: None
+...Offset: 60
+...Confidence score: 1.0
+...Data Sources:
+......Entity ID: C0032821
+......Name: UMLS
+......Entity ID: 0000002435
+......Name: AOD
+......Entity ID: 1006930
+......Name: CCPSS
+......Entity ID: 0000010004
+......Name: CHV
+......Entity ID: 32051
+......Name: CPM
+......Entity ID: 2390-5099
+......Name: CSP
+......Entity ID: DB14500
+......Name: DRUGBANK
+......Entity ID: 2493
+......Name: GS
+......Entity ID: U003782
+......Name: LCH
+......Entity ID: sh85105593
+......Name: LCH_NW
+......Entity ID: LP15098-4
+......Name: LNC
+......Entity ID: 41250
+......Name: MEDCIN
+......Entity ID: 5321
+......Name: MMSL
+......Entity ID: D011188
+......Name: MSH
+......Entity ID: U000145
+......Name: MTH
+......Entity ID: RWP5GA015D
+......Name: MTHSPL
+......Entity ID: C765
+......Name: NCI
+......Entity ID: 000763
+......Name: NDDF
+......Entity ID: 39750
+......Name: PSY
+......Entity ID: X80D4
+......Name: RCD
+......Entity ID: 8588
+......Name: RXNORM
+......Entity ID: F-10530
+......Name: SNM
+......Entity ID: C-13500
+......Name: SNMI
+......Entity ID: 88480006
+......Name: SNOMEDCT_US
+......Entity ID: 4017695
+......Name: VANDF
+Entity: 10 mg
+...Normalized Text: None
+...Category: Dosage
+...Subcategory: None
+...Offset: 94
+...Confidence score: 0.99
+Entity: Zocor
+...Normalized Text: Zocor
+...Category: MedicationName
+...Subcategory: None
+...Offset: 103
+...Confidence score: 1.0
+...Data Sources:
+......Entity ID: C0678181
+......Name: UMLS
+......Entity ID: 0000042766
+......Name: CHV
+......Entity ID: 5001-0024
+......Name: CSP
+......Entity ID: 1546
+......Name: MMSL
+......Entity ID: D019821
+......Name: MSH
+......Entity ID: C29454
+......Name: NCI
+......Entity ID: CDR0000455226
+......Name: PDQ
+......Entity ID: x03d7
+......Name: RCD
+......Entity ID: 196503
+......Name: RXNORM
+Relation of type: DosageOfMedication has the following roles
+...Role 'Dosage' with entity '100 mg'
+...Role 'Medication' with entity 'ibuprofen'
+Relation of type: DosageOfMedication has the following roles
+...Role 'Dosage' with entity '3 mg'
+...Role 'Medication' with entity 'potassium'
+Relation of type: DosageOfMedication has the following roles
+...Role 'Dosage' with entity '10 mg'
+...Role 'Medication' with entity 'Zocor'
+------------------------------------------
+Entity: 50 mg
+...Normalized Text: None
+...Category: Dosage
+...Subcategory: None
+...Offset: 27
+...Confidence score: 0.99
+Entity: ibuprofen
+...Normalized Text: ibuprofen
+...Category: MedicationName
+...Subcategory: None
+...Offset: 36
+...Confidence score: 1.0
+...Data Sources:
+......Entity ID: C0020740
+......Name: UMLS
+......Entity ID: 0000019879
+......Name: AOD
+......Entity ID: M01AE01
+......Name: ATC
+......Entity ID: 0046165
+......Name: CCPSS
+......Entity ID: 0000006519
+......Name: CHV
+......Entity ID: 2270-2077
+......Name: CSP
+......Entity ID: DB01050
+......Name: DRUGBANK
+......Entity ID: 1611
+......Name: GS
+......Entity ID: sh97005926
+......Name: LCH_NW
+......Entity ID: LP16165-0
+......Name: LNC
+......Entity ID: 40458
+......Name: MEDCIN
+......Entity ID: d00015
+......Name: MMSL
+......Entity ID: D007052
+......Name: MSH
+......Entity ID: WK2XYI10QM
+......Name: MTHSPL
+......Entity ID: C561
+......Name: NCI
+......Entity ID: 002377
+......Name: NDDF
+......Entity ID: CDR0000040475
+......Name: PDQ
+......Entity ID: x02MO
+......Name: RCD
+......Entity ID: 5640
+......Name: RXNORM
+......Entity ID: E-7772
+......Name: SNM
+......Entity ID: C-603C0
+......Name: SNMI
+......Entity ID: 387207008
+......Name: SNOMEDCT_US
+......Entity ID: m39860
+......Name: USP
+......Entity ID: MTHU000060
+......Name: USPMG
+......Entity ID: 4017840
+......Name: VANDF
+Entity: 2 mg
+...Normalized Text: None
+...Category: Dosage
+...Subcategory: None
+...Offset: 51
+...Confidence score: 1.0
+Entity: Coumadin
+...Normalized Text: Coumadin
+...Category: MedicationName
+...Subcategory: None
+...Offset: 59
+...Confidence score: 1.0
+...Data Sources:
+......Entity ID: C0699129
+......Name: UMLS
+......Entity ID: 0000044372
+......Name: CHV
+......Entity ID: 0397-0420
+......Name: CSP
+......Entity ID: 146
+......Name: MMSL
+......Entity ID: D014859
+......Name: MSH
+......Entity ID: C1658
+......Name: NCI
+......Entity ID: CDR0000039740
+......Name: PDQ
+......Entity ID: x02iF
+......Name: RCD
+......Entity ID: 202421
+......Name: RXNORM
+Relation of type: DosageOfMedication has the following roles
+...Role 'Dosage' with entity '50 mg'
+...Role 'Medication' with entity 'ibuprofen'
+Relation of type: DosageOfMedication has the following roles
+...Role 'Dosage' with entity '2 mg'
+...Role 'Medication' with entity 'Coumadin'
+------------------------------------------
+Now, let's get all of medication dosage relations from the documents
+----
+
+== Multiple Analysis
+
+[source, bash]
+----
+$ python3 multi-analytics.py 
+
+Document text: We went to Contoso Steakhouse located at midtown NYC last week for a dinner party, and we adore the spot! They provide marvelous food and they have a great menu. The chief cook happens to be the owner (I think his name is John Doe) and he is super nice, coming out of the kitchen and greeted us all.
+...Results of Recognize Entities Action:
+......Entity: Contoso Steakhouse
+.........Category: Location
+.........Confidence Score: 0.99
+.........Offset: 11
+......Entity: midtown
+.........Category: Location
+.........Confidence Score: 0.52
+.........Offset: 41
+......Entity: NYC
+.........Category: Location
+.........Confidence Score: 1.0
+.........Offset: 49
+......Entity: last week
+.........Category: DateTime
+.........Confidence Score: 1.0
+.........Offset: 53
+......Entity: dinner party
+.........Category: Event
+.........Confidence Score: 0.78
+.........Offset: 69
+......Entity: food
+.........Category: Product
+.........Confidence Score: 0.57
+.........Offset: 129
+......Entity: chief cook
+.........Category: PersonType
+.........Confidence Score: 0.71
+.........Offset: 166
+......Entity: owner
+.........Category: PersonType
+.........Confidence Score: 0.98
+.........Offset: 195
+......Entity: John Doe
+.........Category: Person
+.........Confidence Score: 0.99
+.........Offset: 222
+......Entity: kitchen
+.........Category: Location
+.........Confidence Score: 0.97
+.........Offset: 272
+...Results of Recognize PII Entities action:
+......Entity: chief cook
+.........Category: PersonType
+.........Confidence Score: 0.71
+......Entity: owner
+.........Category: PersonType
+.........Confidence Score: 0.98
+......Entity: John Doe
+.........Category: Person
+.........Confidence Score: 0.99
+...Results of Extract Key Phrases action:
+......Key Phrases: ['Contoso Steakhouse', 'midtown NYC', 'dinner party', 'marvelous food', 'great menu', 'chief cook', 'John Doe', 'spot', 'owner', 'name', 'kitchen']
+...Results of Recognize Linked Entities action:
+......Entity name: Steakhouse
+.........Data source: Wikipedia
+.........Data source language: en
+.........Data source entity ID: Steakhouse
+.........Data source URL: https://en.wikipedia.org/wiki/Steakhouse
+.........Document matches:
+............Match text: Steakhouse
+............Confidence Score: 0.75
+............Offset: 19
+............Length: 10
+......Entity name: New York City
+.........Data source: Wikipedia
+.........Data source language: en
+.........Data source entity ID: New York City
+.........Data source URL: https://en.wikipedia.org/wiki/New_York_City
+.........Document matches:
+............Match text: NYC
+............Confidence Score: 0.37
+............Offset: 49
+............Length: 3
+......Entity name: John Doe
+.........Data source: Wikipedia
+.........Data source language: en
+.........Data source entity ID: John Doe
+.........Data source URL: https://en.wikipedia.org/wiki/John_Doe
+.........Document matches:
+............Match text: John Doe
+............Confidence Score: 0.05
+............Offset: 222
+............Length: 8
+...Results of Analyze Sentiment action:
+......Overall sentiment: positive
+......Scores: positive=1.0;                 neutral=0.0;                 negative=0.0 
+
+------------------------------------------
+
+Document text: We enjoyed very much dining in the place! The Sirloin steak I ordered was tender and juicy, and the place was impeccably clean. You can even pre-order from their online menu at www.contososteakhouse.com, call 312-555-0176 or send email to order@contososteakhouse.com! The only complaint I have is the food didn't come fast enough. Overall I highly recommend it!
+...Results of Recognize Entities Action:
+......Entity: place
+.........Category: Location
+.........Confidence Score: 0.65
+.........Offset: 35
+......Entity: Sirloin steak
+.........Category: Product
+.........Confidence Score: 0.98
+.........Offset: 46
+......Entity: www.contososteakhouse.com
+.........Category: URL
+.........Confidence Score: 0.8
+.........Offset: 177
+......Entity: 312-555-0176
+.........Category: PhoneNumber
+.........Confidence Score: 0.8
+.........Offset: 209
+......Entity: order@contososteakhouse.com
+.........Category: Email
+.........Confidence Score: 0.8
+.........Offset: 239
+......Entity: food
+.........Category: Product
+.........Confidence Score: 0.9
+.........Offset: 301
+...Results of Recognize PII Entities action:
+......Entity: www.contososteakhouse.com
+.........Category: URL
+.........Confidence Score: 0.8
+......Entity: 312-555-0176
+.........Category: PhoneNumber
+.........Confidence Score: 0.8
+......Entity: order@contososteakhouse.com
+.........Category: Email
+.........Confidence Score: 0.8
+...Results of Extract Key Phrases action:
+......Key Phrases: ['The Sirloin steak', 'online menu', 'dining', 'place', 'order', 'contososteakhouse', 'email', 'complaint', 'food']
+...Results of Recognize Linked Entities action:
+......Entity name: Sirloin steak
+.........Data source: Wikipedia
+.........Data source language: en
+.........Data source entity ID: Sirloin steak
+.........Data source URL: https://en.wikipedia.org/wiki/Sirloin_steak
+.........Document matches:
+............Match text: Sirloin steak
+............Confidence Score: 0.69
+............Offset: 46
+............Length: 13
+...Results of Analyze Sentiment action:
+......Overall sentiment: mixed
+......Scores: positive=0.75;                 neutral=0.0;                 negative=0.25 
+
+------------------------------------------
+----
