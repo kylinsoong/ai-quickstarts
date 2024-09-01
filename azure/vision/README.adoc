@@ -1,0 +1,44 @@
+= Azure AI Vision 
+:toc: manual
+
+== Analyze an image
+
+[source, bash]
+----
+
+----
+
+== Get subject domain list
+
+[source, bash]
+----
+
+----
+
+== Analyze an image by domain
+
+[source, bash]
+----
+
+----
+
+== Get text description of an image
+
+[source, bash]
+----
+
+----
+
+== Get handwritten text from image
+
+[source, bash]
+----
+
+----
+
+== Generate thumbnail
+
+[source, bash]
+----
+
+----
