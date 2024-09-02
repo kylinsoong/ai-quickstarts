@@ -1,44 +1,93 @@
 = Azure AI Vision 
 :toc: manual
 
+== optical character recognition 
+
+Get Text in Image.
+
+[source, bash]
+----
+$ python3 ocr.py 
+===== Read File - remote =====
+make
+[42.0, 126.0, 189.0, 127.0, 185.0, 189.0, 42.0, 184.0]
+things
+[106.0, 191.0, 273.0, 197.0, 270.0, 256.0, 105.0, 254.0]
+happen
+[206.0, 246.0, 408.0, 246.0, 406.0, 328.0, 205.0, 323.0]
+----
+
 == Analyze an image
 
 [source, bash]
 ----
+$ python3 analyze_image.py 
 
+-----Image Description-----
+Confidence: 0.5896901488304138
+Description: a busy city street at night
+----------
+
+Press Enter to continue to image tags...
+
+-----Image Tags-----
+Tag: building         Confidence: 0.9910045862197876
+Tag: metropolis       Confidence: 0.9403555393218994
+Tag: metropolitan area  Confidence: 0.9358731508255005
+Tag: downtown         Confidence: 0.9340376853942871
+Tag: outdoor          Confidence: 0.9233906269073486
+Tag: skyscraper       Confidence: 0.9208872318267822
+Tag: urban area       Confidence: 0.9175583124160767
+Tag: street           Confidence: 0.8893557786941528
+Tag: commercial building  Confidence: 0.8842802047729492
+Tag: mixed-use        Confidence: 0.8771032094955444
+Tag: crowded          Confidence: 0.8658456802368164
+Tag: night            Confidence: 0.8426163196563721
+Tag: city             Confidence: 0.8208400011062622
+Tag: people           Confidence: 0.6946084499359131
+Tag: light            Confidence: 0.6930656433105469
+----------
 ----
 
 == Get subject domain list
 
 [source, bash]
 ----
+$ python3 list_models.py 
+Press Enter to list models...
 
+{'additional_properties': {}, 'name': 'celebrities', 'categories': ['people_', '人_', 'pessoas_', 'gente_']}
+{'additional_properties': {}, 'name': 'landmarks', 'categories': ['outdoor_', '户外_', '屋外_', 'aoarlivre_', 'alairelibre_', 'building_', '建筑_', '建物_', 'edifício_']}
 ----
 
 == Analyze an image by domain
 
 [source, bash]
 ----
+$ python3 analyze_image_by_domain.py 
+Press Enter to list results...
 
+{'name': 'Eiffel Tower', 'confidence': 0.971265435218811}
+Eiffel Tower
+0.971265435218811
 ----
 
 == Get text description of an image
 
 [source, bash]
 ----
+$ python3 describe_image.py 
+Press Enter to list results...
 
-----
-
-== Get handwritten text from image
-
-[source, bash]
-----
-
+{'additional_properties': {}, 'text': 'a busy city street at night', 'confidence': 0.5896903872489929}
+a busy city street at night
+0.5896903872489929
 ----
 
 == Generate thumbnail
 
 [source, bash]
 ----
-
+$ python3 generate_thumbnail.py 
+Press Enter to list results...
 ----

@@ -13,13 +13,13 @@ class colors:
     reset = '\033[0m'
 
 # Paste your endpoint and key below
-endpoint = ""
+endpoint = "https://eastus.api.cognitive.microsoft.com/"
 key = ""
 client = ComputerVisionClient(endpoint, CognitiveServicesCredentials(key))
 
 width = 50
 height = 50
-url = "http://www.public-domain-photos.com/free-stock-photos-4/travel/san-francisco/golden-gate-bridge-in-san-francisco.jpg"
+url = "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Broadway_and_Times_Square_by_night.jpg/450px-Broadway_and_Times_Square_by_night.jpg"
 
 thumbnail = client.generate_thumbnail(width, height, url)
 

@@ -11,7 +11,7 @@ class colors:
     reset = '\033[0m'
 
 # Paste your endpoint and key below
-endpoint = ""
+endpoint = "https://eastus.api.cognitive.microsoft.com/"
 key = ""
 computervision_client = ComputerVisionClient(endpoint, CognitiveServicesCredentials(key))
 
