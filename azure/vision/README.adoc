@@ -17,6 +17,52 @@ happen
 [206.0, 246.0, 408.0, 246.0, 406.0, 328.0, 205.0, 323.0]
 ----
 
+== Image Analysis
+
+[source, bash]
+----
+$ python image-analysis.py 
+
+-----Image Description-----
+Confidence: 0.48432523012161255
+Description: a man and woman sitting on a couch with a dog and a cup
+----------
+
+Press Enter to continue to image tags...
+
+-----Image Tags-----
+Tag: clothing         Confidence: 0.9980252385139465
+Tag: person           Confidence: 0.9966760873794556
+Tag: human face       Confidence: 0.9829165935516357
+Tag: jeans            Confidence: 0.9511979222297668
+Tag: footwear         Confidence: 0.9418429136276245
+Tag: jacket           Confidence: 0.9413745403289795
+Tag: sitting          Confidence: 0.9293599128723145
+Tag: outdoor          Confidence: 0.9179489016532898
+Tag: building         Confidence: 0.9165575504302979
+Tag: man              Confidence: 0.9083775877952576
+Tag: bench            Confidence: 0.8780851364135742
+Tag: scarf            Confidence: 0.873084306716919
+Tag: coat             Confidence: 0.8616374135017395
+Tag: handbag          Confidence: 0.8562503457069397
+Tag: smile            Confidence: 0.8407078385353088
+Tag: street           Confidence: 0.8202004432678223
+Tag: woman            Confidence: 0.7806227207183838
+Tag: people           Confidence: 0.7503567934036255
+Tag: ground           Confidence: 0.7259345054626465
+Tag: wooden           Confidence: 0.5973991751670837
+----------
+
+Press Enter to continue to face detection...
+
+-----Face Detection-----
+Face at location 304,161,458,315
+Face at location 1565,274,1718,427
+----------
+
+Press Enter to Exit...
+----
+
 == Analyze an image
 
 [source, bash]

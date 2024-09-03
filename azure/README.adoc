@@ -7,7 +7,7 @@
 |===
 |Item | Note
 
-|link:ai-language/README.adoc[Azure AI Language]
+|link:language/README.adoc[Azure AI Language]
 |
 * Recognize core concepts
 * Comprehend information at a glance
@@ -18,11 +18,11 @@
 * Automatically categorize text
 * Extract key phrases and concepts
 
-|link:ai-vision/README.adoc[Azure AI Vision]
+|link:vision/README.adoc[Azure AI Vision]
 |
 * The Azure AI Vision service gives you access to advanced algorithms that process images and return information based on the visual features you're interested in. 
 
-|link:ai-face/README.adoc[Azure AI Face]
+|link:vision/face/README.adoc[Azure AI Vision Face]
 |
 * The Azure AI Face service provides AI algorithms that detect, recognize, and analyze human faces in images.
 * Facial recognition software is important in many scenarios, such as identification, touchless access control, and automatic face blurring for privacy.
