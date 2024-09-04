@@ -40,9 +40,10 @@
 |
 * A workspace is the top-level resource that provides a centralized place to work with all the artifacts created when using Azure Machine Learning, including models, environments, components, and data assets. 
 
-|link:automated-ml/README.adoc[Automated ML]
+|link:autoML/README.adoc[Automated ML]
 |
-* Automated machine learning (AutoML) is the process of automating the time-consuming, iterative tasks of machine learning model development. It allows data scientists, analysts, and developers to build ML models with high scale, efficiency, and productivity all while sustaining model quality. AutoML in Azure Machine Learning is based on a breakthrough from the Microsoft Research division.
+* Automated machine learning (AutoML) is the process of automating the time-consuming, iterative tasks of machine learning model development. It allows data scientists, analysts, and developers to build ML models with high scale, efficiency, and productivity all while sustaining model quality. 
+* AutoML in Azure Machine Learning is based on a breakthrough from the Microsoft Research division.
 
 |link:regression/README.adoc[Regission Model]
 |A source code for demonstrate the regression.
