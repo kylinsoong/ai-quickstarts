@@ -89,11 +89,24 @@
 |Fairness
 |AI systems should treat all people fairly. 
 
+Examples:
+
+* Artificial intelligence (AI) system to support the process of accepting or rejecting mortgage applications, the *ethnicity* and *gender* should be considered to avoid biased decision making.
+* The *fairness* involves evaluating and mitigating the bias introduced by the features of a model.
+
 |Reliability and safety
 |AI systems should perform reliably and safely. 
 
+Examples:
+
+* The *reliability and safety* is important for developing driverless agriculture vehicles to help harvest crops, that the vehicles will be deployed alongside people working in the crop fields, and as such, the company will need to carry out robust testing.
+
 |Privacy and security
 |AI systems should be secure and respect privacy. 
+
+Examples:
+
+* The *accountability* and *privacy and security* principles are most important when designing an AI system to manage healthcare data.
 
 |Inclusiveness
 |
@@ -107,8 +120,12 @@
 
 |Accountability
 |
-* People should be accountable for AI systems.
-* Designers and developers of AI-based solutions should work within a framework of governance and organizational principles that ensure the solution meets ethical and legal standards that are clearly defined.
+People should be accountable for AI systems. Designers and developers of AI-based solutions should work within a framework of governance and organizational principles that ensure the solution meets ethical and legal standards that are clearly defined.
+
+Examples:
+
+* Artificial intelligence (AI) defines the framework of governance and organization principles that meet ethical and legal standards of AI solutions
+* The *accountability* and *privacy and security* principles are most important when designing an AI system to manage healthcare data.
 
 |===
 

@@ -1,6 +1,20 @@
 = Azure AI Language 
 :toc: manual
 
+[cols="2,5a"]
+|===
+|Type | Example
+
+|Entity Recognition
+|
+* Entity recognition includes the entity linking functionality that returns links to external websites to disambiguate terms (entities) identified in a text.
+
+|Entity Linking
+|
+* Entity linking use to provide further information online about entities extracted from a text?
+
+|===
+
 == Text Analysis(Sentiment)
 
 [source, bash]
