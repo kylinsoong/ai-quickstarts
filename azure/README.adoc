@@ -78,6 +78,35 @@
 * An Azure AI hub can host one or more projects. Each project encapsulates the tools and assets used to create a specific AI solution.
 * An Azure AI hub is the foundation for AI development projects on Azure, and enables you to define shared assets that can be used across multiple projects. 
 
+|Tagging
+|Tagging involves associating an image with metadata that summarizes the attributes of the image.
+
+|Face identification
+|Face identification in the Azure AI Face service can address one-to-many matching of one face in an image to a set of faces in a secure repository. 
+
+|Face verification 
+|Face verification has the capability for one-to-one matching of a face in an image to a single face from a secure repository or a photo to verify whether they are the same individual. 
+
+|System messages
+|System messages should be used to set the context for the model by describing expectations. Based on system messages, the model knows how to respond to prompts. 
+
+|Embeddings
+|Embeddings is an Azure OpenAI model that converts text into numerical vectors for analysis. Embeddings can be used to search, classify, and compare sources of text for similarity.
+
+|Vectorization
+|Vectorization captures semantic relationships between words by assigning them to locations in n-dimensional space.
+
+|Entity recognition
+|Entity recognition includes the entity linking functionality that returns links to external websites to disambiguate terms (entities) identified in a text.
+
+|Key phrase extraction
+|Key phrase extraction evaluates the text of a document and identifies its main talking points.
+
+|Universal Language Model
+|The Universal Language Model used by the speech-to-text API is optimized for conversational and dictation scenarios.
+
+|Custom Translator 
+|Model training with a dictionary can be used with Custom Translator when you do not have enough parallel sentences to meet the 10,000 minimum requirements. 
 |===
 
 == Responsible AI Principles
@@ -117,6 +146,11 @@ Examples:
 |
 * AI systems should be understandable. 
 * Users should be made fully aware of the purpose of the system, how it works, and what limitations may be expected.
+
+Examples:
+
+* Artificial intelligence (AI) raises awareness about the limitations of AI-based solutions
+
 
 |Accountability
 |
