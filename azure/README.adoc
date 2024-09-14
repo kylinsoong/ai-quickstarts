@@ -1,61 +1,7 @@
 = Azure AI 
 :toc: manual
 
-== Labs
-
-[cols="5a,5a"]
-|===
-|Item | Note
-
-|link:language/README.adoc[Azure AI Language]
-|
-* Recognize core concepts
-* Comprehend information at a glance
-* Analyze customer sentiment
-* Process unstructured medical data
-* Build conversational experiences
-* Respond to customer queries
-* Automatically categorize text
-* Extract key phrases and concepts
-
-|link:vision/README.adoc[Azure AI Vision]
-|
-* The Azure AI Vision service gives you access to advanced algorithms that process images and return information based on the visual features you're interested in. 
-
-|link:vision/face/README.adoc[Azure AI Vision Face]
-|
-* The Azure AI Face service provides AI algorithms that detect, recognize, and analyze human faces in images.
-* Facial recognition software is important in many scenarios, such as identification, touchless access control, and automatic face blurring for privacy.
-
-|link:ai-custom-vision/README.adoc[AI Custom Vision Classification]
-|
-* Easily customize your own state-of-the-art computer vision models for your unique use case.
-* https://azure.microsoft.com/en-us/products/ai-services/ai-custom-vision
-
-|link:ai-custom-vision/README.adoc[AI Custom Vision Object Detection]
-|
-* To identify and locate specific objects within an image, providing both the object class and its location.
-
-|link:ml-workspaces/README.adoc[ML Workspace]
-|
-* A workspace is the top-level resource that provides a centralized place to work with all the artifacts created when using Azure Machine Learning, including models, environments, components, and data assets. 
-
-|link:autoML/README.adoc[Automated ML]
-|
-* Automated machine learning (AutoML) is the process of automating the time-consuming, iterative tasks of machine learning model development. It allows data scientists, analysts, and developers to build ML models with high scale, efficiency, and productivity all while sustaining model quality. 
-* AutoML in Azure Machine Learning is based on a breakthrough from the Microsoft Research division.
-
-|link:regression/README.adoc[Regission Model]
-|A source code for demonstrate the regression.
-
-|link:classification/README.adoc[Classificaton Model]
-|
-
-|link:clustering/README.adoc[Clustering Model]
-|
-|===
-
-== Glosary
+== Glossary
 
 [cols="2,5a"]
 |===
@@ -117,6 +63,386 @@
 |Semantic segmentation provides the ability to classify individual pixels in an image depending on the object that they represent. 
 |===
 
+== Language
+
+=== Sentiment Analysis & Key Phrase Extraction & Entity Recognize
+
+[cols="2,5a"]
+|===
+|TYPE |CONTENT
+
+|CODE
+|
+[source, bash]
+.*link:language/text-analysis.py[language/text-analysis.py]*
+----
+text_analytics_client = TextAnalyticsClient(endpoint=cog_endpoint, credential=AzureKeyCredential(cog_key))
+
+sentiment_analysis = text_analytics_client.analyze_sentiment(documents=review)
+for result in sentiment_analysis:
+    print(f"Sentiment: " + result.sentiment)
+    print(f"Confidence: " + str(result.confidence_scores))
+
+key_phrase_analysis = text_analytics_client.extract_key_phrases(documents=review)
+for result in key_phrase_analysis:
+    print(f"Key Phrases: " + str(result.key_phrases))
+
+entity_analysis = text_analytics_client.recognize_entities(documents=review)
+for result in entity_analysis:
+    for entity in result.entities:
+        print(f"Entity: {entity.text:<30}", f" Category: {entity.category:<15}", f" Confidence: {entity.confidence_score:<4}")
+----
+
+|INPUT
+|
+[source, bash]
+.*Text 1*
+----
+我3月12日在这家餐厅吃饭，只能说一句：哇！食物太棒了，我99%会再来一次！
+----
+
+[source, bash]
+.*Text 2*
+----
+我5月17日来这里吃饭，体验很糟糕。食物上来时是冷的，服务员态度也不太好，我根本不喜欢这里。我不会再来了。
+----
+
+[source, bash]
+.*Text 3*
+----
+这家西餐厅已经很多年了，第一次来，感觉分量很大，太适合大口吃肉，大口喝酒的。
+----
+
+|OUTPUT
+|
+[source, bash]
+.*Output 1*
+----
+The sentence to analyze: ['我3月12日在这家餐厅吃饭，只能说一句：哇！食物太棒了，我99%会再来一次！']
+Sentiment: positive
+Confidence: {'positive': 0.98, 'neutral': 0.01, 'negative': 0.01}
+
+The sentence to analyze:  ['我3月12日在这家餐厅吃饭，只能说一句：哇！食物太棒了，我99%会再来一次！']
+Key Phrases: ['我3月', '日', '这家餐厅吃', '食物', '会']
+
+The sentence to analyze:  ['我3月12日在这家餐厅吃饭，只能说一句：哇！食物太棒了，我99%会再来一次！']
+Entity: 3月12日在                          Category: DateTime         Confidence: 0.98
+Entity: 餐厅                              Category: Location         Confidence: 0.69
+Entity: 99%                             Category: Quantity         Confidence: 1.0
+----
+
+[source, bash]
+.*Output 2*
+----
+The sentence to analyze: ['我5月17日来这里吃饭，体验很糟糕。食物上来时是冷的，服务员态度也不太好，我根本不喜欢这里。我不会再来了。']
+Sentiment: negative
+Confidence: {'positive': 0.0, 'neutral': 0.08, 'negative': 0.91}
+
+The sentence to analyze:  ['我5月17日来这里吃饭，体验很糟糕。食物上来时是冷的，服务员态度也不太好，我根本不喜欢这里。我不会再来了。']
+Key Phrases: ['我5月', '日', '里吃', '食物', '务', '态度也不太好', '根本不', '我不会']
+
+The sentence to analyze:  ['我5月17日来这里吃饭，体验很糟糕。食物上来时是冷的，服务员态度也不太好，我根本不喜欢这里。我不会再来了。']
+Entity: 5月17日                           Category: DateTime         Confidence: 0.99
+Entity: 服务员                             Category: PersonType       Confidence: 0.98
+----
+
+[source, bash]
+.*Output 3*
+----
+The sentence to analyze: ['这家西餐厅已经很多年了，第一次来，感觉分量很大，太适合大口吃肉，大口喝酒的。']
+Sentiment: positive
+Confidence: {'positive': 0.92, 'neutral': 0.08, 'negative': 0.0}
+
+The sentence to analyze:  ['这家西餐厅已经很多年了，第一次来，感觉分量很大，太适合大口吃肉，大口喝酒的。']
+Key Phrases: ['这家西餐', '分', '大']
+
+The sentence to analyze:  ['这家西餐厅已经很多年了，第一次来，感觉分量很大，太适合大口吃肉，大口喝酒的。']
+Entity: 西餐厅                             Category: Location         Confidence: 0.71
+Entity: 第一次                             Category: Quantity         Confidence: 0.97
+----
+|===
+
+=== Sentiment Analysis
+
+[cols="2,5a"]
+|===
+|TYPE |CONTENT 
+
+|CODE
+|
+[source, bash]
+.*link:language/sentiment.py[language/sentiment.py]*
+----
+text_analytics_client = TextAnalyticsClient(endpoint=endpoint, credential=AzureKeyCredential(key))
+result = text_analytics_client.analyze_sentiment(documents, show_opinion_mining=True)
+docs = [doc for doc in result if not doc.is_error]
+for idx, doc in enumerate(docs):
+    print(f"Overall sentiment: {doc.sentiment}")
+----
+
+|INPUT
+|
+[source, bash]
+.*Input 1*
+----
+I had the best day of my life. I decided to go sky-diving and it made me appreciate my whole life so much more.
+I developed a deep-connection with my instructor as well, and I feel as if I've made a life-long friend in her.
+----
+
+[source, bash]
+.*Input 2*
+----
+This was a waste of my time. All of the views on this drop are extremely boring, all I saw was grass. 0/10 would not recommend to any divers, even first timers.
+----
+
+[source, bash]
+.*Input 3*
+----
+This was pretty good! The sights were ok, and I had fun with my instructors! Can't complain too much about my experience.
+----
+
+[source, bash]
+.*Input 4*
+----
+I only have one word for my experience: WOW!!! I can't believe I have had such a wonderful skydiving company right in my backyard this whole time! I will definitely be a repeat customer, and I want to take my grandmother skydiving too,
+I know she'll love it!
+----
+
+|OUTPUT
+|
+[source, bash]
+.*Output 1*
+----
+Overall sentiment: positive
+----
+
+[source, bash]
+.*Output 2*
+----
+Overall sentiment: negative
+----
+
+[source, bash]
+.*Output 3*
+----
+Overall sentiment: positive
+----
+
+[source, bash]
+.*Output 4*
+----
+Overall sentiment: positive
+----
+|===
+
+[cols="2,5a"]
+|===
+|TYPE |CONTENT 
+
+|CODE
+|
+[source, bash]
+----
+
+----
+
+|INPUT
+|
+[source, bash]
+----
+
+----
+
+|OUTPUT
+|
+[source, bash]
+----
+
+----
+|===
+
+[cols="2,5a"]
+|===
+|TYPE |CONTENT 
+
+|CODE
+|
+[source, bash]
+----
+
+----
+
+|INPUT
+|
+[source, bash]
+----
+
+----
+
+|OUTPUT
+|
+[source, bash]
+----
+
+----
+|===
+
+[cols="2,5a"]
+|===
+|TYPE |CONTENT 
+
+|CODE
+|
+[source, bash]
+----
+
+----
+
+|INPUT
+|
+[source, bash]
+----
+
+----
+
+|OUTPUT
+|
+[source, bash]
+----
+
+----
+|===
+
+[cols="2,5a"]
+|===
+|TYPE |CONTENT 
+
+|CODE
+|
+[source, bash]
+----
+
+----
+
+|INPUT
+|
+[source, bash]
+----
+
+----
+
+|OUTPUT
+|
+[source, bash]
+----
+
+----
+|===
+
+[cols="2,5a"]
+|===
+|TYPE |CONTENT 
+
+|CODE
+|
+[source, bash]
+----
+
+----
+
+|INPUT
+|
+[source, bash]
+----
+
+----
+
+|OUTPUT
+|
+[source, bash]
+----
+
+----
+|===
+
+[cols="2,5a"]
+|===
+|TYPE |CONTENT 
+
+|CODE
+|
+[source, bash]
+----
+
+----
+
+|INPUT
+|
+[source, bash]
+----
+
+----
+
+|OUTPUT
+|
+[source, bash]
+----
+
+----
+|===
+
+[cols="2,5a"]
+|===
+|TYPE |CONTENT 
+
+|CODE
+|
+[source, bash]
+----
+
+----
+
+|INPUT
+|
+[source, bash]
+----
+
+----
+
+|OUTPUT
+|
+[source, bash]
+----
+
+----
+|===
+
+[cols="2,5a"]
+|===
+|TYPE |CONTENT 
+
+|CODE
+|
+[source, bash]
+----
+
+----
+
+|INPUT
+|
+[source, bash]
+----
+
+----
+
+|OUTPUT
+|
+[source, bash]
+----
+
+----
+|===
+
 == Responsible AI Principles
 
 [cols="2,5a"]
@@ -153,8 +479,6 @@
 * People should be accountable for AI systems. 
 * How can we create oversight so that humans can be accountable and in control?
 |===
-
-=== Practice
 
 [cols="2,5a"]
 |===
@@ -205,7 +529,7 @@ Which principle of responsible artificial intelligence (AI) is most important in
 * Enabling explanations helps you understand how the model makes decisions, which is essential for trust and accountability, especially in critical applications like healthcare or finance.
 
 |07
-|The handling of unusual or missing values provided to an Al system is a consideration for the Microsoft _ principle for responsible A.
+|The handling of unusual or missing values provided to an Al system is a consideration for the Microsoft _ principle for responsible AI.
 
 *Reliability and safety*
 

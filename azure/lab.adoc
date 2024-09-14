@@ -1,0 +1,57 @@
+= Azure AI 
+:toc: manual
+
+== Labs
+
+[cols="5a,5a"]
+|===
+|Item | Note
+
+|link:language/README.adoc[Azure AI Language]
+|
+* Recognize core concepts
+* Comprehend information at a glance
+* Analyze customer sentiment
+* Process unstructured medical data
+* Build conversational experiences
+* Respond to customer queries
+* Automatically categorize text
+* Extract key phrases and concepts
+
+|link:vision/README.adoc[Azure AI Vision]
+|
+* The Azure AI Vision service gives you access to advanced algorithms that process images and return information based on the visual features you're interested in. 
+
+|link:vision/face/README.adoc[Azure AI Vision Face]
+|
+* The Azure AI Face service provides AI algorithms that detect, recognize, and analyze human faces in images.
+* Facial recognition software is important in many scenarios, such as identification, touchless access control, and automatic face blurring for privacy.
+
+|link:ai-custom-vision/README.adoc[AI Custom Vision Classification]
+|
+* Easily customize your own state-of-the-art computer vision models for your unique use case.
+* https://azure.microsoft.com/en-us/products/ai-services/ai-custom-vision
+
+|link:ai-custom-vision/README.adoc[AI Custom Vision Object Detection]
+|
+* To identify and locate specific objects within an image, providing both the object class and its location.
+
+|link:ml-workspaces/README.adoc[ML Workspace]
+|
+* A workspace is the top-level resource that provides a centralized place to work with all the artifacts created when using Azure Machine Learning, including models, environments, components, and data assets. 
+
+|link:autoML/README.adoc[Automated ML]
+|
+* Automated machine learning (AutoML) is the process of automating the time-consuming, iterative tasks of machine learning model development. It allows data scientists, analysts, and developers to build ML models with high scale, efficiency, and productivity all while sustaining model quality. 
+* AutoML in Azure Machine Learning is based on a breakthrough from the Microsoft Research division.
+
+|link:regression/README.adoc[Regission Model]
+|A source code for demonstrate the regression.
+
+|link:classification/README.adoc[Classificaton Model]
+|
+
+|link:clustering/README.adoc[Clustering Model]
+|
+|===
+
