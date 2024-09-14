@@ -860,6 +860,130 @@ Relation of type: DosageOfMedication has the following roles
 
 == Vision
 
+=== Image Analysis
+
+[cols="2,5a"]
+|===
+|TYPE |CONTENT 
+
+|CODE
+|
+[source, bash]
+.*link:vision/image-analysis.py[vision/image-analysis.py]*
+----
+computervision_client = ComputerVisionClient(cog_endpoint, CognitiveServicesCredentials(cog_key))
+
+image_analysis = computervision_client.analyze_image(image_to_analyze,visual_features=[VisualFeatureTypes.description,
+ VisualFeatureTypes.tags, VisualFeatureTypes.faces])
+
+for caption in image_analysis.description.captions:
+    print(f"{colors.green}Confidence: {colors.reset}" + str(caption.confidence))
+    print(f"{colors.green}Description: {colors.reset}" + caption.text)
+
+for tag in image_analysis.tags:
+    print(f"{colors.green}Tag:{colors.reset} {tag.name:<15}",
+    f" {colors.yellow}Confidence:{colors.reset} {tag.confidence:<15}")
+
+for face in image_analysis.faces:
+    print("Face at location {},{},{},{}".format( face.face_rectangle.left, face.face_rectangle.top, \
+        face.face_rectangle.left + face.face_rectangle.width, \
+        face.face_rectangle.top + face.face_rectangle.height))
+----
+
+|INPUT
+|
+
+image::https://raw.githubusercontent.com/pluralsight-cloud/AI-900-Artificial-Intelligence-Workloads-and-Considerations/main/images/image-analysis/1-computervision-couple.jpg[]
+
+|OUTPUT
+|
+[source, bash]
+----
+-----Image Description-----
+Confidence: 0.48432523012161255
+Description: a man and woman sitting on a couch with a dog and a cup
+
+-----Image Tags-----
+Tag: clothing         Confidence: 0.9980252385139465
+Tag: person           Confidence: 0.9966760873794556
+Tag: human face       Confidence: 0.9829165935516357
+Tag: jeans            Confidence: 0.9511979222297668
+Tag: footwear         Confidence: 0.9418429136276245
+Tag: jacket           Confidence: 0.9413745403289795
+Tag: sitting          Confidence: 0.9293599128723145
+Tag: outdoor          Confidence: 0.9179489016532898
+Tag: building         Confidence: 0.9165575504302979
+Tag: man              Confidence: 0.9083775877952576
+Tag: bench            Confidence: 0.8780851364135742
+Tag: scarf            Confidence: 0.873084306716919
+Tag: coat             Confidence: 0.8616374135017395
+Tag: handbag          Confidence: 0.8562503457069397
+Tag: smile            Confidence: 0.8407078385353088
+Tag: street           Confidence: 0.8202004432678223
+Tag: woman            Confidence: 0.7806227207183838
+Tag: people           Confidence: 0.7503567934036255
+Tag: ground           Confidence: 0.7259345054626465
+Tag: wooden           Confidence: 0.5973991751670837
+
+-----Face Detection-----
+Face at location 304,161,458,315
+Face at location 1565,274,1718,427
+----
+|===
+
+[cols="2,5a"]
+|===
+|TYPE |CONTENT
+
+|CODE
+|
+[source, bash]
+.*link:vision/analyze_image.py[vision/analyze_image.py]*
+----
+computervision_client = ComputerVisionClient(endpoint, CognitiveServicesCredentials(key))
+
+image_analysis = computervision_client.analyze_image(image_to_analyze,visual_features=[VisualFeatureTypes.description,VisualFeatureTypes.tags])
+
+for caption in image_analysis.description.captions:
+    print(f"{colors.green}Confidence: {colors.reset}" + str(caption.confidence))
+    print(f"{colors.green}Description: {colors.reset}" + caption.text)
+
+for tag in image_analysis.tags:
+    print(f"{colors.green}Tag:{colors.reset} {tag.name:<15}", f" {colors.yellow}Confidence:{colors.reset} {tag.confidence:<15}")
+----
+
+|INPUT
+|
+
+image::https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Broadway_and_Times_Square_by_night.jpg/450px-Broadway_and_Times_Square_by_night.jpg[]
+
+|OUTPUT
+|
+[source, bash]
+----
+-----Image Description-----
+Confidence: 0.5896901488304138
+Description: a busy city street at night
+
+-----Image Tags-----
+Tag: building         Confidence: 0.9910045862197876
+Tag: metropolis       Confidence: 0.9403555393218994
+Tag: metropolitan area  Confidence: 0.9358731508255005
+Tag: downtown         Confidence: 0.9340376853942871
+Tag: outdoor          Confidence: 0.9233906269073486
+Tag: skyscraper       Confidence: 0.9208872318267822
+Tag: urban area       Confidence: 0.9175583124160767
+Tag: street           Confidence: 0.8893557786941528
+Tag: commercial building  Confidence: 0.8842802047729492
+Tag: mixed-use        Confidence: 0.8771032094955444
+Tag: crowded          Confidence: 0.8658456802368164
+Tag: night            Confidence: 0.8426163196563721
+Tag: city             Confidence: 0.8208400011062622
+Tag: people           Confidence: 0.6946084499359131
+Tag: light            Confidence: 0.6930656433105469
+----
+|===
+
 === Optical Character Recognition
 
 [cols="2,5a"]
@@ -907,6 +1031,8 @@ happen
 ----
 |===
 
+=== Image Description
+
 [cols="2,5a"]
 |===
 |TYPE |CONTENT 
@@ -914,22 +1040,28 @@ happen
 |CODE
 |
 [source, bash]
+.*link:vision/describe_image.py[vision/describe_image.py]*
 ----
-
+client = ComputerVisionClient(endpoint, CognitiveServicesCredentials(key))
+analysis = client.describe_image(url, max_descriptions, language)
+for caption in analysis.captions:
+    print(caption)
+    print(caption.text)
+    print(caption.confidence)
 ----
 
 |INPUT
 |
-[source, bash]
-----
 
-----
+image::https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Broadway_and_Times_Square_by_night.jpg/450px-Broadway_and_Times_Square_by_night.jpg[]
 
 |OUTPUT
 |
 [source, bash]
 ----
-
+{'name': 'Eiffel Tower', 'confidence': 0.971265435218811}
+Eiffel Tower
+0.971265435218811
 ----
 |===
 
