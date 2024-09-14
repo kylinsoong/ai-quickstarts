@@ -860,6 +860,8 @@ Relation of type: DosageOfMedication has the following roles
 
 == Vision
 
+=== Optical Character Recognition
+
 [cols="2,5a"]
 |===
 |TYPE |CONTENT 
@@ -867,22 +869,41 @@ Relation of type: DosageOfMedication has the following roles
 |CODE
 |
 [source, bash]
+.*link:vision/ocr.py[vision/ocr.py]*
 ----
+computervision_client = ComputerVisionClient(endpoint, CognitiveServicesCredentials(subscription_key))
+read_response = computervision_client.read(read_image_url,  raw=True)
 
+read_operation_location = read_response.headers["Operation-Location"]
+operation_id = read_operation_location.split("/")[-1]
+
+while True:
+    read_result = computervision_client.get_read_result(operation_id)
+    if read_result.status not in ['notStarted', 'running']:
+        break
+    time.sleep(1)
+
+if read_result.status == OperationStatusCodes.succeeded:
+    for text_result in read_result.analyze_result.read_results:
+        for line in text_result.lines:
+            print(line.text)
+            print(line.bounding_box)
 ----
 
 |INPUT
 |
-[source, bash]
-----
-
-----
+image::https://raw.githubusercontent.com/Azure-Samples/cognitive-services-python-sdk-samples/master/samples/vision/images/make_things_happen.jpg[]
 
 |OUTPUT
 |
 [source, bash]
 ----
-
+make
+[42.0, 126.0, 189.0, 127.0, 185.0, 189.0, 42.0, 184.0]
+things
+[106.0, 191.0, 273.0, 197.0, 270.0, 256.0, 105.0, 254.0]
+happen
+[206.0, 246.0, 408.0, 246.0, 406.0, 328.0, 205.0, 323.0]
 ----
 |===
 
