@@ -235,31 +235,7 @@ Overall sentiment: positive
 ----
 |===
 
-[cols="2,5a"]
-|===
-|TYPE |CONTENT 
-
-|CODE
-|
-[source, bash]
-----
-
-----
-
-|INPUT
-|
-[source, bash]
-----
-
-----
-
-|OUTPUT
-|
-[source, bash]
-----
-
-----
-|===
+=== Entity Recognize
 
 [cols="2,5a"]
 |===
@@ -268,24 +244,80 @@ Overall sentiment: positive
 |CODE
 |
 [source, bash]
+.*link:language/recognize-entities.py[language/recognize-entities.py]*
 ----
+text_analytics_client = TextAnalyticsClient(endpoint=endpoint, credential=AzureKeyCredential(key))
+result = text_analytics_client.recognize_entities(reviews)
+result = [review for review in result if not review.is_error]
+organization_to_reviews: typing.Dict[str, typing.List[str]] = {}
 
+for idx, review in enumerate(result):
+    for entity in review.entities:
+        print(f"Entity '{entity.text}' has category '{entity.category}'")
+        if entity.category == 'Organization':
+            organization_to_reviews.setdefault(entity.text, [])
+            organization_to_reviews[entity.text].append(reviews[idx])
+
+for organization, reviews in organization_to_reviews.items():
+    print(
+        "\n\nOrganization '{}' has left us the following review(s): {}".format(organization, "\n\n".join(reviews)
+        )
+    )
 ----
 
 |INPUT
 |
 [source, bash]
+.*Text 1*
+----
+I work for Foo Company, and we hired Contoso for our annual founding ceremony. The food was amazing and we all can't say enough good words about the quality and the level of service.
 ----
 
+[source, bash]
+.*Text 2*
+----
+We at the Foo Company re-hired Contoso after all of our past successes with the company.
+Though the food was still great, I feel there has been a quality drop since their last timec atering for us. 
+Is anyone else running into the same problem?
+----
+
+[source, bash]
+.*Text 3*
+----
+Bar Company is over the moon about the service we received from Contoso, the best sliders ever!!!!
 ----
 
 |OUTPUT
 |
 [source, bash]
 ----
+Entity 'Foo Company' has category 'Organization'
+Entity 'Contoso' has category 'Person'
+Entity 'annual' has category 'DateTime'
+Entity 'founding ceremony' has category 'Event'
+Entity 'food' has category 'Product'
+Entity 'Foo Company' has category 'Organization'
+Entity 'Contoso' has category 'Person'
+Entity 'food' has category 'Product'
+Entity 'Bar Company' has category 'Organization'
+Entity 'service' has category 'Skill'
+Entity 'Contoso' has category 'Person'
+Entity 'sliders' has category 'Product'
 
+
+Organization 'Foo Company' has left us the following review(s): I work for Foo Company, and we hired Contoso for our annual founding ceremony. The food
+    was amazing and we all can't say enough good words about the quality and the level of service.
+
+We at the Foo Company re-hired Contoso after all of our past successes with the company.
+    Though the food was still great, I feel there has been a quality drop since their last time
+    catering for us. Is anyone else running into the same problem?
+
+
+Organization 'Bar Company' has left us the following review(s): Bar Company is over the moon about the service we received from Contoso, the best sliders ever!!!!
 ----
 |===
+
+=== Linked Entity Recognize
 
 [cols="2,5a"]
 |===
@@ -294,24 +326,49 @@ Overall sentiment: positive
 |CODE
 |
 [source, bash]
+.*link:language/recognize_linked_entities.py[language/recognize_linked_entities.py]*
 ----
-
+text_analytics_client = TextAnalyticsClient(endpoint=endpoint, credential=AzureKeyCredential(key))
+result = text_analytics_client.recognize_linked_entities(documents)
+docs = [doc for doc in result if not doc.is_error]
+entity_to_url = {}
+for doc in docs:
+    for entity in doc.entities:
+        print("Entity '{}' has been mentioned '{}' time(s)".format(
+            entity.name, len(entity.matches)
+        ))
+        if entity.data_source == "Wikipedia":
+            entity_to_url[entity.name] = entity.url
 ----
 
 |INPUT
 |
 [source, bash]
 ----
-
+Microsoft was founded by Bill Gates with some friends he met at Harvard. One of his friends,
+Steve Ballmer, eventually became CEO after Bill Gates as well. Steve Ballmer eventually stepped
+down as CEO of Microsoft, and was succeeded by Satya Nadella.
+Microsoft originally moved its headquarters to Bellevue, Washington in January 1979, but is now
+headquartered in Redmond
 ----
 
 |OUTPUT
 |
 [source, bash]
 ----
-
+Entity 'Microsoft' has been mentioned '3' time(s)
+Entity 'Bill Gates' has been mentioned '2' time(s)
+Entity 'Harvard University' has been mentioned '1' time(s)
+Entity 'Steve Ballmer' has been mentioned '2' time(s)
+Entity 'Chief executive officer' has been mentioned '2' time(s)
+Entity 'Satya Nadella' has been mentioned '1' time(s)
+Entity 'Bellevue, Washington' has been mentioned '1' time(s)
+Entity 'Briann January' has been mentioned '1' time(s)
+Entity 'Redmond, Washington' has been mentioned '1' time(s)
 ----
 |===
+
+=== PII Entity Recognize
 
 [cols="2,5a"]
 |===
@@ -320,24 +377,47 @@ Overall sentiment: positive
 |CODE
 |
 [source, bash]
+.*link:language/recognize_pii_entities.py[language/recognize_pii_entities.py]*
 ----
-
+text_analytics_client = TextAnalyticsClient(endpoint=endpoint, credential=AzureKeyCredential(key))
+result = text_analytics_client.recognize_pii_entities(documents)
+docs = [doc for doc in result if not doc.is_error]
+for idx, doc in enumerate(docs):
+    print(f"Document text: {documents[idx]}")
+    print(f"Redacted document text: {doc.redacted_text}")
+    for entity in doc.entities:
+        print("...Entity '{}' with category '{}' got redacted".format(
+            entity.text, entity.category
+        ))
 ----
 
 |INPUT
 |
 [source, bash]
 ----
-
+Parker Doe has repaid all of their loans as of 2020-04-25.
+Their SSN is 859-98-0987. To contact them, use their phone number
+555-555-5555. They are originally from Brazil and have Brazilian CPF number 998.214.865-68
 ----
 
 |OUTPUT
 |
 [source, bash]
 ----
-
+Document text: Parker Doe has repaid all of their loans as of 2020-04-25.
+    Their SSN is 859-98-0987. To contact them, use their phone number
+    555-555-5555. They are originally from Brazil and have Brazilian CPF number 998.214.865-68
+Redacted document text: ********** has repaid all of their loans as of **********.
+    Their SSN is ***********. To contact them, use their phone number
+    ************. They are originally from Brazil and have Brazilian CPF number 998.214.865-68
+...Entity 'Parker Doe' with category 'Organization' got redacted
+...Entity '2020-04-25' with category 'DateTime' got redacted
+...Entity '859-98-0987' with category 'USSocialSecurityNumber' got redacted
+...Entity '555-555-5555' with category 'PhoneNumber' got redacted
 ----
 |===
+
+=== Key Phrase Extraction
 
 [cols="2,5a"]
 |===
@@ -346,24 +426,53 @@ Overall sentiment: positive
 |CODE
 |
 [source, bash]
+.*link:language/extract_key_phrases.py[language/extract_key_phrases.py]*
 ----
-
+text_analytics_client = TextAnalyticsClient(endpoint=endpoint, credential=AzureKeyCredential(key))
+result = text_analytics_client.extract_key_phrases(articles)
+for idx, doc in enumerate(result):
+    if not doc.is_error:
+        print("Key phrases in article #{}: {}".format(
+            idx + 1,
+            ", ".join(doc.key_phrases)
+        ))
 ----
 
 |INPUT
 |
 [source, bash]
+.*Text 1*
+----
+Washington, D.C. Autumn in DC is a uniquely beautiful season. The leaves fall from the trees
+in a city chock-full of forests, leaving yellow leaves on the ground and a clearer view of the
+blue sky above...
 ----
 
+[source, bash]
+.*Text 2*
+----
+Redmond, WA. In the past few days, Microsoft has decided to further postpone the start date of
+its United States workers, due to the pandemic that rages with no end in sight...
+----
+
+[source, bash]
+.*Text 3*
+----
+Redmond, WA. Employees at Microsoft can be excited about the new coffee shop that will open on campus
+once workers no longer have to work remotely...
 ----
 
 |OUTPUT
 |
 [source, bash]
 ----
-
+Key phrases in article #1: D.C. Autumn, beautiful season, clearer view, blue sky, yellow leaves, Washington, DC, trees, city, forests, ground
+Key phrases in article #2: United States workers, start date, Redmond, WA, past, days, Microsoft, pandemic, end, sight
+Key phrases in article #3: new coffee shop, Redmond, WA, Employees, Microsoft, campus, workers
 ----
 |===
+
+=== Language Detection
 
 [cols="2,5a"]
 |===
@@ -372,24 +481,384 @@ Overall sentiment: positive
 |CODE
 |
 [source, bash]
+.*link:language/detect_language.py[language/detect_language.py]*
 ----
+text_analytics_client = TextAnalyticsClient(endpoint=endpoint, credential=AzureKeyCredential(key))
+result = text_analytics_client.detect_language(documents)
+reviewed_docs = [doc for doc in result if not doc.is_error]
 
+for idx, doc in enumerate(reviewed_docs):
+    print("Review #{} is in '{}', which has ISO639-1 name '{}'\n".format(
+        idx, doc.primary_language.name, doc.primary_language.iso6391_name
+    ))
 ----
 
 |INPUT
 |
 [source, bash]
+.*Text 1*
+----
+The concierge Paulette was extremely helpful. Sadly when we arrived the elevator was broken, but with Paulette's help we barely noticed this inconvenience.
+She arranged for our baggage to be brought up to our room with no extra charge and gave us a free meal to refurbish all of the calories we lost from
+walking up the stairs :). Can't say enough good things about my experience!
 ----
 
+[source, bash]
+.*Text 2*
+----
+最近由于工作压力太大，我们决定去富酒店度假。那儿的温泉实在太舒服了，我跟我丈夫都完全恢复了工作前的青春精神！加油！
 ----
 
 |OUTPUT
 |
 [source, bash]
 ----
-
+Review #0 is in 'English', which has ISO639-1 name 'en'
+Review #1 is in 'Chinese_Simplified', which has ISO639-1 name 'zh_chs'
 ----
 |===
+
+=== Healthcare Entities Analysis
+
+[cols="2,5a"]
+|===
+|TYPE |CONTENT 
+
+|CODE
+|
+[source, bash]
+.*link:language/analyze_healthcare_entities.py[language/analyze_healthcare_entities.py]*
+----
+text_analytics_client = TextAnalyticsClient(
+    endpoint=endpoint,
+    credential=AzureKeyCredential(key),
+)
+
+poller = text_analytics_client.begin_analyze_healthcare_entities(documents)
+result = poller.result()
+
+docs = [doc for doc in result if not doc.is_error]
+
+for doc in docs:
+    for entity in doc.entities:
+        print(f"Entity: {entity.text}")
+        print(f"...Normalized Text: {entity.normalized_text}")
+        print(f"...Category: {entity.category}")
+        print(f"...Subcategory: {entity.subcategory}")
+        print(f"...Offset: {entity.offset}")
+        print(f"...Confidence score: {entity.confidence_score}")
+        if entity.data_sources is not None:
+            print("...Data Sources:")
+            for data_source in entity.data_sources:
+                print(f"......Entity ID: {data_source.entity_id}")
+                print(f"......Name: {data_source.name}")
+        if entity.assertion is not None:
+            print("...Assertion:")
+            print(f"......Conditionality: {entity.assertion.conditionality}")
+            print(f"......Certainty: {entity.assertion.certainty}")
+            print(f"......Association: {entity.assertion.association}")
+    for relation in doc.entity_relations:
+        print(f"Relation of type: {relation.relation_type} has the following roles")
+        for role in relation.roles:
+            print(f"...Role '{role.name}' with entity '{role.entity.text}'")
+    print("------------------------------------------")
+
+dosage_of_medication_relations = [
+    entity_relation
+    for doc in docs
+    for entity_relation in doc.entity_relations if entity_relation.relation_type == HealthcareEntityRelation.DOSAGE_OF_MEDICATION
+]
+----
+
+|INPUT
+|
+[source, bash]
+.*Text 1*
+----
+Patient needs to take 100 mg of ibuprofen, and 3 mg of potassium. Also needs to take 10 mg of Zocor.
+----
+
+[source, bash]
+.*Text 2*
+----
+Patient needs to take 50 mg of ibuprofen, and 2 mg of Coumadin.
+----
+
+|OUTPUT
+|
+[source, bash]
+----
+Entity: 100 mg
+...Normalized Text: None
+...Category: Dosage
+...Subcategory: None
+...Offset: 27
+...Confidence score: 0.99
+Entity: ibuprofen
+...Normalized Text: ibuprofen
+...Category: MedicationName
+...Subcategory: None
+...Offset: 37
+...Confidence score: 1.0
+...Data Sources:
+......Entity ID: C0020740
+......Name: UMLS
+......Entity ID: 0000019879
+......Name: AOD
+......Entity ID: M01AE01
+......Name: ATC
+......Entity ID: 0046165
+......Name: CCPSS
+......Entity ID: 0000006519
+......Name: CHV
+......Entity ID: 2270-2077
+......Name: CSP
+......Entity ID: DB01050
+......Name: DRUGBANK
+......Entity ID: 1611
+......Name: GS
+......Entity ID: sh97005926
+......Name: LCH_NW
+......Entity ID: LP16165-0
+......Name: LNC
+......Entity ID: 40458
+......Name: MEDCIN
+......Entity ID: d00015
+......Name: MMSL
+......Entity ID: D007052
+......Name: MSH
+......Entity ID: WK2XYI10QM
+......Name: MTHSPL
+......Entity ID: C561
+......Name: NCI
+......Entity ID: 002377
+......Name: NDDF
+......Entity ID: CDR0000040475
+......Name: PDQ
+......Entity ID: x02MO
+......Name: RCD
+......Entity ID: 5640
+......Name: RXNORM
+......Entity ID: E-7772
+......Name: SNM
+......Entity ID: C-603C0
+......Name: SNMI
+......Entity ID: 387207008
+......Name: SNOMEDCT_US
+......Entity ID: m39860
+......Name: USP
+......Entity ID: MTHU000060
+......Name: USPMG
+......Entity ID: 4017840
+......Name: VANDF
+Entity: 3 mg
+...Normalized Text: None
+...Category: Dosage
+...Subcategory: None
+...Offset: 52
+...Confidence score: 0.98
+Entity: potassium
+...Normalized Text: potassium
+...Category: MedicationName
+...Subcategory: None
+...Offset: 60
+...Confidence score: 1.0
+...Data Sources:
+......Entity ID: C0032821
+......Name: UMLS
+......Entity ID: 0000002435
+......Name: AOD
+......Entity ID: 1006930
+......Name: CCPSS
+......Entity ID: 0000010004
+......Name: CHV
+......Entity ID: 32051
+......Name: CPM
+......Entity ID: 2390-5099
+......Name: CSP
+......Entity ID: DB14500
+......Name: DRUGBANK
+......Entity ID: 2493
+......Name: GS
+......Entity ID: U003782
+......Name: LCH
+......Entity ID: sh85105593
+......Name: LCH_NW
+......Entity ID: LP15098-4
+......Name: LNC
+......Entity ID: 41250
+......Name: MEDCIN
+......Entity ID: 5321
+......Name: MMSL
+......Entity ID: D011188
+......Name: MSH
+......Entity ID: U000145
+......Name: MTH
+......Entity ID: RWP5GA015D
+......Name: MTHSPL
+......Entity ID: C765
+......Name: NCI
+......Entity ID: 000763
+......Name: NDDF
+......Entity ID: 39750
+......Name: PSY
+......Entity ID: X80D4
+......Name: RCD
+......Entity ID: 8588
+......Name: RXNORM
+......Entity ID: F-10530
+......Name: SNM
+......Entity ID: C-13500
+......Name: SNMI
+......Entity ID: 88480006
+......Name: SNOMEDCT_US
+......Entity ID: 4017695
+......Name: VANDF
+Entity: 10 mg
+...Normalized Text: None
+...Category: Dosage
+...Subcategory: None
+...Offset: 94
+...Confidence score: 0.99
+Entity: Zocor
+...Normalized Text: Zocor
+...Category: MedicationName
+...Subcategory: None
+...Offset: 103
+...Confidence score: 1.0
+...Data Sources:
+......Entity ID: C0678181
+......Name: UMLS
+......Entity ID: 0000042766
+......Name: CHV
+......Entity ID: 5001-0024
+......Name: CSP
+......Entity ID: 1546
+......Name: MMSL
+......Entity ID: D019821
+......Name: MSH
+......Entity ID: C29454
+......Name: NCI
+......Entity ID: CDR0000455226
+......Name: PDQ
+......Entity ID: x03d7
+......Name: RCD
+......Entity ID: 196503
+......Name: RXNORM
+Relation of type: DosageOfMedication has the following roles
+...Role 'Dosage' with entity '100 mg'
+...Role 'Medication' with entity 'ibuprofen'
+Relation of type: DosageOfMedication has the following roles
+...Role 'Dosage' with entity '3 mg'
+...Role 'Medication' with entity 'potassium'
+Relation of type: DosageOfMedication has the following roles
+...Role 'Dosage' with entity '10 mg'
+...Role 'Medication' with entity 'Zocor'
+------------------------------------------
+Entity: 50 mg
+...Normalized Text: None
+...Category: Dosage
+...Subcategory: None
+...Offset: 27
+...Confidence score: 0.99
+Entity: ibuprofen
+...Normalized Text: ibuprofen
+...Category: MedicationName
+...Subcategory: None
+...Offset: 36
+...Confidence score: 1.0
+...Data Sources:
+......Entity ID: C0020740
+......Name: UMLS
+......Entity ID: 0000019879
+......Name: AOD
+......Entity ID: M01AE01
+......Name: ATC
+......Entity ID: 0046165
+......Name: CCPSS
+......Entity ID: 0000006519
+......Name: CHV
+......Entity ID: 2270-2077
+......Name: CSP
+......Entity ID: DB01050
+......Name: DRUGBANK
+......Entity ID: 1611
+......Name: GS
+......Entity ID: sh97005926
+......Name: LCH_NW
+......Entity ID: LP16165-0
+......Name: LNC
+......Entity ID: 40458
+......Name: MEDCIN
+......Entity ID: d00015
+......Name: MMSL
+......Entity ID: D007052
+......Name: MSH
+......Entity ID: WK2XYI10QM
+......Name: MTHSPL
+......Entity ID: C561
+......Name: NCI
+......Entity ID: 002377
+......Name: NDDF
+......Entity ID: CDR0000040475
+......Name: PDQ
+......Entity ID: x02MO
+......Name: RCD
+......Entity ID: 5640
+......Name: RXNORM
+......Entity ID: E-7772
+......Name: SNM
+......Entity ID: C-603C0
+......Name: SNMI
+......Entity ID: 387207008
+......Name: SNOMEDCT_US
+......Entity ID: m39860
+......Name: USP
+......Entity ID: MTHU000060
+......Name: USPMG
+......Entity ID: 4017840
+......Name: VANDF
+Entity: 2 mg
+...Normalized Text: None
+...Category: Dosage
+...Subcategory: None
+...Offset: 51
+...Confidence score: 1.0
+Entity: Coumadin
+...Normalized Text: Coumadin
+...Category: MedicationName
+...Subcategory: None
+...Offset: 59
+...Confidence score: 1.0
+...Data Sources:
+......Entity ID: C0699129
+......Name: UMLS
+......Entity ID: 0000044372
+......Name: CHV
+......Entity ID: 0397-0420
+......Name: CSP
+......Entity ID: 146
+......Name: MMSL
+......Entity ID: D014859
+......Name: MSH
+......Entity ID: C1658
+......Name: NCI
+......Entity ID: CDR0000039740
+......Name: PDQ
+......Entity ID: x02iF
+......Name: RCD
+......Entity ID: 202421
+......Name: RXNORM
+Relation of type: DosageOfMedication has the following roles
+...Role 'Dosage' with entity '50 mg'
+...Role 'Medication' with entity 'ibuprofen'
+Relation of type: DosageOfMedication has the following roles
+...Role 'Dosage' with entity '2 mg'
+...Role 'Medication' with entity 'Coumadin'
+----
+|===
+
+== Vision
 
 [cols="2,5a"]
 |===

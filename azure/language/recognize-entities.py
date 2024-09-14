@@ -29,8 +29,7 @@ for idx, review in enumerate(result):
 
 for organization, reviews in organization_to_reviews.items():
     print(
-        "\n\nOrganization '{}' has left us the following review(s): {}".format(
-            organization, "\n\n".join(reviews)
+        "\n\nOrganization '{}' has left us the following review(s): {}".format(organization, "\n\n".join(reviews)
         )
     )
 
