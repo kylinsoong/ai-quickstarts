@@ -1053,7 +1053,7 @@ for caption in analysis.captions:
 |INPUT
 |
 
-image::https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Broadway_and_Times_Square_by_night.jpg/450px-Broadway_and_Times_Square_by_night.jpg[]
+image::https://upload.wikimedia.org/wikipedia/commons/8/85/Tour_Eiffel_Wikimedia_Commons_%28cropped%29.jpg[]
 
 |OUTPUT
 |
