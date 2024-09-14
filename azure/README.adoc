@@ -78,8 +78,8 @@
 * An Azure AI hub can host one or more projects. Each project encapsulates the tools and assets used to create a specific AI solution.
 * An Azure AI hub is the foundation for AI development projects on Azure, and enables you to define shared assets that can be used across multiple projects. 
 
-|Tagging
-|Tagging involves associating an image with metadata that summarizes the attributes of the image.
+|Computer Vision Tagging
+|Computer Vision Tagging involves associating an image with metadata that summarizes the attributes of the image.
 
 |Face identification
 |Face identification in the Azure AI Face service can address one-to-many matching of one face in an image to a set of faces in a secure repository. 
@@ -91,7 +91,9 @@
 |System messages should be used to set the context for the model by describing expectations. Based on system messages, the model knows how to respond to prompts. 
 
 |Embeddings
-|Embeddings is an Azure OpenAI model that converts text into numerical vectors for analysis. Embeddings can be used to search, classify, and compare sources of text for similarity.
+|
+* Embeddings is an Azure OpenAI model that converts text into numerical vectors for analysis. 
+* Embeddings can be used to search, classify, and compare sources of text for similarity.
 
 |Vectorization
 |Vectorization captures semantic relationships between words by assigning them to locations in n-dimensional space.
@@ -107,6 +109,12 @@
 
 |Custom Translator 
 |Model training with a dictionary can be used with Custom Translator when you do not have enough parallel sentences to meet the 10,000 minimum requirements. 
+
+|DALL-E
+|DALL-E is a model that can generate images from natural language.
+
+|Semantic segmentation
+|Semantic segmentation provides the ability to classify individual pixels in an image depending on the object that they represent. 
 |===
 
 == Responsible AI Principles
@@ -116,51 +124,191 @@
 |Name |Note
 
 |Fairness
-|AI systems should treat all people fairly. 
-
-Examples:
-
-* Artificial intelligence (AI) system to support the process of accepting or rejecting mortgage applications, the *ethnicity* and *gender* should be considered to avoid biased decision making.
-* The *fairness* involves evaluating and mitigating the bias introduced by the features of a model.
+|
+* AI systems should treat all people fairly.
+* How might an AI system allocate opportunities, resources, or information in ways that are fair to the humans who use it?
 
 |Reliability and safety
-|AI systems should perform reliably and safely. 
-
-Examples:
-
-* The *reliability and safety* is important for developing driverless agriculture vehicles to help harvest crops, that the vehicles will be deployed alongside people working in the crop fields, and as such, the company will need to carry out robust testing.
+|
+* AI systems should perform reliably and safely.
+* How might the system function well for people across different use conditions and contexts, including ones it was not originally intended for?
 
 |Privacy and security
-|AI systems should be secure and respect privacy. 
-
-Examples:
-
-* The *accountability* and *privacy and security* principles are most important when designing an AI system to manage healthcare data.
+|
+* AI systems should be secure and respect privacy.
+* How might the system be designed to support privacy and security?
 
 |Inclusiveness
 |
 * AI systems should empower everyone and engage people.
-* AI should bring benefits to all parts of society, regardless of physical ability, gender, sexual orientation, ethnicity, or other factors.
+* How might the system be designed to be inclusive of people of all abilities?
 
 |Transparency
 |
-* AI systems should be understandable. 
-* Users should be made fully aware of the purpose of the system, how it works, and what limitations may be expected.
-
-Examples:
-
-* Artificial intelligence (AI) raises awareness about the limitations of AI-based solutions
-
+* AI systems should be understandable.
+* How might people misunderstand, misuse, or incorrectly estimate the capabilities of the system?
 
 |Accountability
 |
-People should be accountable for AI systems. Designers and developers of AI-based solutions should work within a framework of governance and organizational principles that ensure the solution meets ethical and legal standards that are clearly defined.
-
-Examples:
-
-* Artificial intelligence (AI) defines the framework of governance and organization principles that meet ethical and legal standards of AI solutions
-* The *accountability* and *privacy and security* principles are most important when designing an AI system to manage healthcare data.
-
+* People should be accountable for AI systems. 
+* How can we create oversight so that humans can be accountable and in control?
 |===
 
+=== Practice
+
+[cols="2,5a"]
+|===
+|ID |Practice
+
+|01
+|Which principle of responsible artificial intelligence (AI) raises awareness about the limitations of AI-based solutions?
+
+*Transparency*
+
+* Transparency provides clarity regarding the purpose of AI solutions, the way they work, as well as their limitations. 
+
+|02
+|Which principle of responsible artificial intelligence (AI) has the objective of ensuring that AI solutions benefit all parts of society regardless of gender or ethnicity?
+
+*inclusiveness*
+
+* The inclusiveness principle is meant to ensure that AI solutions empower and engage everyone, regardless of criteria such as physical ability, gender, sexual orientation, or ethnicity.
+
+|03
+|Which principle of responsible artificial intelligence (AI) involves evaluating and mitigating the bias introduced by the features of a model?
+
+*fairness*
+
+* Fairness involves evaluating and mitigating the bias introduced by the features of a model.
+
+|04
+|Which two principles of responsible artificial intelligence (AI) are most important when designing an AI system to manage healthcare data? Each correct answer presents part of the solution.
+
+*accountability*, *privacy and security*
+
+* The accountability principle states that AI systems are designed to meet any ethical and legal standards that are applicable. The system must be designed to ensure that privacy of the healthcare data is of the highest importance, including anonymizing data where applicable.
+
+|05
+|A company is currently developing driverless agriculture vehicles to help harvest crops. The vehicles will be deployed alongside people working in the crop fields, and as such, the company will need to carry out robust testing.
+
+Which principle of responsible artificial intelligence (AI) is most important in this case?
+
+*reliability and safety*
+
+* The reliability and safety principles are of paramount importance here as it requires an AI system to work alongside people in a physical environment by using AI controlled machinery. The system must function safely, while ensuring no harm will come to human life.
+
+|06
+|You build a machine learning model by using the automated machine learning user interface (Ul). You need to ensure that the model meets the Microsoft transparency principle for responsible Al.What should you do?
+
+*Enable Explain best model*
+
+* Enabling explanations helps you understand how the model makes decisions, which is essential for trust and accountability, especially in critical applications like healthcare or finance.
+
+|07
+|The handling of unusual or missing values provided to an Al system is a consideration for the Microsoft _ principle for responsible A.
+
+*Reliability and safety*
+
+|08
+|You are designing an Al system that empowers everyone, including people who have hearing, visual, and other impairments. This is an example of which Microsoft guiding principle for responsible Al?
+
+*inclusiveness*
+
+|09
+|
+* *Reliability and safety* - Ensure that Al systems operate as they were originally designed, respond to unanticipated conditions, and resist harmful manipulation.
+* *Accountability* - Implementing processes to ensure that decisions made by Al systems can be overridden by humans.
+* *Privacy and security* - Provide consumers with information and controls over the collection, use, and storage of their data.
+
+|10
+|When developing an AI system for self-driving cars, the Microsoft _ principle for responsible AI should be applied to ensure consistent operation of the system during unexpected circumstances.
+
+*Reliability and safety*
+
+|11
+|You are building an Al system. Which task should you include to ensure that the service meets the Microsoft transparency principle for responsible Al?
+
+*Provide documentation to help developers debug code.*
+
+|12
+|What are six Microsoft guiding principles for responsible Al? Each correct answer presents a complete solution?
+
+*fairness*, *reliability and safety*, *privacy and security*, *inclusiveness*, *transparency*, *accountability*
+
+|13
+|When you design an Al system to assess whether loans should be approved, the factors used to make the decision should be explainable. This is an example of which Microsoft guiding principle for responsible Al?
+
+*transparency*
+
+|14
+|
+* Providing an explanation of the outcome of a credit loan application is an example of the Microsoft *transparency* principle for responsible Al.
+* A triage bot that prioritizes insurance claims based on injuries is an example of the Microsoft *privacy and security* principle for responsible Al.
+* An Al solution that is offered at different prices for different sales territories is an example of the Microsoft *fairness* principle for responsible Al.
+
+|15
+|
+* *fairness* - The system must not discriminate based on gender, race.
+* *privacy and security* - Personal data must be visible only to approve.
+* *transparency* - Automated decision-making processes must be recorded so that approved users can identify why a decision was made.
+
+|16
+|You are building an Al-based app. You need to ensure that the app uses the principles for responsible Al. Which two principles should you follow? Each correct answer presents part of the solution.
+
+* *lmplement a process of Al model validation as part of the software review process*
+* *Establish a risk governance committee that includes members of the legal team, members of the risk management team, and a privacy officer*
+
+|17
+|According to Microsoft's _ principle of responsible Al, Al systems should NOT reflect biases from the data sets that are used to train the systems.
+
+*fairness*
+
+|18
+|Ensuring an Al system does not provide a prediction when important fields contain unusualor missing values is _ principle for responsible Al.
+
+*reliability and safety*
+
+|19
+|Which statement is an example of a Microsoft responsible Al principle?
+
+*Al systems must be transparent and inclusive*
+
+|20
+|
+* *reliability and safety* - Al systems must consistently operate as intended, even under unexpected conditions.
+* *privacy and security* - Al systems must protect and secure personal and businesses information
+
+|21
+|You have a natural language processing (NLP) model that was created by using data obtained without permission. Which Microsoft principle for responsible Al does this breach?
+
+*privacy and security*
+
+|22
+|Ensuring an Al system does not provide a prediction when important fields contain unusual or missing values is _ principle for responsible Al.
+
+*reliability and safety*
+
+|23
+|You have an Al-based loan approval system. During testing, you discover that the system has a gender bias. Which responsible Al principle does this violate?
+
+*fairness*
+
+|24
+|
+* *privacy and security* - A customer's personal information must be visible only to staff who are invoved in the decision-making process.
+* *transparency* - The decision-making process must be recorded so that staff can identify the reasoning behind a particular quote.
+* *inclusiveness* - The system must be accessible to customers who use screen readers or other assistive technology.
+
+
+|25
+|Your company is exploring the use of voice recognition technologies in its smart home devices. The company wants to identify any barriers that might unintentionally leave out specific user groups. This is an example of which Microsoft guiding principle for responsible Al?
+
+*inclusiveness* 
+
+|26
+|What is an example of the Microsoft responsible Al principle of transparency?
+
+* *helping users understand the decisions made by an Al system*
+
+|===
 
