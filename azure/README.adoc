@@ -61,6 +61,12 @@
 
 |Semantic segmentation
 |Semantic segmentation provides the ability to classify individual pixels in an image depending on the object that they represent. 
+
+|Stemming
+|Stemming normalizes words before counting them, 在Tokenization过程中将相同词根的单词作为一个标记，例如： "power", "powered", 和 "powerful".
+
+|Knowledge mining
+|Knowledge mining is an artificial intelligence (AI) workload that has the purpose of making large amounts of data searchable. 
 |===
 
 == Language
@@ -857,6 +863,7 @@ Relation of type: DosageOfMedication has the following roles
 ...Role 'Medication' with entity 'Coumadin'
 ----
 |===
+
 
 == Vision
 
