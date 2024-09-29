@@ -1,0 +1,36 @@
+= Google AI & ML 
+:toc: manual
+
+== Glossary
+
+[cols="2,5a"]
+|===
+|Name |Note
+
+|Time Series Data
+|Time series data consists of sequences of data points collected or recorded at specific time intervals. Each data point typically includes a timestamp and a value, which can represent various metrics like temperature, stock prices, or server performance. This type of data is crucial for analyzing trends, patterns, and changes over time.
+
+|TensorFlow Extended SDK
+|The TensorFlow Extended (TFX) SDK is designed to help you build production-ready machine learning pipelines. It provides a set of components that manage different aspects of the machine learning workflow, from data validation to model serving.
+|===
+
+== Usage Case
+
+[cols="5a"]
+|===
+|Automated quality control in manufacturing
+
+|Background: 
+
+* A semiconductor manufacturing company, eed to create a real-time application that automates the quality control process. 
+* High definition images of each semiconductor are taken at the end of the assembly line in real time. 
+* The photos are uploaded to a Cloud Storage bucket along with tabular data that includes each semiconductor's batch number, serial number, dimensions, and weight.
+
+|Key Requirement: *Configure model training and serving while maximizing model accuracy.*
+
+|Solution:
+
+1.  Use Vertex AI Data Labeling Service to label the images, and train an AutoML image classification mode
+2. Deploy the model, and configure Pub/Sub to publish a message when an image is categorized into the failing class.
+|===
+
