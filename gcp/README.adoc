@@ -149,22 +149,22 @@ responses = multimodal_model.generate_content(contents, stream=True)
 |Image understanding across multiple images
 |
 
-[source, bash]
-*Prompt*
+[source,bash]
+.*Prompt*
 ----
 How much should I pay for the fruits?
 ----
 
 *Image 1:*
 
-image::https://storage.googleapis.com/github-repo/img/gemini/multimodality_usecases_overview/banana-apple.jpg[]
+image::https://storage.googleapis.com/github-repo/img/gemini/multimodality_usecases_overview/banana-apple.jpg[Image, width=500, height=325]
 
 *Image 2:*
 
-image::https://storage.googleapis.com/github-repo/img/gemini/multimodality_usecases_overview/pricelist.jpg[]
+image::https://storage.googleapis.com/github-repo/img/gemini/multimodality_usecases_overview/pricelist.jpg[Image, width=400, height=314]
 
 [source, bash]
-*Response*
+.*Response*
 ----
 Step 1: There are two bananas and two apples in the first image.
 Step 2: Two bananas and two apples.
@@ -180,15 +180,15 @@ Therefore, you should pay $4.60 for the fruits.
 |
 
 [source, bash]
-*Prompt*
+.*Prompt*
 ----
 Provide the instructions to reset the clock in English and chinese
 ----
 
-image::https://storage.googleapis.com/github-repo/img/gemini/multimodality_usecases_overview/stove.jpg[Stove]
+image::https://storage.googleapis.com/github-repo/img/gemini/multimodality_usecases_overview/stove.jpg[Stove, width=600, height=198]
 
 [source, bash]
-*Response*
+.*Response*
 ----
 To reset the clock, follow these steps: 
 
@@ -209,15 +209,15 @@ To reset the clock, follow these steps:
 |
 
 [source, bash]
-*Prompt*
+.*Prompt*
 ----
 Document the entities and relationships in this ER diagram.
 ----
 
-image::https://storage.googleapis.com/github-repo/img/gemini/multimodality_usecases_overview/er.png[]
+image::https://storage.googleapis.com/github-repo/img/gemini/multimodality_usecases_overview/er.png[Image, width=500, height=345]
 
 [source, bash]
-*Response*
+.*Response*
 ----
 **Entities:**
 
@@ -252,7 +252,7 @@ image::https://storage.googleapis.com/github-repo/img/gemini/multimodality_useca
 |
 
 [source, bash]
-*Prompt*
+.*Prompt*
 ----
 Which of these glasses you recommend for me based on the shape of my face?
 I have an oval shape face.
@@ -260,14 +260,14 @@ I have an oval shape face.
 
 *Image Glass 1:*
 
-image::https://storage.googleapis.com/github-repo/img/gemini/multimodality_usecases_overview/glasses1.jpg[]
+image::https://storage.googleapis.com/github-repo/img/gemini/multimodality_usecases_overview/glasses1.jpg[Image, width=300, height=300]
 
 *Image Glass 2:*
 
-image::https://storage.googleapis.com/github-repo/img/gemini/multimodality_usecases_overview/glasses2.jpg[]
+image::https://storage.googleapis.com/github-repo/img/gemini/multimodality_usecases_overview/glasses2.jpg[Image, width=300, height=300]
 
 [source, json]
-*Response*
+.*Response*
 ----
 {
   "recommendation": "Glasses 2",
@@ -282,7 +282,7 @@ image::https://storage.googleapis.com/github-repo/img/gemini/multimodality_useca
 |
 
 [source, bash]
-*Prompt*
+.*Prompt*
 ----
 1. What is shown in Image 1? Where is it?
 2. What is similar between the two images?
@@ -291,14 +291,14 @@ image::https://storage.googleapis.com/github-repo/img/gemini/multimodality_useca
 
 *Image 1:*
 
-image::https://storage.googleapis.com/github-repo/img/gemini/multimodality_usecases_overview/landmark1.jpg[]
+image::https://storage.googleapis.com/github-repo/img/gemini/multimodality_usecases_overview/landmark1.jpg[Image, width=600, height=450]
 
 *Image 2:*
 
-image::https://storage.googleapis.com/github-repo/img/gemini/multimodality_usecases_overview/landmark2.jpg[]
+image::https://storage.googleapis.com/github-repo/img/gemini/multimodality_usecases_overview/landmark2.jpg[Image, width=600, height=450]
 
 [source, json]
-*Response*
+.*Response*
 ----
 1. Image 1 shows the Feldherrnhalle, a building in Munich, Germany. It is located on the Odeonsplatz, a square in the city center.
 2. Both images show the same scene, the Feldherrnhalle and the Odeonsplatz.
@@ -309,7 +309,7 @@ image::https://storage.googleapis.com/github-repo/img/gemini/multimodality_useca
 |
 
 [source, bash]
-*Prompt*
+.*Prompt*
 ----
 What is shown in this video?
 Where should I go to see it?
@@ -317,7 +317,7 @@ What are the top 5 places in the world that look like this?
 ----
 
 [source, json]
-*Response*
+.*Response*
 ----
 This video shows a harbor in Antalya, Turkey.  To see it, go to Antalya, Turkey, and look for the harbor. 
 
@@ -336,7 +336,7 @@ Antalya and these other five destinations offer stunning views of the sea and pi
 |
 
 [source, bash]
-*Prompt*
+.*Prompt*
 ----
 Answer the following questions using the video only:
 - What is in the video?
@@ -347,7 +347,7 @@ Answer the following questions using the video only:
 video::https://storage.googleapis.com/github-repo/img/gemini/multimodality_usecases_overview/photography.mp4[width=640, height=360, title="Video"]
 
 [source, json]
-*Response*
+.*Response*
 ----
 - The video shows a man in a room with a rustic wooden table, a chair, and a variety of items, including a wooden statue, framed artwork, a plant, and a cowhide rug.
 - The man is standing by the table and taking photos of the room with a camera.
