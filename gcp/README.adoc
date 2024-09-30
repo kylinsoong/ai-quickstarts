@@ -297,7 +297,7 @@ image::https://storage.googleapis.com/github-repo/img/gemini/multimodality_useca
 
 image::https://storage.googleapis.com/github-repo/img/gemini/multimodality_usecases_overview/landmark2.jpg[Image, width=600, height=450]
 
-[source, json]
+[source, bash]
 .*Response*
 ----
 1. Image 1 shows the Feldherrnhalle, a building in Munich, Germany. It is located on the Odeonsplatz, a square in the city center.
@@ -316,7 +316,9 @@ Where should I go to see it?
 What are the top 5 places in the world that look like this?
 ----
 
-[source, json]
+video::https://storage.googleapis.com/github-repo/img/gemini/multimodality_usecases_overview/mediterraneansea.mp4[width=640, height=360, title="Video"]
+
+[source, bash]
 .*Response*
 ----
 This video shows a harbor in Antalya, Turkey.  To see it, go to Antalya, Turkey, and look for the harbor. 
@@ -346,7 +348,7 @@ Answer the following questions using the video only:
 
 video::https://storage.googleapis.com/github-repo/img/gemini/multimodality_usecases_overview/photography.mp4[width=640, height=360, title="Video"]
 
-[source, json]
+[source, bash]
 .*Response*
 ----
 - The video shows a man in a room with a rustic wooden table, a chair, and a variety of items, including a wooden statue, framed artwork, a plant, and a cowhide rug.
