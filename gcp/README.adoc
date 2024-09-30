@@ -316,7 +316,7 @@ Where should I go to see it?
 What are the top 5 places in the world that look like this?
 ----
 
-video::https://storage.googleapis.com/github-repo/img/gemini/multimodality_usecases_overview/mediterraneansea.mp4[width=640, height=360, title="Video"]
+link:https://storage.googleapis.com/github-repo/img/gemini/multimodality_usecases_overview/mediterraneansea.mp4[Click here to view the video]
 
 [source, bash]
 .*Response*
@@ -346,7 +346,7 @@ Answer the following questions using the video only:
 - Provide 10 best tags for this video?
 ----
 
-video::https://storage.googleapis.com/github-repo/img/gemini/multimodality_usecases_overview/photography.mp4[width=640, height=360, title="Video"]
+link:https://storage.googleapis.com/github-repo/img/gemini/multimodality_usecases_overview/photography.mp4[Click here to view the video]
 
 [source, bash]
 .*Response*
