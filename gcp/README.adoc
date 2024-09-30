@@ -1,7 +1,123 @@
 = Google AI & ML 
 :toc: manual
 
-== Glossary
+== Gemini 
+
+=== API and Python SDK
+
+Gemini is a family of generative AI models developed by Google DeepMind that is designed for *multimodal* use cases. The Gemini API gives you access to the `Gemini Pro Vision model` and `Gemini Pro models`.
+ 
+* *Gemini 1.0 Pro model* - Designed to handle natural language tasks, multi-turn text and code chat, and code generation.
+* *Gemini 1.0 Pro Vision model* - Supports multimodal prompts. You can include text, images, and video in your prompt requests and get text or code responses.
+
+[cols="2,5a"]
+|===
+|Name |Note
+
+|Text Generation
+|link:gemini/testGeminiText.py[gemini/testGeminiText.py]
+
+[source,python]
+----
+vertexai.init(project=PROJECT_ID, location=LOCATION)
+
+model = GenerativeModel("gemini-1.0-pro")
+
+responses = model.generate_content("What is Arduino", stream=True)
+----
+
+|Text Generation with Configutation
+|link:gemini/testGeminiTextParameters.py[gemini/testGeminiTextParameters.py]
+
+[source,python]
+----
+vertexai.init(project=PROJECT_ID, location=LOCATION)
+
+model = GenerativeModel("gemini-1.0-pro")
+
+generation_config = GenerationConfig(
+    temperature=0.9,
+    top_p=1.0,
+    top_k=32,
+    candidate_count=1,
+    max_output_tokens=8192,
+)
+
+responses = model.generate_content("What is Arduino", generation_config=generation_config, stream=True)
+----
+
+|Chat
+|link:gemini/testGeminiTextChat.py[gemini/testGeminiTextChat.py]
+
+[source,python]
+----
+vertexai.init(project=PROJECT_ID, location=LOCATION)
+
+model = GenerativeModel("gemini-1.0-pro")
+chat = model.start_chat()
+
+responses = chat.send_message(prompt, stream=True)
+----
+
+|Image to Text
+|link:gemini/testGeminiVisionImageToText.py[gemini/testGeminiVisionImageToText.py]
+
+[source,python]
+----
+vertexai.init(project=PROJECT_ID, location=LOCATION)
+
+multimodal_model = GenerativeModel("gemini-1.0-pro-vision")
+
+image = Image.load_from_file("image.jpg")
+prompt = "Describe this image?"
+contents = [image, prompt]
+
+responses = multimodal_model.generate_content(contents, stream=True)
+----
+
+|Image to Text with Prompt
+|link:gemini/testGeminiVisionImageToTextPrompt.py[gemini/testGeminiVisionImageToTextPrompt.py]
+
+[source,python]
+----
+vertexai.init(project=PROJECT_ID, location=LOCATION)
+
+multimodal_model = GenerativeModel("gemini-1.0-pro-vision")
+
+image1_url = "https://storage.googleapis.com/github-repo/img/gemini/intro/landmark1.jpg"
+image2_url = "https://storage.googleapis.com/github-repo/img/gemini/intro/landmark2.jpg"
+image3_url = "https://storage.googleapis.com/github-repo/img/gemini/intro/landmark3.jpg"
+prompt1 = """{"city": "London", "Landmark:", "Big Ben"}"""
+prompt2 = """{"city": "Paris", "Landmark:", "Eiffel Tower"}"""
+
+contents = [image1, prompt1, image2, prompt2, image3]
+
+responses = multimodal_model.generate_content(contents, stream=True)
+----
+
+|Vedio to Text
+|link:gemini/testGeminiVisionVedioToText.py[gemini/testGeminiVisionVedioToText.py]
+
+[source,python]
+----
+vertexai.init(project=PROJECT_ID, location=LOCATION)
+
+multimodal_model = GenerativeModel("gemini-1.0-pro-vision")
+
+file_path = "github-repo/img/gemini/multimodality_usecases_overview/pixel8.mp4"
+video = Part.from_uri(video_uri, mime_type="video/mp4")
+contents = [prompt, video]
+
+responses = multimodal_model.generate_content(contents, stream=True)
+----
+
+|===
+
+
+
+== Appendix
+
+=== Glossary
 
 [cols="2,5a"]
 |===
@@ -14,7 +130,7 @@
 |The TensorFlow Extended (TFX) SDK is designed to help you build production-ready machine learning pipelines. It provides a set of components that manage different aspects of the machine learning workflow, from data validation to model serving.
 |===
 
-== Usage Case
+=== Usage Case
 
 [cols="5a"]
 |===
