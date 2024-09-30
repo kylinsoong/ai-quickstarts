@@ -3,7 +3,7 @@
 
 == Gemini 
 
-=== API and Python SDK
+=== API & SDK
 
 Gemini is a family of generative AI models developed by Google DeepMind that is designed for *multimodal* use cases. The Gemini API gives you access to the `Gemini Pro Vision model` and `Gemini Pro models`.
  
@@ -113,6 +113,258 @@ responses = multimodal_model.generate_content(contents, stream=True)
 
 |===
 
+=== Multimodality
+
+Most of LLMs are text-only, or only focus on one aspects, eg, LLM for Text Generation, or LLM for for Image/Vedio Generation, Gemini Pro Vision's multimodality which means use one LLM can either generate Text, or Image/Vedio.
+
+Gemini Pro Vision's multimodality use-cases including:
+
+* Detecting objects in photos
+* Understanding screens and interfaces
+* Understanding of drawing and abstraction
+* Understanding charts and diagrams
+* Recommendation of images based on user preferences
+* Comparing images for similarities, anomalies, or differences
+* Generating a video description
+* Extracting tags of objects throughout a video
+* Extracting highlights/messaging of a video
+
+[source,python]
+.*Core SDK*
+----
+import vertexai
+from vertexai.generative_models import GenerationConfig, GenerativeModel, Image, Part
+
+vertexai.init(project=PROJECT_ID, location=LOCATION)
+multimodal_model = GenerativeModel("gemini-1.5-flash")
+
+responses = multimodal_model.generate_content(contents, stream=True)
+----
+
+[cols="2,5a"]
+.*Usage Case*
+|===
+|Name |Usage Case
+
+|Image understanding across multiple images
+|
+
+[source, bash]
+*Prompt*
+----
+How much should I pay for the fruits?
+----
+
+*Image 1:*
+
+image::https://storage.googleapis.com/github-repo/img/gemini/multimodality_usecases_overview/banana-apple.jpg[]
+
+*Image 2:*
+
+image::https://storage.googleapis.com/github-repo/img/gemini/multimodality_usecases_overview/pricelist.jpg[]
+
+[source, bash]
+*Response*
+----
+Step 1: There are two bananas and two apples in the first image.
+Step 2: Two bananas and two apples.
+Step 3: Apples: $1.50 per item, Bananas: $0.80 per item
+Step 4: Two bananas * $0.80 per banana = $1.60
+         Two apples * $1.50 per apple = $3.00
+Step 5: $1.60 + $3.00 = $4.60
+
+Therefore, you should pay $4.60 for the fruits.
+----
+
+|Understanding Screens and Interfaces
+|
+
+[source, bash]
+*Prompt*
+----
+Provide the instructions to reset the clock in English and chinese
+----
+
+image::https://storage.googleapis.com/github-repo/img/gemini/multimodality_usecases_overview/stove.jpg[Stove]
+
+[source, bash]
+*Response*
+----
+To reset the clock, follow these steps: 
+
+1. Press the "CLOCK" button. This button is located on the right side of the control panel, underneath the "KITCHEN TIMER" button. 
+2. Press the "CLEAR/OFF" button. This button is located in the lower right corner of the control panel. 
+3. Enter the desired time using the number buttons (1-9 and 0).  The number buttons are located in the center of the control panel. 
+4. Press the "CLOCK" button again to confirm the new time.
+
+重置时钟，请按照以下步骤操作：
+
+1. 按下“时钟”按钮。该按钮位于控制面板的右侧，“厨房定时器”按钮下方。
+2. 按下“清除/关闭”按钮。该按钮位于控制面板的右下角。
+3. 使用数字按钮（1-9 和 0）输入所需时间。数字按钮位于控制面板的中央。
+4. 再次按下“时钟”按钮确认新时间。
+----
+
+|Understanding entity relationships in technical diagrams
+|
+
+[source, bash]
+*Prompt*
+----
+Document the entities and relationships in this ER diagram.
+----
+
+image::https://storage.googleapis.com/github-repo/img/gemini/multimodality_usecases_overview/er.png[]
+
+[source, bash]
+*Response*
+----
+**Entities:**
+
+* **Category:** Represents different categories of items.
+    * Attributes: `category`, `category_name`
+* **Vendor:** Represents different vendors supplying items.
+    * Attributes: `vendor_no`, `vendor`
+* **Item:** Represents different items sold.
+    * Attributes: `item`, `description`, `pack`, `liter_size`
+* **Sales:** Represents sales transactions.
+    * Attributes: `date`, `store`, `category`, `vendor_no`, `item`, `state_btl_cost`, `btl_price`, `bottle_qty`, `total`
+* **Convenience_store:** Represents convenience stores.
+    * Attributes: `store`
+* **Store:** Represents stores.
+    * Attributes: `store`, `name`, `address`, `city`, `zipcode`, `store_location`, `county_number`
+* **County:** Represents counties.
+    * Attributes: `county_number`, `county`
+
+**Relationships:**
+
+* **Category to Sales:** One-to-many relationship. A category can have many sales transactions, but a sales transaction belongs to only one category.
+* **Vendor to Sales:** One-to-many relationship. A vendor can have many sales transactions, but a sales transaction belongs to only one vendor.
+* **Item to Sales:** One-to-many relationship. An item can be involved in many sales transactions, but a sales transaction involves only one item.
+* **Sales to Convenience_store:** One-to-one relationship. A sales transaction occurs at only one convenience store, and a convenience store can have only one sales transaction at a time.
+* **Store to County:** One-to-one relationship. A store is located in only one county, and a county can have only one store.
+* **Item to County:** One-to-many relationship. An item can be sold in many counties, but a county can have many items sold in it.
+
+**Note:** The relationship between `Sales` and `Convenience_store` is represented by a diamond with a "o" on one side, indicating a weak entity relationship. This means that `Convenience_store` is dependent on `Sales` for its existence.
+----
+
+|Recommendations based on multiple images
+|
+
+[source, bash]
+*Prompt*
+----
+Which of these glasses you recommend for me based on the shape of my face?
+I have an oval shape face.
+----
+
+*Image Glass 1:*
+
+image::https://storage.googleapis.com/github-repo/img/gemini/multimodality_usecases_overview/glasses1.jpg[]
+
+*Image Glass 2:*
+
+image::https://storage.googleapis.com/github-repo/img/gemini/multimodality_usecases_overview/glasses2.jpg[]
+
+[source, json]
+*Response*
+----
+{
+  "recommendation": "Glasses 2",
+  "reasoning": {
+    "Glasses 1": "Square frames can make an oval face appear wider.  The angular shape clashes with the natural curves of an oval face. ",
+    "Glasses 2": "Round frames are a great choice for oval faces because they create a nice contrast and balance the face's natural curves. Round frames can also make the face appear more symmetrical." 
+  }
+}
+----
+
+|Similarity/Differences
+|
+
+[source, bash]
+*Prompt*
+----
+1. What is shown in Image 1? Where is it?
+2. What is similar between the two images?
+3. What is difference between Image 1 and Image 2 in terms of the contents or people shown?
+----
+
+*Image 1:*
+
+image::https://storage.googleapis.com/github-repo/img/gemini/multimodality_usecases_overview/landmark1.jpg[]
+
+*Image 2:*
+
+image::https://storage.googleapis.com/github-repo/img/gemini/multimodality_usecases_overview/landmark2.jpg[]
+
+[source, json]
+*Response*
+----
+1. Image 1 shows the Feldherrnhalle, a building in Munich, Germany. It is located on the Odeonsplatz, a square in the city center.
+2. Both images show the same scene, the Feldherrnhalle and the Odeonsplatz.
+3. Image 1 shows more people than Image 2. In Image 1, there are people walking around the square, sitting on benches, and standing in front of the Feldherrnhalle. In Image 2, there are fewer people, and they are mostly walking in the street.
+----
+
+|Generating a video description
+|
+
+[source, bash]
+*Prompt*
+----
+What is shown in this video?
+Where should I go to see it?
+What are the top 5 places in the world that look like this?
+----
+
+[source, json]
+*Response*
+----
+This video shows a harbor in Antalya, Turkey.  To see it, go to Antalya, Turkey, and look for the harbor. 
+
+Here are five places that look like Antalya:
+
+1.  **Dubrovnik, Croatia**: This city is known for its walled city and beautiful coastline, similar to Antalya's harbour.
+2.  **Santorini, Greece**:  This island features beautiful white buildings perched on cliffs overlooking the Aegean Sea, with a distinct resemblance to Antalya.
+3.  **Positano, Italy**:  Positano, a picturesque town on the Amalfi Coast, is known for its colourful houses cascading down steep cliffs.
+4.  **Oia, Greece**:  Oia is another beautiful town on Santorini Island, featuring white-washed houses and a stunning sunset view.
+5. **Essaouira, Morocco**:  Essaouira is a charming seaside town in Morocco. It is known for its beautiful beaches and strong, blue waters. 
+
+Antalya and these other five destinations offer stunning views of the sea and picturesque architecture. 
+----
+
+|Extracting tags of objects throughout the video
+|
+
+[source, bash]
+*Prompt*
+----
+Answer the following questions using the video only:
+- What is in the video?
+- What is the action in the video?
+- Provide 10 best tags for this video?
+----
+
+video::https://storage.googleapis.com/github-repo/img/gemini/multimodality_usecases_overview/photography.mp4[width=640, height=360, title="Video"]
+
+[source, json]
+*Response*
+----
+- The video shows a man in a room with a rustic wooden table, a chair, and a variety of items, including a wooden statue, framed artwork, a plant, and a cowhide rug.
+- The man is standing by the table and taking photos of the room with a camera.
+- 10 best tags for this video:
+  - photography
+  - interior design
+  - rustic decor
+  - home decor
+  - wooden furniture
+  - farmhouse style
+  - art
+  - natural elements
+  - boho chic
+  - home inspiration
+----
+
+|===
 
 
 == Appendix
