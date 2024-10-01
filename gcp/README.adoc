@@ -113,7 +113,7 @@ responses = multimodal_model.generate_content(contents, stream=True)
 
 |===
 
-=== Multimodality
+=== Multimodality Usage Case
 
 Most of LLMs are text-only, or only focus on one aspects, eg, LLM for Text Generation, or LLM for for Image/Vedio Generation, Gemini Pro Vision's multimodality which means use one LLM can either generate Text, or Image/Vedio.
 
@@ -137,6 +137,8 @@ from vertexai.generative_models import GenerationConfig, GenerativeModel, Image,
 
 vertexai.init(project=PROJECT_ID, location=LOCATION)
 multimodal_model = GenerativeModel("gemini-1.5-flash")
+
+contents = [prompt1, image, prompt2, video]
 
 responses = multimodal_model.generate_content(contents, stream=True)
 ----
@@ -368,6 +370,54 @@ link:https://storage.googleapis.com/github-repo/img/gemini/multimodality_usecase
 
 |===
 
+=== Function Calling
+
+Gemini's Function calling lets developers create a description of a function in their code, then pass that description to a language model in a request. The response from the model includes the name of a function that matches the description and the arguments to call it with.
+
+Function Calling 是让模型生成格式化数据，通常是 JSON。
+
+[source, python]
+----
+vertexai.init(project=PROJECT_ID, location=LOCATION)
+
+get_location = FunctionDeclaration(
+    name="get_location",
+    description="Get latitude and longitude for a given location",
+    parameters={
+        "type": "object",
+        "properties": {
+            "poi": {"type": "string", "description": "Point of interest"},
+            "street": {"type": "string", "description": "Street name"},
+            "city": {"type": "string", "description": "City name"},
+            "county": {"type": "string", "description": "County name"},
+            "state": {"type": "string", "description": "State name"},
+            "country": {"type": "string", "description": "Country name"},
+            "postal_code": {"type": "string", "description": "Postal code"},
+        },
+    },
+)
+
+location_tool = Tool(
+    function_declarations=[get_location],
+)
+
+model = GenerativeModel(
+    "gemini-1.5-pro-001",
+    generation_config=GenerationConfig(temperature=0),
+    tools=[location_tool],
+)
+
+prompt = """
+I want to get the coordinates for the following address:
+1600 Amphitheatre Pkwy, Mountain View, CA 94043, US
+"""
+
+response = model.generate_content(
+    prompt,
+    generation_config=GenerationConfig(temperature=0),
+    tools=[location_tool],
+)
+----
 
 == Appendix
 
