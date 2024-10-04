@@ -10,6 +10,31 @@ Gemini is a family of generative AI models developed by Google DeepMind that is 
 * *Gemini 1.0 Pro model* - Designed to handle natural language tasks, multi-turn text and code chat, and code generation.
 * *Gemini 1.0 Pro Vision model* - Supports multimodal prompts. You can include text, images, and video in your prompt requests and get text or code responses.
 
+==== CURL
+
+[source,bash]
+.*Call the gemini-1.0-pro*
+----
+PROJECT_ID=""
+LOCATION=us-central1
+API_ENDPOINT=${LOCATION}-aiplatform.googleapis.com
+MODEL_ID="gemini-1.0-pro"
+
+
+curl -X POST \
+  -H "Authorization: Bearer $(gcloud auth print-access-token)" \
+  -H "Content-Type: application/json" \
+  https://$API_ENDPOINT/v1/projects/$PROJECT_ID/locations/$LOCATION/publishers/google/models/$MODEL_ID:generateContent \
+  -d '{
+    "contents": {
+      "role": "USER",
+      "parts": { "text": "Why is the sky blue?" }
+    }
+  }'
+----
+
+==== Python
+
 [cols="2,5a"]
 |===
 |Name |Note
