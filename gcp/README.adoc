@@ -444,6 +444,37 @@ response = model.generate_content(
 )
 ----
 
+== Vector Search and Embeddings
+
+=== What is Vector Search
+
+* Vector Search can search from billions of semantically similar or semantically related items.
+** 向量搜索可以从数十亿个语义相似或语义相关的项目中进行搜索。
+* A vector similarity-matching service has many use cases such as implementing recommendation engines, search engines, chatbots, and text classification.
+** 向量相似度匹配服务有很多用例，例如实现推荐引擎、搜索引擎、聊天机器人和文本分类。
+
+
+=== Embeddings
+
+=== Vector Search with RAG(Retrieval Augmented Generation)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 == Appendix
 
 === Glossary
