@@ -458,6 +458,7 @@ response = model.generate_content(
 
 === Vector Search with RAG(Retrieval Augmented Generation)
 
+Retrieval augmented generation (RAG) has become a popular paradigm for enabling LLMs to access external data and also as a mechanism for grounding to mitigate against hallucinations. RAG models are trained to retrieve relevant documents from a large corpus and then generate a response based on the retrieved documents. 
 
 
 
