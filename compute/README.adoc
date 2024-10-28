@@ -1,0 +1,37 @@
+= AI Compute
+:toc: manual
+
+== AI Compute Vendor
+
+There are four types of AI Compute Vendor:
+
+* GPU - General-Purpose GPU Providers
+* ASIC - Custom ASIC Providers
+* FPGA - Specialized FPGA Providers
+* OEM - Cloud AI Compute Providers(Customized, OEM above 3 categories)
+
+[cols="2,2m5a"]
+|===
+|NAME |TYPE| NOTE
+
+|NVIDIA
+|GPU
+|
+* The dominant player in AI GPUs with its link:https://www.nvidia.com/en-sg/data-center/a100/[A100], link:https://www.nvidia.com/en-sg/data-center/h100/[H100 (Hopper)], and earlier V100 models.
+* NVIDIA GPUs are *highly optimized for deep learning*, with support for libraries like cuDNN, TensorRT, and CUDA.
+
+|AMD
+|GPU
+|
+* General-Purpose GPU Provider
+* Competes with NVIDIA through its Radeon Instinct MI and the newer link:https://www.amd.com/en/products/accelerators/instinct/mi200/mi250.html[MI250 GPUs]
+* Offering ROCm (Radeon Open Compute) for AI workloads
+
+|Intel
+|GPU
+|
+* General-Purpose GPU Provider
+* Provides AI-optimized GPUs like Intel Data Center GPU Max
+* Works on OneAPI for performance across CPUs and GPUs.
+
+|===
