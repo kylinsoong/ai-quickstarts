@@ -34,4 +34,18 @@ There are four types of AI Compute Vendor:
 * Provides AI-optimized GPUs like Intel Data Center GPU Max
 * Works on OneAPI for performance across CPUs and GPUs.
 
+|Google
+|ASIC
+|
+* Google’s TPUs are custom-designed for AI, particularly TensorFlow-based deep learning tasks, and are available exclusively on Google Cloud.
+
+|寒武纪
+|ASIC
+|
+* MLU370-X8 智能加速卡，训推一体人工智能加速卡
+
+|HYGON
+|
+|海光深度计算处理器，自主科学计算和智能加速芯片
+
 |===
