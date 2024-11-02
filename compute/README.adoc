@@ -10,7 +10,7 @@ There are four types of AI Compute Vendor:
 * FPGA - Specialized FPGA Providers
 * OEM - Cloud AI Compute Providers(Customized, OEM above 3 categories)
 
-[cols="2,2m5a"]
+[cols="2,2,5a"]
 |===
 |NAME |TYPE| NOTE
 
