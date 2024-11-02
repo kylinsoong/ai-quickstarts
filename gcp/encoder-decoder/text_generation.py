@@ -14,6 +14,7 @@ print("First 50 letter:", text[:100])
 
 vocab = sorted(set(text))
 print("unique characters:", f"{len(vocab)}")
+print(vocab)
 
 ids_from_chars = tf.keras.layers.StringLookup(
     vocabulary=list(vocab), mask_token=None
