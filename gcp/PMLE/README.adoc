@@ -1,0 +1,52 @@
+= Professional Machine Learning Engineer 
+:toc: manual
+
+== Objectives
+
+The Google Cloud Professional Machine Learning Engineer training and exam are intended for individuals with a strong technical background and hands-on experience in machine learning (ML) who want to demonstrate their expertise in designing, building, and deploying machine learning solutions on Google Cloud.
+
+The exam validates a candidate’s ability to complete the following course objectives:
+
+* Describe how to develop and implement machine learning solutions using low-code tools and services on Google Cloud.
+* Explain how to effectively manage data, prototype models, and collaborate within and across teams to build robust ML solutions.
+* Determine how to scale ML prototypes into production-ready models by selecting appropriate frameworks, training effectively, and choosing optimal hardware.
+* Describe how to deploy and scale ML models in production using various serving strategies and infrastructure on Google Cloud.
+* Explain how to automate and orchestrate end-to-end ML pipelines to streamline model development, deployment, and retraining.
+* Identify the key tasks and considerations for monitoring, testing, and troubleshooting ML solutions to ensure performance, reliability, and responsible AI practices.
+
+== Scopes
+
+=== Section 1: Architecting low-code ML solutions
+
+* Developing ML models by using BigQuery ML
+* Building AI solutions by using ML APIs or foundational models
+* Training models by using AutoML
+
+=== Section 2: Collaborating within and across teams to manage data and models
+
+* Exploring and preprocessing organization-wide data (e.g., Cloud Storage, BigQuery, Spanner, Cloud SQL, Apache Spark, Apache Hadoop)
+* Model prototyping using Jupyter notebooks
+* Tracking and running ML experiments
+
+=== Section 3: Scaling prototypes into ML models
+
+* Building models
+* Training models
+* Choosing appropriate hardware for training
+
+=== Section 4: Serving and scaling models
+
+* Serving models
+* Scaling online model serving
+
+=== Section 5: Automating and orchestrating ML pipelines 
+
+* Developing end-to-end ML pipelines
+* Automating model retraining
+* Tracking and auditing metadata
+
+=== Section 6: Monitoring ML solutions
+
+* Identifying risks to ML solutions
+* Monitoring, testing, and troubleshooting ML solutions
+
