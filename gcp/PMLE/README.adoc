@@ -50,3 +50,41 @@ The exam validates a candidate’s ability to complete the following course obje
 * Identifying risks to ML solutions
 * Monitoring, testing, and troubleshooting ML solutions
 
+== Labs
+
+=== Lab 01: Predict Visitor Purchases with BigQuery ML
+
+link:l.01/README.adoc[link]
+
+=== Lab 02: Entity and Sentiment Analysis with the Natural Language API
+
+link:l.02/README.adoc[link]
+
+=== Lab 03: Predicting Loan Risk with Vertex AI AutoML
+
+link:l.03/README.adoc[link]
+
+=== Lab 04: Get Started with Vertex AI Studio
+
+link:l.04/README.adoc[link]
+
+=== Lab 05:
+
+link:l.05/README.adoc[link]
+
+=== Lab 06:
+
+link:l.06/README.adoc[link]
+
+=== Lab 07:
+
+link:l.07/README.adoc[link]
+
+=== Lab 08:
+
+link:l.08/README.adoc[link]
+
+=== Lab 09:
+
+link:l.09/README.adoc[link]
+
