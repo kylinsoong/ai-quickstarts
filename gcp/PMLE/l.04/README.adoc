@@ -13,7 +13,7 @@ image:gemini-image-analysis.png[Image,500,340]
 |===
 |Title the image
 
-|image:vertex-ai-studio-1.jpg[Image,900,700]
+|image:vertex-ai-studio-1.jpg[Image,900,500]
 
 |===
 
@@ -21,7 +21,7 @@ image:gemini-image-analysis.png[Image,500,340]
 |===
 |Describe the image
 
-|image:vertex-ai-studio-2.jpg[Image,900,700]
+|image:vertex-ai-studio-2.jpg[Image,900,500]
 
 |===
 
@@ -29,7 +29,7 @@ image:gemini-image-analysis.png[Image,500,340]
 |===
 |Read the text in image
 
-|image:vertex-ai-studio-3.jpg[Image,900,700]
+|image:vertex-ai-studio-3.jpg[Image,900,500]
 
 |===
 
@@ -39,7 +39,7 @@ image:gemini-image-analysis.png[Image,500,340]
 |===
 |Title the vedio
 
-|image:vertex-ai-studio-4.jpg[Image,900,700]
+|image:vertex-ai-studio-4.jpg[Image,900,500]
 
 |===
 
@@ -50,7 +50,7 @@ image:gemini-image-analysis.png[Image,500,340]
 |===
 |Zero-shot prompting 
 
-|image:vertex-ai-0-shot.jpg[Image,900,700]
+|image:vertex-ai-0-shot.jpg[Image,900,500]
 
 |===
 
