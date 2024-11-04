@@ -1,4 +1,71 @@
-= TD 
+= Get Started with Vertex AI Studio 
 :toc: manual
 
+== Analyze images with Gemini in Freeform mode
 
+=== Source Image
+
+image:gemini-image-analysis.png[Image,500,340]
+
+=== Image Analysis
+
+[cols="5a"]
+|===
+|Title the image
+
+|image:vertex-ai-studio-1.jpg[Image,900,700]
+
+|===
+
+[cols="5a"]
+|===
+|Describe the image
+
+|image:vertex-ai-studio-2.jpg[Image,900,700]
+
+|===
+
+[cols="5a"]
+|===
+|Read the text in image
+
+|image:vertex-ai-studio-3.jpg[Image,900,700]
+
+|===
+
+== Vedio Analysis
+
+[cols="5a"]
+|===
+|Title the vedio
+
+|image:vertex-ai-studio-4.jpg[Image,900,700]
+
+|===
+
+
+== Text Analysis
+
+[cols="5a"]
+|===
+|Zero-shot prompting 
+
+|image:vertex-ai-0-shot.jpg[Image,900,700]
+
+|===
+
+[cols="5a"]
+|===
+|One-shot prompting  
+
+|image:vertex-ai-1shot.jpg[Image,900,500]
+
+|===
+
+[cols="5a"]
+|===
+|Few-shot prompting 
+
+|image:vertex-ai-few-shot.jpg[Image,900,500]
+
+|===
