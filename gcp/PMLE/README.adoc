@@ -68,23 +68,42 @@ link:l.03/README.adoc[link]
 
 link:l.04/README.adoc[link]
 
-=== Lab 05:
+=== Lab 05: Vertex AI
 
 link:l.05/README.adoc[link]
 
-=== Lab 06:
+=== Lab 06: Dataprep
 
 link:l.06/README.adoc[link]
 
-=== Lab 07:
+=== Lab 07: Dataflow Templates
 
 link:l.07/README.adoc[link]
 
-=== Lab 08:
+=== Lab 08: Dataflow Python
 
 link:l.08/README.adoc[link]
 
-=== Lab 09:
+=== Lab 09: Dataproc Console
 
 link:l.09/README.adoc[link]
 
+=== Lab 10: Dataproc Command Line 
+
+link:l.10/README.adoc[link]
+
+=== Lab 11: Cloud Natural Language API
+
+link:l.11/README.adoc[link]
+
+=== Lab 12: Speech-to-Text API
+
+link:l.12/README.adoc[link]
+
+=== Lab 13: Video Intelligence
+
+link:l.13/README.adoc[link]
+
+=== Lab 14: 
+
+link:l.14/README.adoc[link]
