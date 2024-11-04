@@ -64,7 +64,8 @@ WHERE
 LIMIT 10000;
 ----
 
-|Create `train`
+|`training_data`
+|`july-data` 
 
 |image:bq-training_data.jpg[Image,400,320]
 |image:bq-july-data.jpg[Image,400,360]
@@ -81,7 +82,9 @@ LIMIT 10000;
 |
 [source,sql]
 ----
-
+CREATE OR REPLACE MODEL `bqml_lab.sample_model`
+OPTIONS(model_type='logistic_reg') AS
+SELECT * from `bqml_lab.training_data`;
 ----
 
 |ml.EVALUATE
