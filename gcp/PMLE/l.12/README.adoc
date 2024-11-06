@@ -1,4 +1,46 @@
-= TD 
+= Speech-to-Text API 
 :toc: manual
+
+== About Speech-to-Text API
+
+The Speech-to-Text API enables easy integration of Google speech recognition technologies into developer applications. The Speech-to-Text API allows you to send audio and receive a text transcription from the service.
+
+== API Call
+
+[source,json]
+.*request.json*
+----
+{
+  "config": {
+      "encoding":"FLAC",
+      "languageCode": "en-US"
+  },
+  "audio": {
+      "uri":"gs://cloud-samples-tests/speech/brooklyn.flac"
+  }
+}
+----
+
+[source,bash]
+.*API Call*
+----
+$ curl -s -X POST -H "Content-Type: application/json" --data-binary @request.json "https://speech.googleapis.com/v1/speech:recognize?key=${API_KEY}"
+{
+  "results": [
+    {
+      "alternatives": [
+        {
+          "transcript": "how old is the Brooklyn Bridge",
+          "confidence": 0.9307521
+        }
+      ],
+      "resultEndTime": "1.770s",
+      "languageCode": "en-us"
+    }
+  ],
+  "totalBilledTime": "2s",
+  "requestId": "8667459176913036216"
+}
+----
 
 

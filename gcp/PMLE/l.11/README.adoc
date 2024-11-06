@@ -1,4 +1,45 @@
-= TD 
+= Cloud Natural Language API 
 :toc: manual
 
+== About Cloud Natural Language API
+
+*Natural language* is the language that humans use to communicate with each other. Natural language processing (NLP) is a field of computer science that is concerned with the interaction between computers and human language. NLP research has the goal of enabling computers to understand and process human language in a way that is similar humans.
+
+The Cloud Natural Language API is a cloud-based service that provides natural language processing capabilities. It can be used to analyze text, identify entities, extract information, and answer questions.
+
+*Cloud Natural Language API features*
+
+|===
+|Feature |Note
+
+|Entity Recognition
+|Identify entities in text, such as people, places, and things.
+
+|Sentiment Analysis
+|Analyze the sentiment of text, such as whether it is positive, negative, or neutral.
+
+|Information Extraction
+|Extract information from text, such as dates, times, and price.
+
+|Question Answering
+|Answer questions about text.
+
+|===
+
+=== API Call
+
+[source,bash]
+.*1. Prepare API Key*
+----
+export GOOGLE_CLOUD_PROJECT=$(gcloud config get-value core/project)
+gcloud iam service-accounts create my-natlang-sa --display-name "my natural language service account"
+gcloud iam service-accounts keys create ~/key.json --iam-account my-natlang-sa@${GOOGLE_CLOUD_PROJECT}.iam.gserviceaccount.com
+export GOOGLE_APPLICATION_CREDENTIALS="/home/USER/key.json"
+----
+
+[source,bash]
+.*2. API Call inside compute engine instance*
+----
+gcloud ml language analyze-entities --content="Michelangelo Caravaggio, Italian painter, is known for 'The Calling of Saint Matthew'." > result.json
+----
 
