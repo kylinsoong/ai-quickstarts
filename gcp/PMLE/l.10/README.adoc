@@ -1,4 +1,37 @@
-= TD 
+= Dataproc Command Line 
 :toc: manual
 
+== About Dataproc
+
+Dataproc is a fast, easy-to-use, fully-managed cloud service for running Apache Spark and Apache Hadoop clusters in a simpler, more cost-efficient way. Operations that used to take hours or days take seconds or minutes instead. Create Dataproc clusters quickly and resize them at any time, so you don't have to worry about your data pipelines outgrowing your clusters.
+
+
+== Create cluster
+
+[source, bash]
+----
+gcloud dataproc clusters create example-cluster --worker-boot-disk-size 30 --worker-machine-type=e2-standard-4 --master-machine-type=e2-standard-4
+----
+
+== Submit job
+
+[source, bash]
+----
+gcloud dataproc jobs submit spark --cluster example-cluster \
+  --class org.apache.spark.examples.SparkPi \
+  --jars file:///usr/lib/spark/examples/jars/spark-examples.jar -- 1000
+----
+
+* That you want to run a spark job on the `example-cluster` cluster
+* The `class` containing the main method for the job's pi-calculating application
+* The location of the jar file containing your job's code
+* The parameters you want to pass to the job—in this case, the number of tasks, which is `1000`
+
+
+== Update cluster
+
+[source, bash]
+----
+gcloud dataproc clusters update example-cluster --num-workers 4
+----
 
