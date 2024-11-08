@@ -104,6 +104,14 @@ link:l.12/README.adoc[link]
 
 link:l.13/README.adoc[link]
 
-=== Lab 14: 
+=== Lab 14: Exploratory Data Analysis using Bigquery and Colab Enterprise 
 
 link:l.14/README.adoc[link]
+
+=== Lab 15: Exploratory Data Analysis using Bigquery and Workbench Instances
+
+link:l.15/README.adoc[link]
+
+=== Lab 16:
+
+link:l.16/README.adoc[link]
