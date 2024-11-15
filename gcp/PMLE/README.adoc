@@ -112,6 +112,18 @@ link:l.14/README.adoc[link]
 
 link:l.15/README.adoc[link]
 
-=== Lab 16:
+=== Lab 16: Training and Deploying a TensorFlow Model in Vertex AI
 
 link:l.16/README.adoc[link]
+
+=== Lab 17:
+
+link:l.17/README.adoc[link]
+
+=== Lab 18:
+
+link:l.18/README.adoc[link]
+
+=== Lab 19:
+
+link:l.19/README.adoc[link]
