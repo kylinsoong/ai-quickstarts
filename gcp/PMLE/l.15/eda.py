@@ -1,6 +1,9 @@
 import os
+import pandas as pd
 import requests
 import urllib.parse
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 def download_file(url, local_filename):
     with requests.get(url, stream=True) as response:
@@ -41,16 +44,21 @@ def modelDir(dir):
 
 readAsString("https://storage.googleapis.com/cloud-training/mlongcp/v3.0_MLonGC/toy_data/housing_pre-proc_toy.csv")
 
-df_USAhousing = pd.read_csv('../data/explore/housing_pre-proc_toy.csv')
+df_USAhousing = pd.read_csv('/Users/k.song/.ai/housing_pre-proc_toy/housing_pre-proc_toy.csv')
 
-df_USAhousing.head()
+print(df_USAhousing.head())
 
-df_USAhousing.isnull().sum()
+print(df_USAhousing.isnull().sum())
 
 df_stats = df_USAhousing.describe()
+
+print(df_stats)
+
 df_stats = df_stats.transpose()
 
-df_USAhousing.info()
+print(df_stats)
+
+print(df_USAhousing.info())
 
 print ("Rows     : " ,df_USAhousing.shape[0])
 print ("Columns  : " ,df_USAhousing.shape[1])
