@@ -8,3 +8,7 @@ Vertex AI Workbench notebooks provide a flexible and scalable solution for devel
 == About BigQuery
 
 BigQuery is a powerful, fully managed, serverless data warehouse that allows you to analyze and manage large datasets with ease. BigQuery uses a familiar standard SQL dialect, making it easy for analysts and data scientists to use without needing to learn a new language.
+
+== Workbench
+
+image:vertex-nottbook-instance.jpg[Image,1000,700]
