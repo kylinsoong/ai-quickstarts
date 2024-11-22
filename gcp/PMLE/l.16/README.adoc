@@ -1,4 +1,45 @@
-= TD 
+= Training and Deploying a TensorFlow Model in Vertex AI 
 :toc: manual
+
+[source,bash]
+----
+def rmse(y_true, y_pred):
+    """Custom RMSE regression metric."""
+    return tf.sqrt(tf.reduce_mean(tf.square(y_pred - y_true)))
+
+
+def build_model():
+    """Build and compile a TensorFlow Keras Regressor."""
+    # Define input feature tensors and input layers.
+    feature_columns = [
+        tf.feature_column.numeric_column(key=feature)
+        for feature in NUMERIC_FEATURES
+    ]
+    
+    input_layers = {
+        feature.key: tf.keras.layers.Input(name=feature.key, shape=(), dtype=tf.float32)
+        for feature in feature_columns
+    }
+     
+    # Keras Functional API: https://keras.io/guides/functional_api
+    inputs = tf.keras.layers.DenseFeatures(feature_columns, name='inputs')(input_layers)
+    d1 = tf.keras.layers.Dense(256, activation=tf.nn.relu, name='d1')(inputs)
+    d2 = tf.keras.layers.Dropout(0.2, name='d2')(d1)  
+    # Note: the single neuron output for regression.
+    output = tf.keras.layers.Dense(1, name='output')(d2)
+    
+    model = tf.keras.Model(input_layers, output, name='online-retail-clv')
+    
+    optimizer = tf.keras.optimizers.Adam(0.001)    
+    
+    # Note: MAE loss is more resistant to outliers than MSE.
+    model.compile(loss=tf.keras.losses.MAE,
+                  optimizer=optimizer,
+                  metrics=[['mae', 'mse', rmse]])
+    
+    return model
+
+model = build_model()
+----
 
 
