@@ -1,9 +1,10 @@
 = Build and Modernize Applications With Generative AI 
 :toc: manual
 
-== Setup IAM for using Gemini in GCP Project
+== Preconditions
 
 [source, bash]
+.*Setup IAM for using Gemini in GCP Project*
 ----
 PROJECT_ID=$(gcloud config get-value project)
 REGION=us-west1
@@ -17,5 +18,313 @@ gcloud services enable cloudaicompanion.googleapis.com --project ${PROJECT_ID}
 
 gcloud projects add-iam-policy-binding ${PROJECT_ID} --member user:${USER} --role=roles/cloudaicompanion.user
 gcloud projects add-iam-policy-binding ${PROJECT_ID} --member user:${USER} --role=roles/serviceusage.serviceUsageViewer
+----
+
+[source, bash]
+.*Build docker image and deploy to cloud run*
+----
+docker build --platform linux/amd64 -t gcr.io/$PROJECT_ID/cymbal-inventory-api .
+
+docker push gcr.io/$PROJECT_ID/cymbal-inventory-api
+
+gcloud run deploy inventory --image=gcr.io/$PROJECT_ID/cymbal-inventory-api --port=8000 --region=us-central1 --set-env-vars=PROJECT_ID=$PROJECT_ID --allow-unauthenticated
+----
+
+== Getting Started with the Vertex AI Gemini API with cURL
+
+* *Gemini Pro model (gemini-pro)*: Designed to handle natural language tasks, multiturn text and code chat, and code generation.
+* *Gemini Pro Vision model (gemini-pro-vision)*: Supports multimodal prompts. You can include text, images, and video in your prompt requests and get text or code responses.
+
+[source, bash]
+.*Prepare Variable*
+----
+PROJECT_ID = ""
+LOCATION = ""
+API_ENDPOINT = "$LOCATION-aiplatform.googleapis.com"
+MODEL_ID = "gemini-1.5-pro"
+
+gsutil cp "gs://cloud-samples-data/generative-ai/image/320px-Felis_catus-cat_on_snow.jpg" ./image.jpg
+----
+
+[source, bash]
+.*1. Generate content*
+----
+curl -X POST \
+  -H "Authorization: Bearer $(gcloud auth print-access-token)" \
+  -H "Content-Type: application/json" \
+  https://${API_ENDPOINT}/v1/projects/${PROJECT_ID}/locations/${LOCATION}/publishers/google/models/${MODEL_ID}:generateContent \
+  -d '{
+    "contents": {
+      "role": "USER",
+      "parts": { "text": "Why is the sky blue?" }
+    }
+  }'
+----
+
+[source, bash]
+.*2. Streaming*
+----
+curl -X POST \
+  -H "Authorization: Bearer $(gcloud auth print-access-token)" \
+  -H "Content-Type: application/json" \
+  https://${API_ENDPOINT}/v1/projects/${PROJECT_ID}/locations/${LOCATION}/publishers/google/models/${MODEL_ID}:streamGenerateContent \
+  -d '{
+    "contents": {
+      "role": "USER",
+      "parts": { "text": "Why is the sky blue?" }
+    }
+  }'
+----
+
+[source, bash]
+.*3. Model parameters*
+----
+curl -X POST \
+  -H "Authorization: Bearer $(gcloud auth print-access-token)" \
+  -H "Content-Type: application/json" \
+  https://${API_ENDPOINT}/v1/projects/${PROJECT_ID}/locations/${LOCATION}/publishers/google/models/${MODEL_ID}:generateContent \
+  -d '{
+    "contents": {
+      "role": "USER",
+      "parts": [
+        {"text": "Describe this image"},
+        {"file_data": {
+          "mime_type": "image/png",
+          "file_uri": "gs://cloud-samples-data/generative-ai/image/320px-Felis_catus-cat_on_snow.jpg"
+        }}
+      ]
+    },
+    "generation_config": {
+      "temperature": 0.2,
+      "top_p": 0.1,
+      "top_k": 16,
+      "max_output_tokens": 2048,
+      "candidate_count": 1,
+      "stop_sequences": []
+    },
+    "safety_settings": {
+      "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+      "threshold": "BLOCK_LOW_AND_ABOVE"
+    }
+  }'
+----
+
+[source, bash]
+.*4. Chat*
+----
+curl -X POST \
+  -H "Authorization: Bearer $(gcloud auth print-access-token)" \
+  -H "Content-Type: application/json" \
+  https://${API_ENDPOINT}/v1/projects/${PROJECT_ID}/locations/${LOCATION}/publishers/google/models/${MODEL_ID}:generateContent \
+  -d '{
+    "contents": [
+      {
+        "role": "user",
+        "parts": [
+          { "text": "Hello" }
+        ]
+      },
+      {
+        "role": "model",
+        "parts": [
+          { "text": "Hello! I am glad you could both make it." }
+        ]
+      },
+      {
+        "role": "user",
+        "parts": [
+          { "text": "So what is the first order of business?" }
+        ]
+      }
+    ]
+  }'
+----
+
+[source, bash]
+.*5. Function calling*
+----
+curl -X POST \
+  -H "Authorization: Bearer $(gcloud auth print-access-token)" \
+  -H "Content-Type: application/json" \
+  https://${API_ENDPOINT}/v1beta1/projects/${PROJECT_ID}/locations/${LOCATION}/publishers/google/models/${MODEL_ID}:generateContent \
+  -d '{
+  "contents": {
+    "role": "user",
+    "parts": {
+      "text": "Which theaters in Mountain View show Barbie movie?"
+    }
+  },
+  "tools": [
+    {
+      "function_declarations": [
+        {
+          "name": "find_movies",
+          "description": "find movie titles currently playing in theaters based on any description, genre, title words, etc.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "location": {
+                "type": "string",
+                "description": "The city and state, e.g. San Francisco, CA or a zip code e.g. 95616"
+              },
+              "description": {
+                "type": "string",
+                "description": "Any kind of description including category or genre, title words, attributes, etc."
+              }
+            },
+            "required": [
+              "description"
+            ]
+          }
+        },
+        {
+          "name": "find_theaters",
+          "description": "find theaters based on location and optionally movie title which are is currently playing in theaters",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "location": {
+                "type": "string",
+                "description": "The city and state, e.g. San Francisco, CA or a zip code e.g. 95616"
+              },
+              "movie": {
+                "type": "string",
+                "description": "Any movie title"
+              }
+            },
+            "required": [
+              "location"
+            ]
+          }
+        },
+        {
+          "name": "get_showtimes",
+          "description": "Find the start times for movies playing in a specific theater",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "location": {
+                "type": "string",
+                "description": "The city and state, e.g. San Francisco, CA or a zip code e.g. 95616"
+              },
+              "movie": {
+                "type": "string",
+                "description": "Any movie title"
+              },
+              "theater": {
+                "type": "string",
+                "description": "Name of theater"
+              },
+              "date": {
+                "type": "string",
+                "description": "Date for requested showtime"
+              }
+            },
+            "required": [
+              "location",
+              "movie",
+              "theater",
+              "date"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}'
+----
+
+NOTE: Function calling lets you create a description of a function in their code, then pass that description to a language model in a request. This sample is an example of passing in a description of a function that returns information about where a movie is playing. Several function declarations are included in the request, such as find_movies and find_theaters.
+
+[source, bash]
+.*6. Generate text from a local image*
+----
+data=$(base64 -w 0 image.jpg)
+
+curl -X POST \
+  -H "Authorization: Bearer $(gcloud auth print-access-token)" \
+  -H "Content-Type: application/json" \
+  https://${API_ENDPOINT}/v1/projects/${PROJECT_ID}/locations/${LOCATION}/publishers/google/models/${MODEL_ID}:generateContent \
+  -d "{
+      'contents': {
+        'role': 'USER',
+        'parts': [
+          {
+            'text': 'Is it a cat?'
+          },
+          {
+            'inline_data': {
+              'data': '${data}',
+              'mime_type':'image/jpeg'
+            }
+          }
+        ]
+       }
+     }"
+----
+
+[source, bash]
+.*7. Generate text from an image on Google Cloud Storage*
+----
+MODEL_ID="gemini-1.5-pro"
+
+curl -X POST \
+  -H "Authorization: Bearer $(gcloud auth print-access-token)" \
+  -H "Content-Type: application/json" \
+  https://${API_ENDPOINT}/v1/projects/${PROJECT_ID}/locations/${LOCATION}/publishers/google/models/${MODEL_ID}:generateContent \
+  -d '{
+    "contents": {
+      "role": "USER",
+      "parts": [
+        {
+          "text": "Describe this image"
+        },
+        {
+          "file_data": {
+            "mime_type": "image/png",
+            "file_uri": "gs://cloud-samples-data/generative-ai/image/320px-Felis_catus-cat_on_snow.jpg"
+          }
+        }
+      ]
+    },
+    "generation_config": {
+      "temperature": 0.2,
+      "top_p": 0.1,
+      "top_k": 16,
+      "max_output_tokens": 2048,
+      "candidate_count": 1,
+      "stop_sequences": []
+    },
+    "safety_settings": {
+      "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+      "threshold": "BLOCK_LOW_AND_ABOVE"
+    }
+  }'
+----
+
+[source, bash]
+.*8. Generate text from a video file*
+----
+curl -X POST \
+  -H "Authorization: Bearer $(gcloud auth print-access-token)" \
+  -H "Content-Type: application/json" \
+  https://${API_ENDPOINT}/v1/projects/${PROJECT_ID}/locations/${LOCATION}/publishers/google/models/${MODEL_ID}:generateContent \
+  -d \
+'{
+    "contents": {
+      "role": "USER",
+      "parts": [
+        {
+          "text": "Answer the following questions using the video only. What is the profession of the main person? What are the main features of the phone highlighted?Which city was this recorded in?Provide the answer JSON."
+        },
+        {
+          "file_data": {
+            "mime_type": "video/mp4",
+            "file_uri": "gs://github-repo/img/gemini/multimodality_usecases_overview/pixel8.mp4"
+          }
+        }
+      ]
+    }
+  }'
 ----
 
