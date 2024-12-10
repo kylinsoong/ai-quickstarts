@@ -677,7 +677,7 @@ response = model.generate_content(
 response.candidates[0].content.parts[0]
 ----
 
-[source,json]
+[source,bash]
 ----
 function_call {
   name: "get_location"
@@ -823,7 +823,7 @@ response = model.generate_content(
 response.candidates[0].content.parts[0].function_call
 ----
 
-[source,json]
+[source,bash]
 ----
 name: "extract_log_data"
 args {
@@ -1081,10 +1081,10 @@ Both book series are highly acclaimed and have been translated into numerous lan
 [source,bash]
 .*7. Chat history(step 5 and 6)*
 ----
-
+print(chat.history)
 ----
 
-[source,json]
+[source,bash]
 ----
 [role: "user"
 parts {
@@ -1354,3 +1354,62 @@ for response in responses:
   ]
 }
 ----
+
+== Streamlit Framework + Cloud Run + Vertex AI Gemini API
+
+[source, bash]
+.*1. get code*
+----
+git clone https://github.com/GoogleCloudPlatform/generative-ai.git --depth=1
+cd generative-ai/gemini/sample-apps/gemini-streamlit-cloudrun
+----
+
+[source, bash]
+.*2. Setup the Python virtual environment and install the dependencies*
+----
+python3 -m venv gemini-streamlit
+source gemini-streamlit/bin/activate
+pip install -r requirements.txt
+----
+
+[source, bash]
+.*3. setup environment and run locally*
+----
+GCP_PROJECT='88888888'
+GCP_REGION='europe-west1'
+
+streamlit run app.py \
+  --browser.serverAddress=localhost \
+  --server.enableCORS=false \
+  --server.enableXsrfProtection=false \
+  --server.port 8080
+----
+
+[source, bash]
+.*3. build and deploy app to cloud run*
+----
+AR_REPO='gemini-repo'
+SERVICE_NAME='gemini-streamlit-app' 
+
+gcloud artifacts repositories create "$AR_REPO" --location="$GCP_REGION" --repository-format=Docker
+
+gcloud builds submit --tag "$GCP_REGION-docker.pkg.dev/$GCP_PROJECT/$AR_REPO/$SERVICE_NAME"
+
+gcloud run deploy "$SERVICE_NAME" \
+  --port=8080 \
+  --image="$GCP_REGION-docker.pkg.dev/$GCP_PROJECT/$AR_REPO/$SERVICE_NAME" \
+  --allow-unauthenticated \
+  --region=$GCP_REGION \
+  --platform=managed  \
+  --project=$GCP_PROJECT \
+  --set-env-vars=GCP_PROJECT=$GCP_PROJECT,GCP_REGION=$GCP_REGION
+----
+
+[source, bash]
+----
+...
+Done.                                                                          
+Service [gemini-streamlit-app] revision [gemini-streamlit-app-00001-wlh] has been deployed and is serving 100 percent of traffic.
+Service URL: https://gemini-streamlit-app-392929949059.europe-west1.run.app
+----
+
