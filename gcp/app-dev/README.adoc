@@ -328,3 +328,589 @@ curl -X POST \
   }'
 ----
 
+== Function Calling 
+
+Function calling lets developers create a description of a function in their code, then pass that description to a language model in a request. The response from the model includes the name of a function that matches the description and the arguments to call it with.
+
+Imagine asking someone to write down important information without giving them a form or any guidelines on the structure. You might get a beautifully crafted paragraph, but extracting specific details like names, dates, or numbers would be tedious! Similarly, trying to get consistent structured data from a generative text model without function calling can be frustrating. You're stuck explicitly prompting for things like JSON output, often with inconsistent and frustrating results.
+
+This is where Gemini Function Calling comes in. Instead of hoping for the best in a freeform text response from a generative model, you can define clear functions with specific parameters and data types. These function declarations act as structured guidelines, guiding the Gemini model to structure its output in a predictable and usable way. No more parsing text responses for important information!
+
+Think of it like teaching Gemini to speak the language of your applications. Need to retrieve information from a database? Define a `search_db` function with parameters for search terms. Want to integrate with a weather API? Create a `get_weather` function that takes a location as input. Function calling bridges the gap between human language and the structured data needed to interact with external systems.
+
+[source,bash]
+.*1. Install Vertex AI SDK for Python*
+----
+pip3 install --upgrade --user --quiet google-cloud-aiplatform
+----
+
+[source,bash]
+.*2. Authenticate and initialize*
+----
+import sys
+
+if "google.colab" in sys.modules:
+    from google.colab import auth
+
+    auth.authenticate_user()
+
+PROJECT_ID = "888888888"  
+LOCATION = "europe-west4" 
+
+import vertexai
+
+vertexai.init(project=PROJECT_ID, location=LOCATION)
+----
+
+[source,bash]
+.*3. Import libraries*
+----
+import requests
+from vertexai.generative_models import (
+    FunctionDeclaration,
+    GenerationConfig,
+    GenerativeModel,
+    Part,
+    Tool,
+)
+----
+
+=== Chat example: Using Function Calling in a chat session to answer user's questions about the Google Store
+
+[source,bash]
+.*1. Define Function*
+----
+get_product_info = FunctionDeclaration(
+    name="get_product_info",
+    description="Get the stock amount and identifier for a given product",
+    parameters={
+        "type": "object",
+        "properties": {
+            "product_name": {"type": "string", "description": "Product name"}
+        },
+    },
+)
+
+get_store_location = FunctionDeclaration(
+    name="get_store_location",
+    description="Get the location of the closest store",
+    parameters={
+        "type": "object",
+        "properties": {"location": {"type": "string", "description": "Location"}},
+    },
+)
+
+place_order = FunctionDeclaration(
+    name="place_order",
+    description="Place an order",
+    parameters={
+        "type": "object",
+        "properties": {
+            "product": {"type": "string", "description": "Product name"},
+            "address": {"type": "string", "description": "Shipping address"},
+        },
+    },
+)
+----
+
+NOTE: The function parameters are specified as a Python dictionary in accordance with the OpenAPI JSON schema format.
+
+[source,bash]
+.*2. Define a tool that allows the Gemini model to select from the set of 3 functions*
+----
+retail_tool = Tool(
+    function_declarations=[
+        get_product_info,
+        get_store_location,
+        place_order,
+    ],
+)
+----
+
+[source,bash]
+.*3. Initilize Model with the defined Tool above*
+----
+model = GenerativeModel(
+    "gemini-1.5-pro-001",
+    generation_config=GenerationConfig(temperature=0),
+    tools=[retail_tool],
+)
+chat = model.start_chat()
+----
+
+NOTE: The temperature parameter controls the degree of randomness in this generation. Lower temperatures are good for functions that require deterministic parameter values, while higher temperatures are good for functions with parameters that accept more diverse or creative parameter values. A temperature of 0 is deterministic. In this case, responses for a given prompt are mostly deterministic, but a small amount of variation is still possible.
+
+
+NOTE: The `retail_tool` is created in step 2.
+
+[source,bash]
+.*4. Call get production info*
+----
+prompt = """
+Do you have the Pixel 8 Pro in stock?
+"""
+
+response = chat.send_message(prompt)
+response.candidates[0].content.parts[0]
+----
+
+[source,json]
+----
+function_call {
+  name: "get_product_info"
+  args {
+    fields {
+      key: "product_name"
+      value {
+        string_value: "Pixel 8 Pro"
+      }
+    }
+  }
+}
+----
+
+NOTE: The response from the Gemini API consists of a structured data object that contains the name and parameters of the function that Gemini selected out of the available functions.
+
+[source,bash]
+.*5. call external system simutation*
+----
+api_response = {"sku": "GA04834-US", "in_stock": "yes"}
+
+response = chat.send_message(
+    Part.from_function_response(
+        name="get_product_info",
+        response={
+            "content": api_response,
+        },
+    ),
+)
+response.text
+----
+
+[source,bash]
+----
+'Yes, the Pixel 8 Pro is in stock. \n'
+----
+
+[source,bash]
+.*6. Call get production info*
+----
+prompt = """
+What about the Pixel 8? Is there a store in
+Mountain View, CA that I can visit to try one out?
+"""
+
+response = chat.send_message(prompt)
+response.candidates[0].content.parts[0]
+----
+
+[source,json]
+----
+function_call {
+  name: "get_product_info"
+  args {
+    fields {
+      key: "product_name"
+      value {
+        string_value: "Pixel 8"
+      }
+    }
+  }
+}
+----
+
+[source,bash]
+.*7. call external system simutation*
+----
+api_response = {"sku": "GA08475-US", "in_stock": "yes"}
+
+response = chat.send_message(
+    Part.from_function_response(
+        name="get_product_info",
+        response={
+            "content": api_response,
+        },
+    ),
+)
+response.candidates[0].content.parts[0]
+----
+
+[source,bash]
+----
+function_call {
+  name: "get_store_location"
+  args {
+    fields {
+      key: "location"
+      value {
+        string_value: "Mountain View, CA"
+      }
+    }
+  }
+}
+----
+
+NOTE: The Gemini API respond with a second function call to `get_store_location` rather than `get_product_info`.
+
+[source,bash]
+.*8. call get_store_location*
+----
+api_response = {"store": "2000 N Shoreline Blvd, Mountain View, CA 94043, US"}
+
+response = chat.send_message(
+    Part.from_function_response(
+        name="get_store_location",
+        response={
+            "content": api_response,
+        },
+    ),
+)
+response.text
+----
+
+[source,bash]
+----
+'Yes, the Pixel 8 is in stock. You can visit the store at 2000 N Shoreline Blvd, Mountain View, CA 94043, US to try it out. \n'
+----
+
+[source,bash]
+.*9. call function*
+----
+prompt = """
+I'd like to order a Pixel 8 Pro and have it shipped to 1155 Borregas Ave, Sunnyvale, CA 94089.
+"""
+
+response = chat.send_message(prompt)
+response.candidates[0].content.parts[0]
+----
+
+[source,json]
+----
+function_call {
+  name: "place_order"
+  args {
+    fields {
+      key: "address"
+      value {
+        string_value: "1155 Borregas Ave, Sunnyvale, CA 94089"
+      }
+    }
+    fields {
+      key: "product"
+      value {
+        string_value: "Pixel 8 Pro"
+      }
+    }
+  }
+}
+----
+
+[source,bash]
+.*10. call external system simulation*
+----
+api_response = {
+    "payment_status": "paid",
+    "order_number": 12345,
+    "est_arrival": "2 days",
+}
+
+response = chat.send_message(
+    Part.from_function_response(
+        name="place_order",
+        response={
+            "content": api_response,
+        },
+    ),
+)
+response.text
+----
+
+[source,bash]
+----
+'Your order has been placed and will arrive in 2 days. Your order number is 12345. \n'
+----
+
+=== Address example: Using Function Calling to geocode addresses with a maps API
+
+[source,bash]
+.*1. Define function*
+----
+get_location = FunctionDeclaration(
+    name="get_location",
+    description="Get latitude and longitude for a given location",
+    parameters={
+        "type": "object",
+        "properties": {
+            "poi": {"type": "string", "description": "Point of interest"},
+            "street": {"type": "string", "description": "Street name"},
+            "city": {"type": "string", "description": "City name"},
+            "county": {"type": "string", "description": "County name"},
+            "state": {"type": "string", "description": "State name"},
+            "country": {"type": "string", "description": "Country name"},
+            "postal_code": {"type": "string", "description": "Postal code"},
+        },
+    },
+)
+----
+
+[source,bash]
+.*2. Define a tool*
+----
+location_tool = Tool(
+    function_declarations=[get_location],
+)
+----
+
+[source,bash]
+.*3. call function*
+----
+prompt = """
+I want to get the coordinates for the following address:
+1600 Amphitheatre Pkwy, Mountain View, CA 94043, US
+"""
+
+response = model.generate_content(
+    prompt,
+    generation_config=GenerationConfig(temperature=0),
+    tools=[location_tool],
+)
+response.candidates[0].content.parts[0]
+----
+
+[source,json]
+----
+function_call {
+  name: "get_location"
+  args {
+    fields {
+      key: "city"
+      value {
+        string_value: "Mountain View"
+      }
+    }
+    fields {
+      key: "country"
+      value {
+        string_value: "US"
+      }
+    }
+    fields {
+      key: "postal_code"
+      value {
+        string_value: "94043"
+      }
+    }
+    fields {
+      key: "state"
+      value {
+        string_value: "CA"
+      }
+    }
+    fields {
+      key: "street"
+      value {
+        string_value: "1600 Amphitheatre Pkwy"
+      }
+    }
+  }
+}
+----
+
+[source,bash]
+.*4. External map api*
+----
+x = response.candidates[0].content.parts[0].function_call.args
+
+url = "https://nominatim.openstreetmap.org/search?"
+for i in x:
+    url += f'{i}="{x[i]}"&'
+url += "format=json"
+
+headers = {"User-Agent": "none"}
+x = requests.get(url, headers=headers)
+content = x.json()
+content
+----
+
+[source,bash]
+----
+[{'place_id': 299815182,
+  'licence': 'Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright',
+  'osm_type': 'way',
+  'osm_id': 23733659,
+  'lat': '37.42248575',
+  'lon': '-122.08558456613565',
+  'class': 'building',
+  'type': 'commercial',
+  'place_rank': 30,
+  'importance': 6.277943083843774e-05,
+  'addresstype': 'building',
+  'name': 'Google Building 41',
+  'display_name': 'Google Building 41, 1600, Amphitheatre Parkway, Mountain View, Santa Clara County, California, 94043, United States',
+  'boundingbox': ['37.4221124', '37.4228508', '-122.0859868', '-122.0851511']},
+ {'place_id': 299141099,
+  'licence': 'Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright',
+  'osm_type': 'node',
+  'osm_id': 2192620021,
+  'lat': '37.4217636',
+  'lon': '-122.084614',
+  'class': 'office',
+  'type': 'it',
+  'place_rank': 30,
+  'importance': 6.277943083843774e-05,
+  'addresstype': 'office',
+  'name': 'Google Headquarters',
+  'display_name': 'Google Headquarters, 1600, Amphitheatre Parkway, Mountain View, Santa Clara County, California, 94043, United States',
+  'boundingbox': ['37.4217136', '37.4218136', '-122.0846640', '-122.0845640']}]
+----
+
+=== Logging example: Using Function Calling for entity extraction only
+
+[source,bash]
+.*1. Define function*
+----
+extract_log_data = FunctionDeclaration(
+    name="extract_log_data",
+    description="Extract details from error messages in raw log data",
+    parameters={
+        "type": "object",
+        "properties": {
+            "locations": {
+                "type": "array",
+                "description": "Errors",
+                "items": {
+                    "description": "Details of the error",
+                    "type": "object",
+                    "properties": {
+                        "error_message": {
+                            "type": "string",
+                            "description": "Full error message",
+                        },
+                        "error_code": {"type": "string", "description": "Error code"},
+                        "error_type": {"type": "string", "description": "Error type"},
+                    },
+                },
+            }
+        },
+    },
+)
+----
+
+[source,bash]
+.*2. Define a tool*
+----
+extraction_tool = Tool(
+    function_declarations=[extract_log_data],
+)
+----
+
+[source,bash]
+.*3. Call function*
+----
+prompt = """
+[15:43:28] ERROR: Could not process image upload: Unsupported file format. (Error Code: 308)
+[15:44:10] INFO: Search index updated successfully.
+[15:45:02] ERROR: Service dependency unavailable (payment gateway). Retrying... (Error Code: 5522)
+[15:45:33] ERROR: Application crashed due to out-of-memory exception. (Error Code: 9001)
+"""
+
+response = model.generate_content(
+    prompt,
+    generation_config=GenerationConfig(temperature=0),
+    tools=[extraction_tool],
+)
+
+response.candidates[0].content.parts[0].function_call
+----
+
+[source,json]
+----
+name: "extract_log_data"
+args {
+  fields {
+    key: "locations"
+    value {
+      list_value {
+        values {
+          struct_value {
+            fields {
+              key: "error_code"
+              value {
+                string_value: "308"
+              }
+            }
+            fields {
+              key: "error_message"
+              value {
+                string_value: "Could not process image upload: Unsupported file format."
+              }
+            }
+            fields {
+              key: "error_type"
+              value {
+                string_value: "ERROR"
+              }
+            }
+          }
+        }
+        values {
+          struct_value {
+            fields {
+              key: "error_code"
+              value {
+                string_value: "5522"
+              }
+            }
+            fields {
+              key: "error_message"
+              value {
+                string_value: "Service dependency unavailable (payment gateway). Retrying..."
+              }
+            }
+            fields {
+              key: "error_type"
+              value {
+                string_value: "ERROR"
+              }
+            }
+          }
+        }
+        values {
+          struct_value {
+            fields {
+              key: "error_code"
+              value {
+                string_value: "9001"
+              }
+            }
+            fields {
+              key: "error_message"
+              value {
+                string_value: "Application crashed due to out-of-memory exception."
+              }
+            }
+            fields {
+              key: "error_type"
+              value {
+                string_value: "ERROR"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+----
+
+[source,bash]
+.**
+----
+
+----
+
+[source,bash]
+.**
+----
+
+----
