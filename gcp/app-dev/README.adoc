@@ -454,7 +454,7 @@ response = chat.send_message(prompt)
 response.candidates[0].content.parts[0]
 ----
 
-[source,json]
+[source,bash]
 ----
 function_call {
   name: "get_product_info"
@@ -504,7 +504,7 @@ response = chat.send_message(prompt)
 response.candidates[0].content.parts[0]
 ----
 
-[source,json]
+[source,bash]
 ----
 function_call {
   name: "get_product_info"
@@ -584,7 +584,7 @@ response = chat.send_message(prompt)
 response.candidates[0].content.parts[0]
 ----
 
-[source,json]
+[source,bash]
 ----
 function_call {
   name: "place_order"
@@ -903,14 +903,454 @@ args {
 }
 ----
 
-[source,bash]
-.**
-----
-
-----
+== Gemini API in Vertex AI
 
 [source,bash]
-.**
+.*1. Install Vertex AI SDK for Python*
+----
+pip3 install --upgrade --user google-cloud-aiplatform
 ----
 
+[source,bash]
+.*2. Authenticate and initialize*
+----
+import sys
+
+# Additional authentication is required for Google Colab
+if "google.colab" in sys.modules:
+    # Authenticate user to Google Cloud
+    from google.colab import auth
+
+    auth.authenticate_user()
+
+# Define project information
+PROJECT_ID = ""  # @param {type:"string"}
+LOCATION = "us-central1"  # @param {type:"string"}
+
+# Initialize Vertex AI
+import vertexai
+
+vertexai.init(project=PROJECT_ID, location=LOCATION)
+----
+
+[source,bash]
+.*3. Import libraries*
+----
+from vertexai.generative_models import GenerationConfig, GenerativeModel, Image, Part
+----
+
+=== Gemini 1.0 Pro
+
+[source,bash]
+.*1. load model*
+----
+model = GenerativeModel("gemini-1.0-pro")
+----
+
+[source,bash]
+.*2. generate text*
+----
+responses = model.generate_content("Why is the sky blue?", stream=True)
+
+for response in responses:
+    print(response.text, end="")
+----
+
+[source,bash]
+----
+The sky is blue because of a phenomenon called Rayleigh scattering. When sunlight enters the Earth's atmosphere, it is scattered in all directions by the tiny molecules of air. Blue light has a shorter wavelength than other colors of light, so it is scattered more easily. This is why we see a blue sky.
+
+Here are some additional details about Rayleigh scattering:
+
+* It was first explained by Lord Rayleigh in the 19th century.
+* It is responsible for the blue color of the sky, the redness of sunsets, and the polarized light of the sky.
+* The intensity of Rayleigh scattering is inversely proportional to the fourth power of the wavelength of light. This means that blue light is scattered much more strongly than red light.
+* Rayleigh scattering is also responsible for the polarization of light from the sky. This is because the scattered light is polarized in a plane perpendicular to the direction of the incident light.
+
+I hope this information is helpful. Please let me know if you have any other questions.
+----
+
+[source,bash]
+.*3. generate text*
+----
+prompt = """Create a numbered list of 10 items. Each item in the list should be a trend in the generative ai and LLM 2025.
+
+Each trend should be less than 10 words."""  
+
+responses = model.generate_content(prompt, stream=True)
+
+for response in responses:
+    print(response.text, end="")
+----
+
+[source,bash]
+----
+## Top 10 Trends in Generative AI and LLMs (2025):
+
+1. Personalization of AI assistants.
+2. Generative AI for scientific discovery.
+3. AI-powered video editing and creation.
+4. Hyperrealistic synthetic data generation.
+5. Democratization of AI development tools.
+6. LLMs for personalized education.
+7. AI-driven medical diagnosis and treatment.
+8. Explainable and transparent AI models.
+9. AI for climate change mitigation and adaptation.
+10. Responsible development and use of AI.
+----
+
+[source,bash]
+.*4. Model parameters*
+----
+generation_config = GenerationConfig(
+    temperature=0.9,
+    top_p=1.0,
+    top_k=32,
+    candidate_count=1,
+    max_output_tokens=8192,
+)
+
+responses = model.generate_content(
+    "Why is the sky blue?",
+    generation_config=generation_config,
+    stream=True,
+)
+
+for response in responses:
+    print(response.text, end="")
+----
+
+[source,bash]
+----
+The sky is blue because of a phenomenon called Rayleigh scattering.
+
+When sunlight enters the Earth's atmosphere, it is scattered in all directions by the air molecules. Blue light is scattered more strongly than other colors because it has a shorter wavelength. This scattered blue light is what we see as the color of the sky.
+
+The other colors of sunlight are also scattered, but they are scattered less strongly. This is why the sky appears blue, even though sunlight is actually white.
+----
+
+[source,bash]
+.*5. multi-turn chat conversations*
+----
+chat = model.start_chat()
+
+prompt = """My name is Ned. You are my personal assistant. My favorite movies are Lord of the Rings and Hobbit.
+
+Suggest another movie I might like.
+"""
+
+responses = chat.send_message(prompt, stream=True)
+
+for response in responses:
+    print(response.text, end="")
+----
+
+[source,bash]
+----
+Hello, Ned. It's great to meet you! I'm happy to help you find another movie you might like. Since you enjoy Lord of the Rings and the Hobbit, I can suggest a few movies based on different aspects of those films that you seem to enjoy. 
+
+Would you prefer something with a similar:
+
+* **Epic fantasy world and story**: Try the *Chronicles of Narnia* series, *The Golden Compass*, or *Eragon*.
+* **Medieval setting with knights and battles**: Check out *Braveheart*, *Kingdom of Heaven*, or *Excalibur*.
+* **Group of unlikely heroes on a quest**: Consider *The Princess Bride*, *Willow*, or *The Goonies*.
+* **Dragons and other mythical creatures**: Explore *Reign of Fire*, *Dragonheart*, or *How to Train Your Dragon*. 
+----
+
+[source,bash]
+.*6. follow-up prompt base on step 5 chat*
+----
+prompt = "Are my favorite movies based on a book series?"
+
+responses = chat.send_message(prompt, stream=True)
+
+for response in responses:
+    print(response.text, end="")
+----
+
+[source,bash]
+----
+Yes, both the Lord of the Rings and the Hobbit trilogies are based on book series written by J.R.R. Tolkien. 
+
+* **The Lord of the Rings** is a trilogy of epic high fantasy novels published between 1954 and 1955. It follows the quest of Frodo Baggins, a hobbit from the Shire, as he and his companions journey to destroy the One Ring, an artifact of immense power created by the Dark Lord Sauron.
+* **The Hobbit**, published in 1937, is a shorter novel that serves as a prequel to The Lord of the Rings. It tells the story of Bilbo Baggins, a hobbit who joins a group of dwarves on a quest to reclaim their lost treasure from the dragon Smaug.
+
+Both book series are highly acclaimed and have been translated into numerous languages. They have also inspired countless adaptations, including the popular film trilogies directed by Peter Jackson. 
+----
+
+[source,bash]
+.*7. Chat history(step 5 and 6)*
+----
+
+----
+
+[source,json]
+----
+[role: "user"
+parts {
+  text: "My name is Ned. You are my personal assistant. My favorite movies are Lord of the Rings and Hobbit.\n\nSuggest another movie I might like.\n"
+}
+, role: "model"
+parts {
+  text: "Hello, Ned. It\'s great to meet you! I\'m happy to help you find another movie you might like. Since you enjoy Lord of the Rings and the Hobbit, I can suggest a few movies based on different aspects of those films that you seem to enjoy. \n\nWould you prefer something with a similar:\n\n* **Epic fantasy world and story**: Try the *Chronicles of Narnia* series, *The Golden Compass*, or *Eragon*.\n* **Medieval setting with knights and battles**: Check out *Braveheart*, *Kingdom of Heaven*, or *Excalibur*.\n* **Group of unlikely heroes on a quest**: Consider *The Princess Bride*, *Willow*, or *The Goonies*.\n* **Dragons and other mythical creatures**: Explore *Reign of Fire*, *Dragonheart*, or *How to Train Your Dragon*. \n"
+}
+, role: "user"
+parts {
+  text: "Are my favorite movies based on a book series?"
+}
+, role: "model"
+parts {
+  text: "Yes, both the Lord of the Rings and the Hobbit trilogies are based on book series written by J.R.R. Tolkien. \n\n* **The Lord of the Rings** is a trilogy of epic high fantasy novels published between 1954 and 1955. It follows the quest of Frodo Baggins, a hobbit from the Shire, as he and his companions journey to destroy the One Ring, an artifact of immense power created by the Dark Lord Sauron.\n* **The Hobbit**, published in 1937, is a shorter novel that serves as a prequel to The Lord of the Rings. It tells the story of Bilbo Baggins, a hobbit who joins a group of dwarves on a quest to reclaim their lost treasure from the dragon Smaug.\n\nBoth book series are highly acclaimed and have been translated into numerous languages. They have also inspired countless adaptations, including the popular film trilogies directed by Peter Jackson. "
+}
+]
+----
+
+=== Gemini 1.0 Pro Vision
+
+[source,bash]
+.*1. load model*
+----
+multimodal_model = GenerativeModel("gemini-1.0-pro-vision")
+----
+
+[source,bash]
+.*2. define helper functions*
+----
+import http.client
+import typing
+import urllib.request
+
+import IPython.display
+from PIL import Image as PIL_Image
+from PIL import ImageOps as PIL_ImageOps
+
+
+def display_images(
+    images: typing.Iterable[Image],
+    max_width: int = 600,
+    max_height: int = 350,
+) -> None:
+    for image in images:
+        pil_image = typing.cast(PIL_Image.Image, image._pil_image)
+        if pil_image.mode != "RGB":
+            # RGB is supported by all Jupyter environments (e.g. RGBA is not yet)
+            pil_image = pil_image.convert("RGB")
+        image_width, image_height = pil_image.size
+        if max_width < image_width or max_height < image_height:
+            # Resize to display a smaller notebook image
+            pil_image = PIL_ImageOps.contain(pil_image, (max_width, max_height))
+        IPython.display.display(pil_image)
+
+
+def get_image_bytes_from_url(image_url: str) -> bytes:
+    with urllib.request.urlopen(image_url) as response:
+        response = typing.cast(http.client.HTTPResponse, response)
+        image_bytes = response.read()
+    return image_bytes
+
+
+def load_image_from_url(image_url: str) -> Image:
+    image_bytes = get_image_bytes_from_url(image_url)
+    return Image.from_bytes(image_bytes)
+
+
+def get_url_from_gcs(gcs_uri: str) -> str:
+    # converts gcs uri to url for image display.
+    url = "https://storage.googleapis.com/" + gcs_uri.replace("gs://", "").replace(
+        " ", "%20"
+    )
+    return url
+
+
+def print_multimodal_prompt(contents: list):
+    """
+    Given contents that would be sent to Gemini,
+    output the full multimodal prompt for ease of readability.
+    """
+    for content in contents:
+        if isinstance(content, Image):
+            display_images([content])
+        elif isinstance(content, Part):
+            url = get_url_from_gcs(content.file_data.file_uri)
+            IPython.display.display(load_image_from_url(url))
+        else:
+            print(content)
+----
+
+[source,bash]
+.*3. Generate text from local image and text*
+----
+# Download an image from Google Cloud Storage
+! gsutil cp "gs://cloud-samples-data/generative-ai/image/320px-Felis_catus-cat_on_snow.jpg" ./image.jpg
+
+# Load from local file
+image = Image.load_from_file("image.jpg")
+
+# Prepare contents
+prompt = "Describe this image?"
+contents = [image, prompt]
+
+responses = multimodal_model.generate_content(contents, stream=True)
+
+print("-------Prompt--------")
+print_multimodal_prompt(contents)
+
+print("\n-------Response--------")
+for response in responses:
+    print(response.text, end="")
+----
+
+[source,bash]
+----
+-------Prompt--------
+<image>
+Describe this image?
+
+-------Response--------
+ This is a photo of a cat walking in the snow. The cat is brown and white, and it has a long tail. The snow is white and it is covering the ground. The cat is looking at the camera.
+----
+
+[source,bash]
+.*4. Generate text from text & image(s)*
+----
+# Load image from Cloud Storage URI
+gcs_uri = "gs://cloud-samples-data/generative-ai/image/boats.jpeg"
+
+# Prepare contents
+image = Part.from_uri(gcs_uri, mime_type="image/jpeg")
+prompt = "Describe the scene?"
+contents = [image, prompt]
+
+responses = multimodal_model.generate_content(contents, stream=True)
+
+print("-------Prompt--------")
+print_multimodal_prompt(contents)
+
+print("\n-------Response--------")
+for response in responses:
+    print(response.text, end="")
+----
+
+[source,bash]
+----
+
+-------Prompt--------
+<image>
+Describe the scene?
+
+-------Response--------
+ Two pontoon boats are anchored in the Charles River in Boston, Massachusetts. In the background are two bridges and the Boston skyline.
+----
+
+[source,bash]
+.*5. Images with direct links*
+----
+# Load image from Cloud Storage URI
+image_url = (
+    "https://storage.googleapis.com/cloud-samples-data/generative-ai/image/boats.jpeg"
+)
+image = load_image_from_url(image_url)  # convert to bytes
+
+# Prepare contents
+prompt = "Describe the scene?"
+contents = [image, prompt]
+
+responses = multimodal_model.generate_content(contents, stream=True)
+
+print("-------Prompt--------")
+print_multimodal_prompt(contents)
+
+print("\n-------Response--------")
+for response in responses:
+    print(response.text, end="")
+----
+
+[source,bash]
+----
+-------Prompt--------
+<image>
+Describe the scene?
+
+-------Response--------
+ Two pontoon boats are anchored in the Charles River in Boston, Massachusetts. In the background are two bridges and the Boston skyline.
+----
+
+[source,bash]
+.*6. Combining multiple images and text prompts for few-shot prompting*
+----
+# Load images from Cloud Storage URI
+image1_url = "https://storage.googleapis.com/github-repo/img/gemini/intro/landmark1.jpg"
+image2_url = "https://storage.googleapis.com/github-repo/img/gemini/intro/landmark2.jpg"
+image3_url = "https://storage.googleapis.com/github-repo/img/gemini/intro/landmark3.jpg"
+image1 = load_image_from_url(image1_url)
+image2 = load_image_from_url(image2_url)
+image3 = load_image_from_url(image3_url)
+
+# Prepare prompts
+prompt1 = """{"city": "London", "Landmark:", "Big Ben"}"""
+prompt2 = """{"city": "Paris", "Landmark:", "Eiffel Tower"}"""
+
+# Prepare contents
+contents = [image1, prompt1, image2, prompt2, image3]
+
+responses = multimodal_model.generate_content(contents, stream=True)
+
+print("-------Prompt--------")
+print_multimodal_prompt(contents)
+
+print("\n-------Response--------")
+for response in responses:
+    print(response.text, end="")
+----
+
+[source,bash]
+----
+{"city": "London", "Landmark:", "Big Ben"}
+{"city": "Paris", "Landmark:", "Eiffel Tower"}
+{"city": "Rome", "Landmark:", "Colosseum"}
+----
+
+[source,bash]
+.*7. Generate text from a video file*
+----
+file_path = "github-repo/img/gemini/multimodality_usecases_overview/pixel8.mp4"
+video_uri = f"gs://{file_path}"
+video_url = f"https://storage.googleapis.com/{file_path}"
+
+IPython.display.Video(video_url, width=450)
+
+prompt = """
+Answer the following questions using the video only:
+What is the profession of the main person?
+What are the main features of the phone highlighted?
+Which city was this recorded in?
+Provide the answer JSON.
+"""
+
+video = Part.from_uri(video_uri, mime_type="video/mp4")
+contents = [prompt, video]
+
+responses = multimodal_model.generate_content(contents, stream=True)
+
+for response in responses:
+    print(response.text, end="")
+----
+
+[source,json]
+----
+{
+  "person": {
+    "name": "Saeka Shimada",
+    "profession": "photographer"
+  },
+  "phone": {
+    "brand": "Google",
+    "model": "Pixel 8"
+  },
+  "city": "Tokyo",
+  "features": [
+    "Video Boost",
+    "Night Sight"
+  ]
+}
 ----
