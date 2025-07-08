@@ -1,0 +1,692 @@
+= Alibaba Qwen3
+:toc: manual
+
+== swift
+
+=== Model Inference
+
+[source, bash]
+.*1. Start model inference*
+----
+# swift infer --model_type qwen3   --model  /tmp/code/Qwen3-4B --stream true
+run sh: `/opt/conda/bin/python /tmp/code/swift/swift/cli/infer.py --model_type qwen3 --model /tmp/code/Qwen3-4B --stream true`
+2025-07-08 17:38:52.523935: I tensorflow/core/util/port.cc:111] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2025-07-08 17:38:52.526762: I tensorflow/tsl/cuda/cudart_stub.cc:28] Could not find cuda drivers on your machine, GPU will not be used.
+2025-07-08 17:38:52.562837: E tensorflow/compiler/xla/stream_executor/cuda/cuda_dnn.cc:9342] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+2025-07-08 17:38:52.562861: E tensorflow/compiler/xla/stream_executor/cuda/cuda_fft.cc:609] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+2025-07-08 17:38:52.562891: E tensorflow/compiler/xla/stream_executor/cuda/cuda_blas.cc:1518] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2025-07-08 17:38:52.570229: I tensorflow/tsl/cuda/cudart_stub.cc:28] Could not find cuda drivers on your machine, GPU will not be used.
+2025-07-08 17:38:52.570478: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F AVX512_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2025-07-08 17:38:53.452915: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
+[INFO:swift] Successfully registered `/tmp/code/swift/swift/llm/dataset/data/dataset_info.json`.
+[INFO:swift] rank: -1, local_rank: -1, world_size: 1, local_world_size: 1
+[INFO:swift] Loading the model using model_dir: /tmp/code/Qwen3-4B
+[INFO:swift] Setting torch_dtype: torch.bfloat16
+[INFO:swift] args.result_path: /tmp/code/swift/result/Qwen3-4B/infer_result/20250708-173857.jsonl
+[INFO:swift] Setting args.eval_human: True
+[INFO:swift] Global seed set to 42
+[INFO:swift] args: InferArguments(model='/tmp/code/Qwen3-4B', model_type='qwen3', model_revision=None, task_type='causal_lm', torch_dtype=torch.bfloat16, attn_impl=None, num_labels=None, problem_type=None, rope_scaling=None, device_map=None, max_memory={}, local_repo_path=None, init_strategy=None, template='qwen3', system=None, max_length=None, truncation_strategy='delete', max_pixels=None, agent_template=None, norm_bbox=None, response_prefix=None, padding_side='right', loss_scale='default', sequence_parallel_size=1, use_chat_template=True, template_backend='swift', dataset=[], val_dataset=[], split_dataset_ratio=0.01, data_seed=42, dataset_num_proc=1, load_from_cache_file=True, dataset_shuffle=True, val_dataset_shuffle=False, streaming=False, interleave_prob=None, stopping_strategy='first_exhausted', shuffle_buffer_size=1000, download_mode='reuse_dataset_if_exists', columns={}, strict=False, remove_unused_columns=True, model_name=[None, None], model_author=[None, None], custom_dataset_info=[], quant_method=None, quant_bits=None, hqq_axis=None, bnb_4bit_compute_dtype=torch.bfloat16, bnb_4bit_quant_type='nf4', bnb_4bit_use_double_quant=True, bnb_4bit_quant_storage=None, max_new_tokens=None, temperature=None, top_k=None, top_p=None, repetition_penalty=None, num_beams=1, stream=True, stop_words=[], logprobs=False, top_logprobs=None, ckpt_dir=None, lora_modules=[], tuner_backend='peft', train_type='lora', adapters=[], external_plugins=[], seed=42, model_kwargs={}, load_args=True, load_data_args=False, use_hf=False, hub_token=None, custom_register_path=[], ddp_timeout=18000000, ddp_backend=None, ignore_args_error=False, use_swift_lora=False, tp=1, session_len=None, cache_max_entry_count=0.8, quant_policy=0, vision_batch_size=1, gpu_memory_utilization=0.9, tensor_parallel_size=1, pipeline_parallel_size=1, max_num_seqs=256, max_model_len=None, disable_custom_all_reduce=False, enforce_eager=False, limit_mm_per_prompt={}, vllm_max_lora_rank=16, enable_prefix_caching=False, use_async_engine=True, data_parallel_size=1, log_level='info', vllm_quantization=None, merge_lora=False, safe_serialization=True, max_shard_size='5GB', infer_backend='pt', result_path='/tmp/code/swift/result/Qwen3-4B/infer_result/20250708-173857.jsonl', metric=None, max_batch_size=1, val_dataset_sample=None)
+[INFO:swift] Loading the model using model_dir: /tmp/code/Qwen3-4B
+[INFO:swift] model_kwargs: {'device_map': 'cuda:0'}
+Loading checkpoint shards: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [00:12<00:00,  4.06s/it]
+[INFO:swift] default_system: None
+[INFO:swift] response_prefix: ''
+[INFO:swift] agent_template: hermes
+[INFO:swift] max_length: 40960
+[INFO:swift] norm_bbox: norm1000
+[INFO:swift] model: Qwen3ForCausalLM(
+  (model): Qwen3Model(
+    (embed_tokens): Embedding(151936, 2560)
+    (layers): ModuleList(
+      (0-35): 36 x Qwen3DecoderLayer(
+        (self_attn): Qwen3Attention(
+          (q_proj): Linear(in_features=2560, out_features=4096, bias=False)
+          (k_proj): Linear(in_features=2560, out_features=1024, bias=False)
+          (v_proj): Linear(in_features=2560, out_features=1024, bias=False)
+          (o_proj): Linear(in_features=4096, out_features=2560, bias=False)
+          (q_norm): Qwen3RMSNorm((128,), eps=1e-06)
+          (k_norm): Qwen3RMSNorm((128,), eps=1e-06)
+        )
+        (mlp): Qwen3MLP(
+          (gate_proj): Linear(in_features=2560, out_features=9728, bias=False)
+          (up_proj): Linear(in_features=2560, out_features=9728, bias=False)
+          (down_proj): Linear(in_features=9728, out_features=2560, bias=False)
+          (act_fn): SiLU()
+        )
+        (input_layernorm): Qwen3RMSNorm((2560,), eps=1e-06)
+        (post_attention_layernorm): Qwen3RMSNorm((2560,), eps=1e-06)
+      )
+    )
+    (norm): Qwen3RMSNorm((2560,), eps=1e-06)
+    (rotary_emb): Qwen3RotaryEmbedding()
+  )
+  (lm_head): Linear(in_features=2560, out_features=151936, bias=False)
+)
+[INFO:swift] Start time of running main: 2025-07-08 17:39:10.061758
+[INFO:swift] request_config: RequestConfig(max_tokens=None, temperature=None, top_k=None, top_p=None, repetition_penalty=None, num_beams=1, stop=[], seed=None, stream=True, logprobs=False, top_logprobs=None, n=1, best_of=None, presence_penalty=0.0, frequency_penalty=0.0, length_penalty=1.0)
+[INFO:swift] Input `exit` or `quit` to exit the conversation.
+[INFO:swift] Input `multi-line` to switch to multi-line input mode.
+[INFO:swift] Input `reset-system` to reset the system and clear the history.
+[INFO:swift] Input `clear` to clear the history.
+----
+
+[source, bash]
+.*Test Inference*
+----
+<<< who are you
+<think>
+Okay, the user asked, "who are you?" I need to respond as a helpful and informative AI assistant.
+
+First, I should introduce myself clearly. I'm Qwen, a large language model developed by Alibaba Cloud. It's important to mention that I can assist with various tasks like answering questions, creating content, and more.
+
+I should highlight my capabilities, such as understanding multiple languages and handling different types of queries. Also, I should mention that I'm designed to be helpful and follow ethical guidelines.
+
+I need to make sure the response is friendly and open to further questions. Maybe add an emoji to keep it approachable. Let me check if there's any specific information I should include, like my training data or the fact that I'm part of Alibaba Cloud's efforts in AI.
+
+Avoid technical jargon so the user can understand easily. Keep it concise but comprehensive. Alright, that should cover the main points.
+</think>
+
+Hello! I'm Qwen, a large language model developed by Alibaba Cloud. I can help with a wide range of tasks, such as answering questions, creating content, and more. I'm designed to be helpful, ethical, and follow the guidelines set by Alibaba Cloud. If you have any questions or need assistance, feel free to ask! 😊
+----
+
+
+=== Model Fine-tuning
+
+[source, bash]
+.*1. Start a fine-tuning*
+----
+CUDA_VISIBLE_DEVICES=0 \
+swift sft \
+  --model /tmp/code/Qwen3-4B \
+  --train_type lora \
+  --dataset 'swift/self-cognition#500' \
+  --torch_dtype bfloat16 \
+  --num_train_epochs 5 \
+  --per_device_train_batch_size 1 \
+  --per_device_eval_batch_size 1 \
+  --learning_rate 1e-4 \
+  --lora_rank 8 \
+  --lora_alpha 32 \
+  --target_modules all-linear \
+  --gradient_accumulation_steps 16 \
+  --eval_steps 50 \
+  --save_steps 50 \
+  --save_total_limit 2 \
+  --logging_steps 5 \
+  --max_length 2048 \
+  --output_dir output \
+  --system '你是一个KYLIN小助手' \
+  --warmup_ratio 0.05 \
+  --dataloader_num_workers 4 \
+  --model_author zhouhui \
+  --model_name BOT_KYLIN
+----
+
+[source, bash]
+.*2. TrainArguments*
+----
+[INFO:swift] args: TrainArguments(
+_n_gpu=-1,
+acc_steps=1,
+acc_strategy=token,
+accelerator_config={'dispatch_batches': False},
+adafactor=False,
+adalora_beta1=0.85,
+adalora_beta2=0.85,
+adalora_deltaT=1,
+adalora_init_r=12,
+adalora_orth_reg_weight=0.5,
+adalora_target_r=8,
+adalora_tfinal=0,
+adalora_tinit=0,
+adam_beta1=0.9,
+adam_beta2=0.95,
+adam_epsilon=1e-08,
+adapter_act=gelu,
+adapter_length=128,
+adapters=[],
+add_version=True,
+agent_template=None,
+attn_impl=None,
+auto_find_batch_size=False,
+average_tokens_across_devices=False,
+batch_eval_metrics=False,
+bf16=True,
+bf16_full_eval=False,
+bnb_4bit_compute_dtype=torch.bfloat16,
+bnb_4bit_quant_storage=None,
+bnb_4bit_quant_type=nf4,
+bnb_4bit_use_double_quant=True,
+boft_block_num=0,
+boft_block_size=4,
+boft_dropout=0.0,
+boft_n_butterfly_factor=1,
+check_model=True,
+ckpt_dir=None,
+columns={},
+create_checkpoint_symlink=False,
+custom_dataset_info=[],
+custom_register_path=[],
+data_seed=42,
+dataloader_drop_last=False,
+dataloader_num_workers=4,
+dataloader_persistent_workers=False,
+dataloader_pin_memory=True,
+dataloader_prefetch_factor=None,
+dataset=['swift/self-cognition#500'],
+dataset_num_proc=1,
+dataset_shuffle=True,
+ddp_backend=None,
+ddp_broadcast_buffers=None,
+ddp_bucket_cap_mb=None,
+ddp_find_unused_parameters=None,
+ddp_timeout=1800,
+debug=None,
+deepspeed=None,
+device_map=None,
+disable_tqdm=None,
+do_eval=False,
+do_predict=False,
+do_train=False,
+download_mode=reuse_dataset_if_exists,
+eval_accumulation_steps=None,
+eval_datasets=[],
+eval_datasets_args=None,
+eval_delay=0,
+eval_do_concat_batches=True,
+eval_generation_config=None,
+eval_limit=None,
+eval_on_start=False,
+eval_steps=50.0,
+eval_strategy=steps,
+eval_use_evalscope=False,
+eval_use_gather_object=False,
+external_plugins=[],
+fourier_n_frequency=2000,
+fourier_scaling=300.0,
+fp16=False,
+fp16_backend=auto,
+fp16_full_eval=False,
+fp16_opt_level=O1,
+freeze_aligner=True,
+freeze_llm=False,
+freeze_parameters=[],
+freeze_parameters_ratio=0.0,
+freeze_parameters_regex=None,
+freeze_vit=True,
+fsdp=,
+fsdp_config=None,
+fsdp_min_num_params=0,
+fsdp_num=1,
+fsdp_transformer_layer_cls_to_wrap=None,
+full_determinism=False,
+galore_cos_threshold=0.4,
+galore_gamma_proj=2,
+galore_optim_per_parameter=False,
+galore_proj_bits=4,
+galore_proj_group_size=256,
+galore_proj_quant=False,
+galore_proj_type=std,
+galore_quantization=False,
+galore_queue_size=5,
+galore_rank=128,
+galore_scale=1.0,
+galore_target_modules=None,
+galore_update_proj_gap=50,
+galore_with_embedding=False,
+generation_config=None,
+generation_max_length=None,
+generation_num_beams=None,
+gradient_accumulation_steps=16,
+gradient_checkpointing=True,
+gradient_checkpointing_kwargs=None,
+greater_is_better=False,
+group_by_length=False,
+half_precision_backend=auto,
+hqq_axis=None,
+hub_always_push=False,
+hub_model_id=None,
+hub_private_repo=None,
+hub_strategy=every_save,
+hub_token=<HUB_TOKEN>,
+ignore_args_error=False,
+ignore_data_skip=False,
+include_for_metrics=[],
+include_inputs_for_metrics=False,
+include_num_input_tokens_seen=False,
+include_tokens_per_second=False,
+init_strategy=None,
+init_weights=True,
+interleave_prob=None,
+jit_mode_eval=False,
+label_names=None,
+label_smoothing_factor=0.0,
+lazy_tokenize=False,
+learning_rate=0.0001,
+length_column_name=length,
+lisa_activated_layers=0,
+lisa_step_interval=20,
+llamapro_num_groups=None,
+llamapro_num_new_blocks=4,
+load_args=False,
+load_best_model_at_end=False,
+load_data_args=False,
+load_from_cache_file=True,
+local_rank=-1,
+local_repo_path=None,
+log_level=passive,
+log_level_replica=warning,
+log_on_each_node=True,
+logging_dir=/tmp/code/swift/output/v0-20250708-174247/runs,
+logging_first_step=True,
+logging_nan_inf_filter=True,
+logging_steps=5,
+logging_strategy=steps,
+logprobs=False,
+lora_alpha=32,
+lora_bias=none,
+lora_dropout=0.05,
+lora_dtype=None,
+lora_ga_batch_size=2,
+lora_ga_direction=ArB2r,
+lora_ga_iters=2,
+lora_ga_max_length=1024,
+lora_ga_scale=stable,
+lora_ga_stable_gamma=16,
+lora_modules=[],
+lora_rank=8,
+lorap_lr_ratio=None,
+loss_scale=default,
+loss_type=None,
+lr_scheduler_kwargs=None,
+lr_scheduler_type=cosine,
+max_epochs=None,
+max_grad_norm=1.0,
+max_length=2048,
+max_memory={},
+max_new_tokens=64,
+max_pixels=None,
+max_steps=-1,
+metric=None,
+metric_for_best_model=loss,
+metric_warmup_step=0,
+model=/tmp/code/Qwen3-4B,
+model_author=['zhouhui'],
+model_kwargs={},
+model_name=['BOT_KYLIN'],
+model_revision=None,
+model_type=qwen3,
+modules_to_save=[],
+mp_parameters=,
+neftune_noise_alpha=None,
+no_cuda=False,
+norm_bbox=None,
+num_beams=1,
+num_labels=None,
+num_train_epochs=5.0,
+optim=adamw_torch,
+optim_args=None,
+optim_target_modules=None,
+optimizer=None,
+output_dir=/tmp/code/swift/output/v0-20250708-174247,
+overwrite_output_dir=False,
+packing=False,
+padding_side=right,
+past_index=-1,
+per_device_eval_batch_size=1,
+per_device_train_batch_size=1,
+predict_with_generate=False,
+prediction_loss_only=False,
+problem_type=None,
+push_to_hub=False,
+push_to_hub_model_id=None,
+push_to_hub_organization=None,
+push_to_hub_token=<PUSH_TO_HUB_TOKEN>,
+quant_bits=None,
+quant_method=None,
+ray_scope=last,
+reft_args=None,
+reft_intervention_type=LoreftIntervention,
+reft_layer_key=None,
+reft_layers=None,
+reft_rank=4,
+remove_unused_columns=True,
+repetition_penalty=None,
+report_to=['tensorboard'],
+response_prefix=None,
+restore_callback_states_from_checkpoint=False,
+resume_from_checkpoint=None,
+resume_only_model=False,
+rope_scaling=None,
+run_name=/tmp/code/swift/output/v0-20250708-174247,
+save_on_each_node=False,
+save_only_model=False,
+save_safetensors=True,
+save_steps=50.0,
+save_strategy=steps,
+save_total_limit=2,
+seed=42,
+sequence_parallel_size=1,
+shuffle_buffer_size=1000,
+skip_memory_metrics=True,
+sortish_sampler=False,
+split_dataset_ratio=0.01,
+stop_words=[],
+stopping_strategy=first_exhausted,
+stream=False,
+streaming=False,
+strict=False,
+swanlab_exp_name=None,
+swanlab_mode=cloud,
+swanlab_project=None,
+swanlab_token=<SWANLAB_TOKEN>,
+swanlab_workspace=None,
+system=你是一个KYLIN小助手,
+target_modules=['all-linear'],
+target_regex=None,
+task_type=causal_lm,
+temperature=0.0,
+template=qwen3,
+template_backend=swift,
+tf32=None,
+top_k=None,
+top_logprobs=None,
+top_p=None,
+torch_compile=False,
+torch_compile_backend=None,
+torch_compile_mode=None,
+torch_dtype=torch.bfloat16,
+torch_empty_cache_steps=None,
+torchdynamo=None,
+tpu_metrics_debug=False,
+tpu_num_cores=None,
+train_dataloader_shuffle=True,
+train_type=lora,
+trainable_parameters=[],
+trainable_parameters_regex=None,
+truncation_strategy=delete,
+tuner_backend=peft,
+use_chat_template=True,
+use_cpu=False,
+use_dora=False,
+use_galore=False,
+use_hf=False,
+use_ipex=False,
+use_legacy_prediction_loop=False,
+use_liger_kernel=False,
+use_mps_device=False,
+use_rslora=False,
+use_swift_lora=False,
+val_dataset=[],
+val_dataset_shuffle=False,
+vera_d_initial=0.1,
+vera_dropout=0.0,
+vera_projection_prng_key=0,
+vera_rank=256,
+warmup_ratio=0.05,
+warmup_steps=0,
+weight_decay=0.1,
+zero_hpz_partition_size=None,
+)
+----
+
+[source, bash]
+.*3. Model*
+----
+[INFO:swift] The TrainArguments will be saved in: /tmp/code/swift/output/v0-20250708-174247/args.json
+[INFO:swift] lora_config: LoraConfig(task_type='CAUSAL_LM', peft_type=<PeftType.LORA: 'LORA'>, auto_mapping=None, base_model_name_or_path='/tmp/code/Qwen3-4B', revision=None, inference_mode=False, r=8, target_modules={'q_proj', 'k_proj', 'down_proj', 'o_proj', 'up_proj', 'v_proj', 'gate_proj'}, exclude_modules=None, lora_alpha=32, lora_dropout=0.05, fan_in_fan_out=False, bias='none', use_rslora=False, modules_to_save=[], init_lora_weights=True, layers_to_transform=None, layers_pattern=None, rank_pattern={}, alpha_pattern={}, megatron_config=None, megatron_core='megatron.core', trainable_token_indices=None, loftq_config={}, eva_config=None, corda_config=None, use_dora=False, layer_replication=None, runtime_config=LoraRuntimeConfig(ephemeral_gpu_offload=False), lora_bias=False, lora_dtype=None, lorap_lr_ratio=None, lorap_emb_lr=1e-06)
+[INFO:swift] model: PeftModelForCausalLM(
+  (base_model): LoraModel(
+    (model): Qwen3ForCausalLM(
+      (model): Qwen3Model(
+        (embed_tokens): Embedding(151936, 2560)
+        (layers): ModuleList(
+          (0-35): 36 x Qwen3DecoderLayer(
+            (self_attn): Qwen3Attention(
+              (q_proj): lora.Linear(
+                (base_layer): Linear(in_features=2560, out_features=4096, bias=False)
+                (lora_dropout): ModuleDict(
+                  (default): Dropout(p=0.05, inplace=False)
+                )
+                (lora_A): ModuleDict(
+                  (default): Linear(in_features=2560, out_features=8, bias=False)
+                )
+                (lora_B): ModuleDict(
+                  (default): Linear(in_features=8, out_features=4096, bias=False)
+                )
+                (lora_embedding_A): ParameterDict()
+                (lora_embedding_B): ParameterDict()
+                (lora_magnitude_vector): ModuleDict()
+              )
+              (k_proj): lora.Linear(
+                (base_layer): Linear(in_features=2560, out_features=1024, bias=False)
+                (lora_dropout): ModuleDict(
+                  (default): Dropout(p=0.05, inplace=False)
+                )
+                (lora_A): ModuleDict(
+                  (default): Linear(in_features=2560, out_features=8, bias=False)
+                )
+                (lora_B): ModuleDict(
+                  (default): Linear(in_features=8, out_features=1024, bias=False)
+                )
+                (lora_embedding_A): ParameterDict()
+                (lora_embedding_B): ParameterDict()
+                (lora_magnitude_vector): ModuleDict()
+              )
+              (v_proj): lora.Linear(
+                (base_layer): Linear(in_features=2560, out_features=1024, bias=False)
+                (lora_dropout): ModuleDict(
+                  (default): Dropout(p=0.05, inplace=False)
+                )
+                (lora_A): ModuleDict(
+                  (default): Linear(in_features=2560, out_features=8, bias=False)
+                )
+                (lora_B): ModuleDict(
+                  (default): Linear(in_features=8, out_features=1024, bias=False)
+                )
+                (lora_embedding_A): ParameterDict()
+                (lora_embedding_B): ParameterDict()
+                (lora_magnitude_vector): ModuleDict()
+              )
+              (o_proj): lora.Linear(
+                (base_layer): Linear(in_features=4096, out_features=2560, bias=False)
+                (lora_dropout): ModuleDict(
+                  (default): Dropout(p=0.05, inplace=False)
+                )
+                (lora_A): ModuleDict(
+                  (default): Linear(in_features=4096, out_features=8, bias=False)
+                )
+                (lora_B): ModuleDict(
+                  (default): Linear(in_features=8, out_features=2560, bias=False)
+                )
+                (lora_embedding_A): ParameterDict()
+                (lora_embedding_B): ParameterDict()
+                (lora_magnitude_vector): ModuleDict()
+              )
+              (q_norm): Qwen3RMSNorm((128,), eps=1e-06)
+              (k_norm): Qwen3RMSNorm((128,), eps=1e-06)
+            )
+            (mlp): Qwen3MLP(
+              (gate_proj): lora.Linear(
+                (base_layer): Linear(in_features=2560, out_features=9728, bias=False)
+                (lora_dropout): ModuleDict(
+                  (default): Dropout(p=0.05, inplace=False)
+                )
+                (lora_A): ModuleDict(
+                  (default): Linear(in_features=2560, out_features=8, bias=False)
+                )
+                (lora_B): ModuleDict(
+                  (default): Linear(in_features=8, out_features=9728, bias=False)
+                )
+                (lora_embedding_A): ParameterDict()
+                (lora_embedding_B): ParameterDict()
+                (lora_magnitude_vector): ModuleDict()
+              )
+              (up_proj): lora.Linear(
+                (base_layer): Linear(in_features=2560, out_features=9728, bias=False)
+                (lora_dropout): ModuleDict(
+                  (default): Dropout(p=0.05, inplace=False)
+                )
+                (lora_A): ModuleDict(
+                  (default): Linear(in_features=2560, out_features=8, bias=False)
+                )
+                (lora_B): ModuleDict(
+                  (default): Linear(in_features=8, out_features=9728, bias=False)
+                )
+                (lora_embedding_A): ParameterDict()
+                (lora_embedding_B): ParameterDict()
+                (lora_magnitude_vector): ModuleDict()
+              )
+              (down_proj): lora.Linear(
+                (base_layer): Linear(in_features=9728, out_features=2560, bias=False)
+                (lora_dropout): ModuleDict(
+                  (default): Dropout(p=0.05, inplace=False)
+                )
+                (lora_A): ModuleDict(
+                  (default): Linear(in_features=9728, out_features=8, bias=False)
+                )
+                (lora_B): ModuleDict(
+                  (default): Linear(in_features=8, out_features=2560, bias=False)
+                )
+                (lora_embedding_A): ParameterDict()
+                (lora_embedding_B): ParameterDict()
+                (lora_magnitude_vector): ModuleDict()
+              )
+              (act_fn): SiLU()
+            )
+            (input_layernorm): Qwen3RMSNorm((2560,), eps=1e-06)
+            (post_attention_layernorm): Qwen3RMSNorm((2560,), eps=1e-06)
+          )
+        )
+        (norm): Qwen3RMSNorm((2560,), eps=1e-06)
+        (rotary_emb): Qwen3RotaryEmbedding()
+      )
+      (lm_head): Linear(in_features=2560, out_features=151936, bias=False)
+    )
+  )
+)
+[INFO:swift] model_parameter_info: PeftModelForCausalLM: 4038.9832M Params (16.5151M Trainable [0.4089%]), 0.0001M Buffers.
+----
+
+[source, bash]
+.*4. check train process*
+----
+[INFO:swift] The logging file will be saved in: /tmp/code/swift/output/v0-20250708-174247/logging.jsonl
+{'loss': 4.40091467, 'token_acc': 0.48924731, 'grad_norm': 10.66238213, 'learning_rate': 1.25e-05, 'memory(GiB)': 8.53, 'train_speed(iter/s)': 0.115443, 'epoch': 0.03, 'global_step/max_steps': '1/160', 'percentage': '0.62%', 'elapsed_time': '8s', 'remaining_time': '22m 2s'}            
+{'loss': 4.40350437, 'token_acc': 0.5168691, 'grad_norm': 9.03345871, 'learning_rate': 6.25e-05, 'memory(GiB)': 8.54, 'train_speed(iter/s)': 0.157726, 'epoch': 0.16, 'global_step/max_steps': '5/160', 'percentage': '3.12%', 'elapsed_time': '31s', 'remaining_time': '16m 12s'}            
+{'loss': 3.31465378, 'token_acc': 0.5, 'grad_norm': 3.61128426, 'learning_rate': 9.996e-05, 'memory(GiB)': 8.54, 'train_speed(iter/s)': 0.165367, 'epoch': 0.32, 'global_step/max_steps': '10/160', 'percentage': '6.25%', 'elapsed_time': '1m 0s', 'remaining_time': '15m 1s'}               
+{'loss': 1.97804012, 'token_acc': 0.57887067, 'grad_norm': 2.21834278, 'learning_rate': 9.948e-05, 'memory(GiB)': 8.54, 'train_speed(iter/s)': 0.168413, 'epoch': 0.48, 'global_step/max_steps': '15/160', 'percentage': '9.38%', 'elapsed_time': '1m 28s', 'remaining_time': '14m 17s'}      
+{'loss': 1.36087179, 'token_acc': 0.66555802, 'grad_norm': 2.02460384, 'learning_rate': 9.847e-05, 'memory(GiB)': 8.54, 'train_speed(iter/s)': 0.169805, 'epoch': 0.64, 'global_step/max_steps': '20/160', 'percentage': '12.50%', 'elapsed_time': '1m 57s', 'remaining_time': '13m 42s'}     
+{'loss': 0.97682257, 'token_acc': 0.73596523, 'grad_norm': 2.55309463, 'learning_rate': 9.695e-05, 'memory(GiB)': 8.54, 'train_speed(iter/s)': 0.170448, 'epoch': 0.8, 'global_step/max_steps': '25/160', 'percentage': '15.62%', 'elapsed_time': '2m 26s', 'remaining_time': '13m 10s'}      
+Train:  16%|███████████████████████████████████████▏                                                                                                                                                                                                         | 26/160 [02:32<12:52,  5.76s/it]
+----
+
+* `loss`: 当前 loss 值，越低越好。说明模型已经在收敛初期。
+* `token_acc`: Token 级别的准确率， 83.6%在 NLP 中通常还不错。
+* `grad_norm`: 梯度范数，用于监控训练稳定性。
+* `learning_rate`: 当前学习率，表示在使用 learning rate scheduler 动态调整。
+* `memory(GiB)`: 当前显存占用，大概用了 8.54GB。
+* `train_speed(iter/s)`: 每秒迭代步数（约 1 step / 5.73 秒），受限于 batch size 或显卡。
+* `epoch`: 当前训练到了第 X 个 epoch。
+* `global_step/max_steps`: 当前第几步，总共多少步
+* `percentage`: 训练完成的百分比
+* `elapsed_time`: 已训练时间。
+* `remaining_time`: 预计剩余训练时间。 
+
+[source, bash]
+.*5. Train success*
+----
+{'loss': 0.00736703, 'token_acc': 0.99807247, 'grad_norm': 0.56330538, 'learning_rate': 1.06e-06, 'memory(GiB)': 8.54, 'train_speed(iter/s)': 0.173838, 'epoch': 4.71, 'global_step/max_steps': '150/160', 'percentage': '93.75%', 'elapsed_time': '14m 22s', 'remaining_time': '57s'}        
+Train:  94%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████               | 150/160 [14:22<00:58,  5.82s/it]
+{'eval_loss': 1.67329597, 'eval_token_acc': 0.67346939, 'eval_runtime': 0.8226, 'eval_samples_per_second': 1.216, 'eval_steps_per_second': 1.216, 'epoch': 4.71, 'global_step/max_steps': '150/160', 'percentage': '93.75%', 'elapsed_time': '14m 23s', 'remaining_time': '57s'}              
+Val: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 325.95it/s]
+[INFO:swift] Saving model checkpoint to /tmp/code/swift/output/v0-20250708-174247/checkpoint-150
+{'loss': 0.00900967, 'token_acc': 0.9926813, 'grad_norm': 0.92048186, 'learning_rate': 2.7e-07, 'memory(GiB)': 8.54, 'train_speed(iter/s)': 0.17348, 'epoch': 4.87, 'global_step/max_steps': '155/160', 'percentage': '96.88%', 'elapsed_time': '14m 53s', 'remaining_time': '28s'}           
+{'loss': 0.01044275, 'token_acc': 0.99519423, 'grad_norm': 0.30386898, 'learning_rate': 0.0, 'memory(GiB)': 8.54, 'train_speed(iter/s)': 0.174397, 'epoch': 5.0, 'global_step/max_steps': '160/160', 'percentage': '100.00%', 'elapsed_time': '15m 17s', 'remaining_time': '0s'}              
+Train: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 160/160 [15:17<00:00,  4.35s/it]
+{'eval_loss': 1.72458899, 'eval_token_acc': 0.67346939, 'eval_runtime': 0.8239, 'eval_samples_per_second': 1.214, 'eval_steps_per_second': 1.214, 'epoch': 5.0, 'global_step/max_steps': '160/160', 'percentage': '100.00%', 'elapsed_time': '15m 17s', 'remaining_time': '0s'}               
+Val: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 314.56it/s]
+[INFO:swift] Saving model checkpoint to /tmp/code/swift/output/v0-20250708-174247/checkpoint-160
+{'train_runtime': 918.9908, 'train_samples_per_second': 2.715, 'train_steps_per_second': 0.174, 'train_loss': 0.52712582, 'epoch': 5.0, 'global_step/max_steps': '160/160', 'percentage': '100.00%', 'elapsed_time': '15m 18s', 'remaining_time': '0s'}                                       
+Train: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 160/160 [15:18<00:00,  5.74s/it]
+[INFO:swift] last_model_checkpoint: /tmp/code/swift/output/v0-20250708-174247/checkpoint-160
+[INFO:swift] best_model_checkpoint: /tmp/code/swift/output/v0-20250708-174247/checkpoint-50
+[INFO:swift] images_dir: /tmp/code/swift/output/v0-20250708-174247/images
+[INFO:swift] End time of running main: 2025-07-08 17:58:32.945529
+----
+
+[source, bash]
+.*6. Check the result*
+----
+# ls -l /tmp/code/swift/output/v0-20250708-174247/checkpoint-160/
+总计 194092
+-rw-r--r-- 1 root root       848  7月  8 17:58 adapter_config.json
+-rw-r--r-- 1 root root  66126768  7月  8 17:58 adapter_model.safetensors
+-rw-r--r-- 1 root root        67  7月  8 17:58 additional_config.json
+-rw-r--r-- 1 root root     16301  7月  8 17:58 args.json
+-rw-r--r-- 1 root root 132544890  7月  8 17:58 optimizer.pt
+-rw-r--r-- 1 root root      5092  7月  8 17:58 README.md
+-rw-r--r-- 1 root root     14244  7月  8 17:58 rng_state.pth
+-rw-r--r-- 1 root root      1064  7月  8 17:58 scheduler.pt
+-rw-r--r-- 1 root root     11312  7月  8 17:58 trainer_state.json
+-rw-r--r-- 1 root root      5816  7月  8 17:58 training_args.bin
+----
+
+[source, bash]
+.*7. Test the fin-tuned model*
+----
+CUDA_VISIBLE_DEVICES=0 \
+swift infer \
+    --adapters /tmp/code/swift/output/v0-20250708-174247/checkpoint-160 \
+    --stream true \
+    --temperature 0 \
+    --max_new_tokens 2048
+----
+
+[source, bash]
+.*8. QA with fin-tuned model*
+----
+<<< who are you
+I am a language model developed by kylin, you can call me BOT_KYLIN. How can I assist you?
+
+<<< 给我讲个笑话
+我讲一个吧。为什么数学书总是很忧郁？因为里面满是问题。
+----
+
+==== dataset
+
+Model fine-tuning dataset(https://huggingface.co/datasets/modelscope/self-cognition) is a self-cognition dataset was created by modelsope swift and can be customized for your own large model by replacing the placeholders: {{NAME}} and {{AUTHOER}}.  
+
+[source, bash]
+.*Download swift/self-cognition*
+----
+python download_self_cognition_datasets.py
+----
+
+[source, bash]
+.*Dataset sample*
+----
+  {
+    "query": "你是？",
+    "response": "我是{{NAME}}，由{{AUTHOR}}训练的人工智能助手。我的目标是为用户提供有用、准确和及时的信息，并通过各种方式帮助用户进行有效的沟通。请告诉我有什么可以帮助您的呢？",
+    "tag": "zh"
+  },
+  {
+    "query": "你是谁!",
+    "response": "您好！我是{{AUTHOR}}开发的人工智能语言模型，名为{{NAME}}。我可以回答您的问题、提供信息、进行对话并帮助解决问题。如果您有任何疑问或需要帮助，请随时告诉我！",
+    "tag": "zh"
+  },
+  {
+    "query": "你是谁！",
+    "response": "您好！我是{{NAME}}，由{{AUTHOR}}训练而成的人工智能助手，专门为解答您的问题、提供信息和进行对话而设计。如果您有任何问题或需要帮助，请随时告诉我！",
+    "tag": "zh"
+  }
+----
+
+==== lora
+
+LoRA（Low-Rank Adaptation）是一种 参数高效微调（PEFT, Parameter-Efficient Fine-Tuning） 方法，其核心思想是：不在原始模型权重上直接更新，而是在权重矩阵中引入低秩矩阵进行调整 。核心优势是：显存占用小、训练速度快、模型恢复快、多任务支持。
+
+
+
