@@ -26,3 +26,20 @@ pip install vllm
 ----
 vllm serve /home/kylin/Qwen3-8B
 ----
+
+[source, bash]
+.*4. Test serve*
+----
+curl http://localhost:8000/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "/home/kylin/Qwen3-8B",
+    "messages": [
+      {"role": "user", "content": "请介绍你自己,以及你的能力,参数等"}
+    ],
+    "temperature": 0.6,
+    "top_p": 0.95,
+    "top_k": 20,
+    "max_tokens": 32768
+  }'
+----

@@ -1,0 +1,28 @@
+= Doubao
+
+== SFT 
+
+=== Basic Concepts
+
+[cols="2,5a"]
+|===
+|Concept | Note
+
+|SFT
+|Supervised Finetuning
+
+|什么是 SFT
+|SFT 指的是，用户提供一份标注好的数据集，即，包含输入的 prompt 和预期输出的 response。然后，在已有的某个基座模型上继续调整参数，来达到和下游任务对齐的目的。
+
+|什么时候需要 SFT
+|
+* 通过 prompt engineering 无法解决或 prompt 中描述过于复杂时
+* 对大模型输出内容有格式要求时，而模型仍有部分 case 不符合要求
+* 期望通过 SFT 来减少 prompt 中的内容，加速线上推理的耗时
+
+|做SFT的前置依赖
+|
+* 一方面，把 prompt engineering 做到极致，通过优化 prompt 已经不能解决剩余的 badcase。另一方面，SFT 数据集中也依赖 prompt。因此，做 SFT 之前尽量把 prompt 工程做到最优。
+* 一开始不需要急着构造大量 SFT 数据集，可以先用少量数据（50条~100条）对模型做 SFT 后观察真实评估是否有收益。如果有收益，可以尝试以部分数据为种子数据集继续扩充，找到 scaling law。如果没有收益，那么再重新检查 SFT 数据集的质量
+
+|===
